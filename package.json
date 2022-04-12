@@ -1,0 +1,22 @@
+{
+  "name": "fonline-name-colorizing",
+  "version": "1.0.0",
+  "description": "Utility tool for colorizing nicknames in Fonline",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Fonline",
+    "name-colorizing",
+    "fonline2",
+    "reloaded",
+    "fonline2238"
+  ],
+  "author": "Ernest Rudnicki",
+  "license": "ISC",
+  "devDependencies": {
+    "@commitlint/cli": "^16.2.3",
+    "@commitlint/config-conventional": "^16.2.1",
+    "husky": "^7.0.4"
+  }
+}
