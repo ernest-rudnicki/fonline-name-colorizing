@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Utility tool for colorizing nicknames in Fonline",
   "scripts": {
+    "setup": "cd frontend && npm run install && npm run build",
+    "dev:front": "cd frontend && npm run dev",
+    "dev": "concurrently \"npm run dev:front\" \"neu run --frontend-lib-dev\"",
     "lint": "cd ./frontend && npm run lint",
     "lint-fix": "cd ./frontend && npm run lint -- --fix",
     "pre-commit": "npm run lint-fix"
@@ -24,6 +27,8 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "husky": "^7.0.4",
-    "prettier": "2.6.2"
+    "pre-commit": "^1.2.2",
+    "prettier": "2.6.2",
+    "concurrently": "^7.1.0"
   }
 }
