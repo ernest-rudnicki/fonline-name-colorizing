@@ -1,0 +1,36 @@
+{
+  "applicationId": "js.neutralino.zero",
+  "version": "1.0.0",
+  "defaultMode": "window",
+  "documentRoot": "/frontend/build/",
+  "url": "/",
+  "enableServer": true,
+  "enableNativeAPI": true,
+  "port": 41128,
+  "nativeAllowList": [
+    "app.*"
+  ],
+  "modes": {
+    "window": {
+      "title": "fonline-name-colorizing",
+      "width": 800,
+      "height": 500,
+      "minWidth": 400,
+      "minHeight": 200,
+      "icon": "/frontend/src/assets/icons/favicon-32x32.png",
+      "enableInspector": true
+    }
+  },
+  "cli": {
+    "binaryName": "fonline-name-colorizing",
+    "resourcesPath": "/frontend/build/",
+    "extensionsPath": "/extensions/",
+    "clientLibrary": "/frontend/src/assets/neutralino.js",
+    "binaryVersion": "4.4.0",
+    "clientVersion": "3.3.0",
+    "frontendLibrary": {
+      "patchFile": "/frontend/src/template.html",
+      "devUrl": "http://localhost:8080"
+  }
+  }
+}
