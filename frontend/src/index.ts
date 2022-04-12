@@ -1,11 +1,13 @@
-import './style/index.css';
-import App from './components/app';
+import "./style/index.css";
+import App from "./components/app";
 
 declare global {
-  interface Window { Neutralino: any; }
+  interface Window {
+    Neutralino: any;
+  }
 }
 
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   window.Neutralino.init();
 }
 
