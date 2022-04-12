@@ -1,14 +1,11 @@
 import "./style/index.css";
 import App from "./components/app";
+import "./declaration";
 
-declare global {
-  interface Window {
-    Neutralino: any;
-  }
-}
+import Neutralino from "./neutralino/neutralino";
 
 if (typeof window !== "undefined") {
-  window.Neutralino.init();
+  Neutralino.init();
 }
 
 export default App;
