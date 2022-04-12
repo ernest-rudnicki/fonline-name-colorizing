@@ -6,7 +6,7 @@
   "url": "/",
   "enableServer": true,
   "enableNativeAPI": true,
-  "port": 41128,
+  "port": 18067,
   "nativeAllowList": [
     "app.*"
   ],
