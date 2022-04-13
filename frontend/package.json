@@ -11,9 +11,11 @@
     "test": "jest ./tests"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.8.1",
     "preact": "^10.3.1",
     "preact-render-to-string": "^5.1.4",
-    "preact-router": "^3.2.1"
+    "preact-router": "^3.2.1",
+    "react-redux": "^7.2.8"
   },
   "devDependencies": {
     "@types/enzyme": "^3.10.5",
@@ -27,7 +29,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.2.5",
     "jest-preset-preact": "^4.0.2",
-    "preact-cli": "^3.0.0",
+    "preact-cli": "^3.3.5",
     "prettier": "2.6.2",
     "sass": "^1.50.0",
     "sass-loader": "^10.2.1",
