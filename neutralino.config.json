@@ -8,7 +8,8 @@
   "enableNativeAPI": true,
   "port": 18067,
   "nativeAllowList": [
-    "app.*"
+    "app.*",
+    "filesystem.*"
   ],
   "modes": {
     "window": {
