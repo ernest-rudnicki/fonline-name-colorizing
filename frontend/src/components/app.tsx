@@ -1,14 +1,14 @@
 import { FunctionalComponent, h } from "preact";
 import { Route, Router } from "preact-router";
-
-import Home from "../routes/home";
-import NotFoundPage from "../routes/notfound";
 import { useEffect } from "preact/hooks";
-import Neutralino from "../neutralino/neutralino";
+import { neutralino } from "@neutralino/neutralino";
+
+import Home from "@routes/home";
+import NotFoundPage from "@routes/notfound";
 
 const App: FunctionalComponent = () => {
   const getDirectory = async () => {
-    const entries = await Neutralino.filesystem.readDirectory("./");
+    const entries = await neutralino.filesystem.readDirectory("./");
     console.log(entries);
   };
 

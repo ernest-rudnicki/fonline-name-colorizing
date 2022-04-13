@@ -1,9 +1,9 @@
 import "./style/index.scss";
-import App from "./components/app";
-import Neutralino from "./neutralino/neutralino";
+import { neutralino } from "@neutralino/neutralino";
+import App from "@components/app";
 
 if (typeof window !== "undefined") {
-  Neutralino.init();
+  neutralino.init();
 }
 
 export default App;

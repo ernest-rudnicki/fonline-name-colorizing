@@ -12,6 +12,10 @@ export interface Neutralino {
   filesystem: NeutralinoFileSystem;
 }
 
-const Neutralino = window.Neutralino as Neutralino;
+declare global {
+  interface Window {
+    Neutralino: Neutralino;
+  }
+}
 
-export default Neutralino;
+export const neutralino = window.Neutralino;

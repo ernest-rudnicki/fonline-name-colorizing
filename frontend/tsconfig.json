@@ -10,7 +10,15 @@
         "strict": true,
         "moduleResolution": "node",
         "esModuleInterop": true,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "baseUrl": "./src",
+        "paths": {
+            "@assets/*": ["assets/*"],
+            "@components/*": ["components/*"],
+            "@neutralino/*": ["neutralino/*"],
+            "@routes/*": ["routes/*"],
+            "style/*": ["style/*"],
+        }
     },
     "include": ["src/**/*", "tests/**/*"]
 }
