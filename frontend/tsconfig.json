@@ -11,6 +11,15 @@
         "moduleResolution": "node",
         "esModuleInterop": true,
         "skipLibCheck": true,
+        "baseUrl": "./src",
+        "paths": {
+            "assets/*": ["assets/*"],
+            "components/*": ["components/*"],
+            "neutralino/*": ["neutralino/*"],
+            "routes/*": ["routes/*"],
+            "store/*": ["store/*"],
+            "style": ["style/*"]
+        }
     },
     "include": ["src/**/*", "tests/**/*"]
 }

@@ -1,4 +1,4 @@
-import { neutralino } from "./neutralino/neutralino";
+import { neutralino } from "neutralino/neutralino";
 import StoreWrappedApp from "./StoreWrappedApp";
 import "./style/index.scss";
 
