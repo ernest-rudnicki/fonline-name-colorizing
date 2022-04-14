@@ -4,6 +4,7 @@ import { useEffect, useState } from "preact/hooks";
 import { checkIfFileExist } from "utils";
 import { currentDir } from "constants/constants";
 import Button from "components/Button/Button";
+import { Link } from "preact-router";
 
 import "./style.scss";
 
@@ -29,18 +30,19 @@ const Start: FunctionalComponent = () => {
           <h1>Fonline Name Colorizing</h1>
           {isFileInCurrentDir ? (
             <span>
-              We found a <b>NameColorizing</b> file in the current directory!
+              We found a <b>NameColorizing</b> file in the current directory!{" "}
+              <Link href="/editor">Click here to open it</Link>
             </span>
           ) : null}
           <div className="start-container-content-btns">
             <Button className="start-container-content-btns-btn">
-              Edit File in the Current Directory
+              Create New Name Colorizing
             </Button>
             <Button
               variant="bordered"
               className="start-container-content-btns-btn"
             >
-              Open Another File
+              Open existing file
             </Button>
           </div>
         </div>
