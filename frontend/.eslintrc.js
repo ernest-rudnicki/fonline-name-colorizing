@@ -30,13 +30,5 @@ module.exports = {
       version: "detect",
     },
   },
-  overrides: [
-    {
-      files: ["*.js"],
-      rules: {
-        "@typescript-eslint/explicit-function-return-type": "off",
-      },
-    },
-  ],
-  ignorePatterns: ["node_modules/", "build/"],
+  ignorePatterns: ["node_modules/", "build/", "template.html"],
 };
