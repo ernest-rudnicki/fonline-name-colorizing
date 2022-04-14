@@ -1,9 +1,10 @@
 // COLORS
 $white: #FAFAFA;
-
+$primary-color: #285486;
 
 // FONTS COLOR
 $font-color-regular: #444;
+$font-color-white: #FFFFFF;
 
 // FONT WEIGHT
 $font-weight-regular: 400;
@@ -13,6 +14,7 @@ $margin-huge: 36px;
 $margin-big: 24px;
 $margin-medium: 16px;
 $margin-small: 12px;
+$margin-between: 8px;
 $margin-tiny: 6px;
 $margin-minimal: 3px;
 
@@ -21,6 +23,7 @@ $padding-huge: 36px;
 $padding-big: 24px;
 $padding-medium: 16px;
 $padding-small: 12px;
+$padding-between: 8px;
 $padding-tiny: 6px;
 $padding-minimal: 3px;
 
@@ -33,5 +36,9 @@ $font-size-small: 14px;
 $font-size-very-small: 12px;
 $font-size-tiny: 10px;
 
+// BORDER RADIUS
+$border-radius-regular: 6px;
+
 // ANIMATION TIME
 $animation-duration-base: 0.3s;
+$animation-duration-short: 0.1s;

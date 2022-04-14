@@ -1,0 +1,41 @@
+@use "style/variables" as v;
+
+.btn {
+  border: none;
+  cursor: pointer;
+  transition: transform v.$animation-duration-short ease;
+  
+  &.standard {
+    background-color: v.$primary-color;
+    color: v.$font-color-white;
+    border: 2px solid v.$primary-color;
+    border-radius: v.$border-radius-regular;
+    transition: background-color v.$animation-duration-base ease, border-color v.$animation-duration-base;
+
+    &:hover, &:focus {
+      background-color: lighten(v.$primary-color, 15%);
+      border-color: lighten(v.$primary-color, 15%);
+    }
+  }
+
+  &.bordered {
+    // background-color: transparent;
+    border: 2px solid v.$primary-color;
+    border-radius: v.$border-radius-regular;
+    transition: background-color v.$animation-duration-base ease, border-color v.$animation-duration-base;
+    
+    &:hover, &:focus {
+      border-color: lighten(v.$primary-color, 15%);
+      background-color: lighten(v.$primary-color, 45%);
+    }
+  }
+
+  &.medium {
+    font-size: v.$font-size-regular;
+    padding: v.$padding-between v.$padding-medium;
+  }
+
+  &:active {
+    transform: translateY(3px);
+  }
+}

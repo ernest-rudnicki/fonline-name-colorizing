@@ -21,3 +21,7 @@ html, body {
 #preact_root {
 	height: 100%;
 }
+
+h1, h2, h3, h4, h5 {
+	margin-block-start: 0;
+}

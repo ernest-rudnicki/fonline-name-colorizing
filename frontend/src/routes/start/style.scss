@@ -1,0 +1,27 @@
+@use "style/mixins" as m;
+@use "style/variables" as v;
+
+.start {
+  @include m.center;
+  height: 100%;
+
+  &-container {
+    &-img {
+      max-width: 300px;
+      margin-left: 50px;
+    }
+
+    &-content {
+      margin-top: v.$margin-big;
+      text-align: center;
+
+      &-btns {
+        margin-top: v.$margin-big;
+
+        &-btn:not(:last-child) {
+          margin-right: v.$margin-big;
+        }
+      }
+    }
+  }
+}

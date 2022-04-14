@@ -14,10 +14,10 @@
   "modes": {
     "window": {
       "title": "fonline-name-colorizing",
-      "width": 800,
-      "height": 500,
-      "minWidth": 400,
-      "minHeight": 200,
+      "width": 1024,
+      "height": 768,
+      "minWidth": 1024,
+      "minHeight": 768,
       "icon": "/frontend/src/assets/icons/favicon-32x32.png",
       "enableInspector": true
     }
