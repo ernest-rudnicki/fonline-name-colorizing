@@ -5,6 +5,7 @@ import { checkIfFileExist } from "utils";
 import { currentDir } from "constants/constants";
 import Button from "components/Button/Button";
 import { Link } from "preact-router";
+import { AiFillFolderOpen, AiFillEdit } from "react-icons/ai";
 
 import "./style.scss";
 
@@ -35,10 +36,14 @@ const Start: FunctionalComponent = () => {
             </span>
           ) : null}
           <div className="start-container-content-btns">
-            <Button className="start-container-content-btns-btn">
+            <Button
+              icon={<AiFillEdit />}
+              className="start-container-content-btns-btn"
+            >
               Create New Name Colorizing
             </Button>
             <Button
+              icon={<AiFillFolderOpen />}
               variant="bordered"
               className="start-container-content-btns-btn"
             >

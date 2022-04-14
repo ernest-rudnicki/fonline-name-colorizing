@@ -1,4 +1,5 @@
 @use "style/variables" as v;
+@use "style/mixins" as m;
 
 .btn {
   border: none;
@@ -34,7 +35,16 @@
     padding: v.$padding-between v.$padding-medium;
   }
 
+  &-content {
+    display: flex;
+    &-icon {
+      @include m.center-vertically;
+      margin-right: v.$margin-between;
+    }
+  }
+
   &:active {
     transform: translateY(3px);
   }
+  
 }

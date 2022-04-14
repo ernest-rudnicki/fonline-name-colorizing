@@ -1,5 +1,5 @@
 import { PreactMouseEvent } from "generic/generic";
-import { FunctionalComponent, h } from "preact";
+import { FunctionalComponent, h, VNode } from "preact";
 
 import "./style.scss";
 
@@ -10,6 +10,7 @@ export interface ButtonProps {
   variant?: "standard" | "bordered";
   size?: "medium";
   disabled?: boolean;
+  icon?: VNode;
   onClick?: (e: PreactMouseEvent) => void;
 }
 
@@ -17,6 +18,7 @@ const Button: FunctionalComponent<ButtonProps> = (props) => {
   const {
     children,
     className,
+    icon,
     onClick,
     disabled,
     type = "button",
@@ -32,7 +34,10 @@ const Button: FunctionalComponent<ButtonProps> = (props) => {
       type={type}
       className={joinedClasssName}
     >
-      {children}
+      <div className="btn-content">
+        {icon && <span className="btn-content-icon">{icon}</span>}
+        {children}
+      </div>
     </button>
   );
 };
