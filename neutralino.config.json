@@ -9,7 +9,8 @@
   "port": 18067,
   "nativeAllowList": [
     "app.*",
-    "filesystem.*"
+    "filesystem.*",
+    "os.*"
   ],
   "modes": {
     "window": {

@@ -1,11 +1,12 @@
 import { FunctionalComponent, h } from "preact";
-import { useEffect, useState } from "preact/hooks";
-
-import { checkIfFileExist } from "utils";
-import { currentDir } from "constants/constants";
-import Button from "components/Button/Button";
+import { useCallback, useEffect, useState } from "preact/hooks";
 import { Link } from "preact-router";
 import { AiFillFolderOpen, AiFillEdit } from "react-icons/ai";
+
+import { checkIfFileExist } from "utils";
+import { CURRENT_DIR, NAME_COLORIZING_FILE_NAME } from "constants/constants";
+import Button from "components/Button/Button";
+import { neutralino } from "neutralino/neutralino";
 
 import "./style.scss";
 
@@ -14,9 +15,20 @@ const Start: FunctionalComponent = () => {
 
   // TODO serve error case
   useEffect(() => {
-    checkIfFileExist(currentDir, "NameColorizing.txt").then((value) =>
+    checkIfFileExist(CURRENT_DIR, NAME_COLORIZING_FILE_NAME).then((value) =>
       setIsFileInCurrentDir(value)
     );
+  }, []);
+
+  const openFileDialog = useCallback(() => {
+    neutralino.os.showOpenDialog("Open your name colorizing file", {
+      filters: [
+        {
+          name: "Text files",
+          extensions: ["txt"],
+        },
+      ],
+    });
   }, []);
 
   return (
@@ -43,6 +55,7 @@ const Start: FunctionalComponent = () => {
               Create New Name Colorizing
             </Button>
             <Button
+              onClick={openFileDialog}
               icon={<AiFillFolderOpen />}
               variant="bordered"
               className="start-container-content-btns-btn"
