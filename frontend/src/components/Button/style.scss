@@ -19,14 +19,13 @@
   }
 
   &.bordered {
-    // background-color: transparent;
     border: 2px solid v.$primary-color;
     border-radius: v.$border-radius-regular;
-    transition: background-color v.$animation-duration-base ease, border-color v.$animation-duration-base;
+    transition: color v.$animation-duration-base ease, border-color v.$animation-duration-base;
     
     &:hover, &:focus {
       border-color: lighten(v.$primary-color, 15%);
-      background-color: lighten(v.$primary-color, 45%);
+      color: lighten(v.$primary-color, 15%);
     }
   }
 
