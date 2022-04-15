@@ -23,7 +23,7 @@ export interface ShowDialogOptions {
 
 export interface NeutralinoFileSystem {
   readDirectory: (path: string) => Promise<DirectoryEntries[]>;
-  readFile: (filename: string) => Promise<unknown>;
+  readFile: (path: string) => Promise<unknown>;
 }
 
 export interface NeutralinoOS {

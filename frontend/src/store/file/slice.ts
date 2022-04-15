@@ -1,11 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createCustomSlice } from "store/store-utils";
 import { FileState } from "./types";
 
 const initialState: FileState = {
   test: "Goodbye world",
+  isLoading: false,
 };
 
-export const fileSlice = createSlice({
+export const fileSlice = createCustomSlice({
   name: "file",
   initialState,
   reducers: {},

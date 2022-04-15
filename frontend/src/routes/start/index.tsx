@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "preact/hooks";
 import { Link } from "preact-router";
 import { AiFillFolderOpen, AiFillEdit } from "react-icons/ai";
 
-import { checkIfFileExist } from "utils";
+import { checkIfFileExist } from "utils/utils";
 import { CURRENT_DIR, NAME_COLORIZING_FILE_NAME } from "constants/constants";
 import Button from "components/Button/Button";
 import { neutralino } from "neutralino/neutralino";
