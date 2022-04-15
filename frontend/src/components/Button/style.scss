@@ -11,7 +11,7 @@
     color: v.$font-color-white;
     border: 2px solid v.$primary-color;
     border-radius: v.$border-radius-regular;
-    transition: background-color v.$animation-duration-base ease, border-color v.$animation-duration-base;
+    transition: background-color v.$animation-duration-base ease, border-color v.$animation-duration-base ease;
 
     &:hover, &:focus {
       background-color: lighten(v.$primary-color, 15%);
@@ -22,7 +22,7 @@
   &.bordered {
     border: 2px solid v.$primary-color;
     border-radius: v.$border-radius-regular;
-    transition: color v.$animation-duration-base ease, border-color v.$animation-duration-base;
+    transition: color v.$animation-duration-base ease, border-color v.$animation-duration-base ease;
     
     &:hover, &:focus {
       border-color: lighten(v.$primary-color, 15%);
