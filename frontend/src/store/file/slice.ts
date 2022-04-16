@@ -1,7 +1,5 @@
 import { createCustomSlice } from "store/store-utils";
-import { removeAdditionalSpaces, splitByNewLine } from "utils/utils";
 import { readFileContent } from "./actions";
-import { parseFileContent } from "./helpers";
 import { FileState } from "./types";
 
 const initialState: FileState = {
@@ -18,8 +16,7 @@ export const fileSlice = createCustomSlice(
   undefined,
   (builder) => {
     builder.addCase(readFileContent.fulfilled, (state, response) => {
-      const lines = splitByNewLine(removeAdditionalSpaces(response.payload));
-      state.colors = parseFileContent(lines);
+      state.colors = response.payload;
     });
   }
 );
