@@ -20,7 +20,6 @@ export const fileSlice = createCustomSlice(
     builder.addCase(readFileContent.fulfilled, (state, response) => {
       const lines = splitByNewLine(removeAdditionalSpaces(response.payload));
       state.colors = parseFileContent(lines);
-      console.log(state.colors);
     });
   }
 );
