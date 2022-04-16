@@ -30,9 +30,22 @@
     }
   }
 
+  &.minimal {
+    background-color: transparent;
+    color: v.$link-color;
+
+    &:hover, &:focus {
+      text-decoration: underline;
+    }
+  }
+
   &.medium {
     font-size: v.$font-size-regular;
     padding: v.$padding-between v.$padding-medium;
+  }
+  
+  &.tiny {
+    font-size: v.$font-size-regular;
   }
 
   &-content {

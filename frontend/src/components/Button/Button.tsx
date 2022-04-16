@@ -7,8 +7,8 @@ export interface ButtonProps {
   children: React.ReactNode;
   className?: string;
   type?: "button" | "submit" | "reset";
-  variant?: "standard" | "bordered";
-  size?: "medium";
+  variant?: "standard" | "bordered" | "minimal";
+  size?: "medium" | "tiny";
   disabled?: boolean;
   icon?: VNode;
   onClick?: (e: PreactMouseEvent) => void;
@@ -25,7 +25,10 @@ const Button: FunctionalComponent<ButtonProps> = (props) => {
     variant = "standard",
     size = "medium",
   } = props;
-  const joinedClasssName = `btn ${variant} ${size} ${className}`.trimEnd();
+
+  const joinedClasssName = `btn ${variant} ${size} ${
+    className ? className : ""
+  }`.trimEnd();
 
   return (
     <button
