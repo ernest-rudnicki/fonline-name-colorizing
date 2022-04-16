@@ -10,3 +10,15 @@ export function checkIfFileExist(
     );
   });
 }
+
+export function splitByNewLine(text: string): string[] {
+  return text.split(/\r?\n/);
+}
+
+export function removeAdditionalSpaces(text: string): string {
+  return text.replace(/[^\S\r\n]+/g, " ").trim();
+}
+
+export function parseIntBaseTen(textNumber: string): number {
+  return parseInt(textNumber, 10);
+}

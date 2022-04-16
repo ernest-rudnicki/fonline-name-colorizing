@@ -27,15 +27,15 @@ export interface CustomThunkConfig<ErrorData> {
 
 export function createCustomThunk<Data, ThunkArg, ErrorData>(
   prefix: string,
-  action: (payload?: ThunkArg) => Promise<Data>,
-  options: {
+  action: (payload: ThunkArg) => Promise<Data>,
+  options?: {
     errorMsg: string;
   }
 ): AsyncThunk<Data, ThunkArg, CustomThunkConfig<ErrorData>> {
   return createAsyncThunk<Data, ThunkArg, CustomThunkConfig<ErrorData>>(
     prefix,
     async (payload, { rejectWithValue }) => {
-      const { errorMsg } = options;
+      const { errorMsg } = options || {};
       try {
         const response = await action(payload);
         return response;

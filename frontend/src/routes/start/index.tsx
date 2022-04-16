@@ -2,6 +2,8 @@ import { FunctionalComponent, h } from "preact";
 import { useCallback, useEffect, useState } from "preact/hooks";
 import { Link } from "preact-router";
 import { AiFillFolderOpen, AiFillEdit } from "react-icons/ai";
+import { Dispatch } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
 
 import { checkIfFileExist } from "utils/utils";
 import { CURRENT_DIR, NAME_COLORIZING_FILE_NAME } from "constants/constants";
@@ -9,9 +11,12 @@ import Button from "components/Button/Button";
 import { neutralino } from "neutralino/neutralino";
 
 import "./style.scss";
+import { readFileContent } from "store/file/actions";
+import { AppDispatch } from "store/store";
 
 const Start: FunctionalComponent = () => {
   const [isFileInCurrentDir, setIsFileInCurrentDir] = useState<boolean>(false);
+  const dispatch: AppDispatch = useDispatch();
 
   // TODO serve error case
   useEffect(() => {
@@ -21,15 +26,19 @@ const Start: FunctionalComponent = () => {
   }, []);
 
   const openFileDialog = useCallback(() => {
-    neutralino.os.showOpenDialog("Open your name colorizing file", {
-      filters: [
-        {
-          name: "Text files",
-          extensions: ["txt"],
-        },
-      ],
-    });
-  }, []);
+    neutralino.os
+      .showOpenDialog("Open your name colorizing file", {
+        filters: [
+          {
+            name: "Text files",
+            extensions: ["txt"],
+          },
+        ],
+      })
+      .then((res) => {
+        dispatch(readFileContent(res[0]));
+      });
+  }, [dispatch]);
 
   return (
     <div className="start">

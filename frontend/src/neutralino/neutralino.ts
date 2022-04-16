@@ -6,7 +6,7 @@ export enum DirectoryItem {
   DIRECTORY = "DIRECTORY",
 }
 
-export interface DirectoryEntries {
+export interface DirectoryEntry {
   entry: string;
   type: DirectoryItem;
 }
@@ -22,15 +22,15 @@ export interface ShowDialogOptions {
 }
 
 export interface NeutralinoFileSystem {
-  readDirectory: (path: string) => Promise<DirectoryEntries[]>;
-  readFile: (path: string) => Promise<unknown>;
+  readDirectory: (path: string) => Promise<DirectoryEntry[]>;
+  readFile: <Content>(path: string) => Promise<Content>;
 }
 
 export interface NeutralinoOS {
   showOpenDialog: (
     title: string,
     options: ShowDialogOptions
-  ) => Promise<DirectoryEntries>;
+  ) => Promise<string[]>;
 }
 
 export interface Neutralino {

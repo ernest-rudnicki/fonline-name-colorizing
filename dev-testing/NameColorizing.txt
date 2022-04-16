@@ -14,7 +14,7 @@
 >   GoodBoyName*     NameGreen         ContourGreen
 >   BadBoyName*      NameRed           ContourRed
 >   One&Two???       NameGray          ContourYellow
->   Terminatova      NameMine	       CountourMine
+>   Terminatova      NameMine	       ContourMine
 >   Terminatk        NameMine	       ContourMine
 
 
