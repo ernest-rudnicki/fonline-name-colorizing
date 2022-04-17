@@ -2,6 +2,7 @@
 $white: #FAFAFA;
 $divider: #d3d3d3;
 $primary-color: #285486;
+$mask: #000000cc;
 
 // FONTS COLOR
 $font-color-regular: #444;
@@ -41,7 +42,9 @@ $font-size-tiny: 10px;
 
 // BORDER RADIUS
 $border-radius-regular: 6px;
+$border-radius-small: 3px;
 
 // ANIMATION TIME
 $animation-duration-base: 0.3s;
+$animation-duration-between: 0.15s;
 $animation-duration-short: 0.1s;

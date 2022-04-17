@@ -15,6 +15,7 @@ const Editor: FunctionalComponent = () => {
             variant="minimal"
             size="tiny"
             mode="dark"
+            tooltipText="Add new color group"
             icon={<AiFillPlusCircle />}
           />
         </TitleBar>
