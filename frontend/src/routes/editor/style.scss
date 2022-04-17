@@ -1,5 +1,22 @@
+@use "style/variables" as v;
+@use "style/mixins" as m;
+
 .editor {
-	padding: 56px 20px;
-	min-height: 100%;
-	width: 100%;
+	@include m.full-size;
+	display: grid;
+	grid-template-columns: 250px 1fr;
+	
+	&-list {
+		border-right: 1px solid v.$divider;
+
+		&-content {
+			padding: v.$padding-big;
+		}
+	}
+
+	&-config {
+		&-content {
+			padding: v.$padding-big;
+		}
+	}
 }

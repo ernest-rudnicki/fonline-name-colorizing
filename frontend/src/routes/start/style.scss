@@ -17,12 +17,16 @@
       margin-top: v.$margin-big;
       text-align: center;
 
+      &-header {
+        margin-bottom: v.$margin-medium;
+      }
+
       &-found {
         @include m.center-horizontally;
       }
 
       &-btns {
-        margin-top: v.$margin-big;
+        margin-top: v.$margin-medium;
 
         &-btn:not(:last-child) {
           margin-right: v.$margin-big;

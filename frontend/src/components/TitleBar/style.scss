@@ -1,0 +1,17 @@
+@use "style/variables" as v;
+@use "style/mixins" as m;
+
+.titlebar {
+  @include m.center-vertically;
+  width: 100%;
+  background-color: v.$primary-color;
+  color: v.$font-color-white;
+  padding: v.$padding-small v.$padding-between;
+  font-size: v.$font-size-small;
+
+  &-actions {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+  }
+}

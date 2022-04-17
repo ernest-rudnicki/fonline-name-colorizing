@@ -48,11 +48,23 @@
     font-size: v.$font-size-regular;
   }
 
+  &.icon {
+    font-size: v.$font-size-between;
+  }
+
+  &.dark {
+    color: v.$font-color-white;
+  }
+
   &-content {
     display: flex;
+
+    &-icon + &-text {
+      margin-left: v.$margin-between;
+    }
+
     &-icon {
       @include m.center-vertically;
-      margin-right: v.$margin-between;
     }
   }
 

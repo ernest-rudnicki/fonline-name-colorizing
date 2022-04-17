@@ -60,7 +60,9 @@ const Start: FunctionalComponent = () => {
           src="assets/img/fallout_boy.png"
         />
         <div className="start-container-content">
-          <h1>Fonline Name Colorizing</h1>
+          <h1 className="start-container-content-header">
+            Fonline Name Colorizing
+          </h1>
           {isFileInCurrentDir ? (
             <div className="start-container-content-found">
               <span>

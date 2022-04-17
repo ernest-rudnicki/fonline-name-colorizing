@@ -13,3 +13,8 @@
   display: flex;
   align-items: center;
 }
+
+@mixin full-size {
+  width: 100%;
+  height: 100%;
+}
