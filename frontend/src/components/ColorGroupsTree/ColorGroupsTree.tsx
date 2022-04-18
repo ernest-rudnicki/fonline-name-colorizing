@@ -51,7 +51,9 @@ const ColorGroupsTree: FunctionalComponent<ColorGroupsTreeProps> = (props) => {
                 size={16}
                 color={color}
               />
-              <div>{props.item.data.name}</div>
+              <div>
+                <b>{props.item.data.name}</b>
+              </div>
             </div>
           ) as React.ReactElement;
         }
