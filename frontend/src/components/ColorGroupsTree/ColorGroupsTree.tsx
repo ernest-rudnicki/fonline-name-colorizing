@@ -22,6 +22,7 @@ const ColorGroupsTree: FunctionalComponent<ColorGroupsTreeProps> = (props) => {
 
   return (
     <UncontrolledTreeEnvironment
+      canSearch={false}
       dataProvider={
         new StaticTreeDataProvider(colors, (item, data) => {
           return {
