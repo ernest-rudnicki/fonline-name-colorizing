@@ -78,7 +78,7 @@ const Start: FunctionalComponent = () => {
               icon={<AiFillEdit />}
               className="start-container-content-btns-btn"
             >
-              Create New Name Colorizing
+              Create new Name Colorizing
             </Button>
             <Button
               onClick={openFileDialog}
