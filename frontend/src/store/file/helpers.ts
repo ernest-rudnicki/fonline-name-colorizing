@@ -1,6 +1,12 @@
-import { ColorTreeItems } from "./types";
+import { ColorGroup, ColorTreeItems } from "./types";
 import { parseIntBaseTen } from "utils/utils";
 import { TreeItem } from "react-complex-tree";
+
+export type TreeItemData = string | ColorGroup;
+
+export function isColorGroup(item: TreeItemData): item is ColorGroup {
+  return !!(item as ColorGroup).name;
+}
 
 export function createColorItem(
   colorName: string,
@@ -14,7 +20,9 @@ export function createColorItem(
     canMove: false,
     hasChildren: true,
     children: [nameGroup, contourGroup],
-    data: colorName,
+    data: {
+      name: colorName,
+    },
   };
 
   colorGroup[nameGroup] = {
@@ -36,7 +44,7 @@ export function createColorItem(
   return colorGroup;
 }
 
-export function createUsernameItem(username: string): TreeItem {
+export function createUsernameItem(username: string): TreeItem<string> {
   return {
     index: username,
     canMove: true,
@@ -45,9 +53,32 @@ export function createUsernameItem(username: string): TreeItem {
   };
 }
 
-export function parseFileContent(content: string[]): {
-  [key: string]: TreeItem;
-} {
+export function fillTree(
+  treeItems: ColorTreeItems,
+  colorName: string,
+  username?: string
+): ColorTreeItems {
+  const nameColorItem = `name${colorName}`;
+  const nameContourItem = `contour${colorName}`;
+  let treeItemsCopy = { ...treeItems };
+
+  if (!treeItemsCopy[colorName]) {
+    treeItemsCopy = {
+      ...treeItemsCopy,
+      ...createColorItem(colorName, nameColorItem, nameContourItem),
+    };
+    treeItemsCopy["root"].children?.push(colorName);
+  }
+
+  if (!username) {
+    return treeItemsCopy;
+  }
+
+  treeItemsCopy[nameColorItem].children?.push(username);
+  return treeItemsCopy;
+}
+
+export function parseFileContent(content: string[]): ColorTreeItems {
   let treeItems: ColorTreeItems = {
     root: {
       index: "root",
@@ -70,29 +101,8 @@ export function parseFileContent(content: string[]): {
       const nameColor = splittedLine[2];
       const contourColor = splittedLine[3];
 
-      const nameColorItem = `name${nameColor}`;
-      const nameContourItem = `contour${nameColor}`;
-
-      if (!treeItems[nameColor]) {
-        treeItems = {
-          ...treeItems,
-          ...createColorItem(nameColor, nameColorItem, nameContourItem),
-        };
-        treeItems["root"].children?.push(nameColor);
-      }
-      treeItems[nameColorItem].children?.push(username);
-
-      const contourColorItem = `name${contourColor}`;
-      const contourItem = `contour${contourColor}`;
-
-      if (!treeItems[contourColor]) {
-        treeItems = {
-          ...treeItems,
-          ...createColorItem(contourColor, contourColorItem, contourItem),
-        };
-        treeItems["root"].children?.push(contourColor);
-      }
-      treeItems[contourItem].children?.push(username);
+      treeItems = fillTree(treeItems, nameColor, username);
+      treeItems = fillTree(treeItems, contourColor, username);
 
       treeItems = {
         ...treeItems,
@@ -112,20 +122,22 @@ export function parseFileContent(content: string[]): {
       const green = splittedLine[3];
       const blue = splittedLine[4];
 
-      const color = `name${colorName}`;
-      const contour = `contour${colorName}`;
+      treeItems = fillTree(treeItems, colorName);
 
-      if (!treeItems[colorName]) {
-        treeItems = {
-          ...treeItems,
-          ...createColorItem(colorName, color, contour),
-        };
-        treeItems["root"].children?.push(colorName);
+      const treeItemData = treeItems[colorName].data;
+      if (!isColorGroup(treeItemData)) {
+        return;
       }
 
-      // treeItems[colorName].data.red = parseIntBaseTen(red);
-      // treeItems[colorName].data.green = parseIntBaseTen(green);
-      // treeItems[colorName].data.blue = parseIntBaseTen(blue);
+      treeItems[colorName].data = {
+        ...treeItemData,
+        color: {
+          red: parseIntBaseTen(red),
+          green: parseIntBaseTen(green),
+          blue: parseIntBaseTen(blue),
+        },
+      };
+
       return;
     }
   });

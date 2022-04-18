@@ -1,16 +1,17 @@
-import { GenericPreactContent } from "generic/generic";
 import { FunctionalComponent, h } from "preact";
+
+import { GenericPreactContent } from "generic/generic";
 import { joinClassNames } from "utils/utils";
 
 import "./style.scss";
 
-export interface ButtonProps {
+export interface TitleBarProps {
   title: string;
   className?: string;
   children?: GenericPreactContent;
 }
 
-const TitleBar: FunctionalComponent<ButtonProps> = (props) => {
+const TitleBar: FunctionalComponent<TitleBarProps> = (props) => {
   const { children, title, className } = props;
 
   return (
