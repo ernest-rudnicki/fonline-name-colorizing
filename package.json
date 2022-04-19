@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Utility tool for colorizing nicknames in Fonline",
   "scripts": {
-    "setup": "cd frontend && npm run install && npm run build",
+    "setup": "cd frontend && npm install && npm run build",
     "dev:front": "cd frontend && npm run dev",
     "dev": "concurrently \"npm run dev:front\" \"neu run --frontend-lib-dev\"",
     "lint": "cd ./frontend && npm run lint",
