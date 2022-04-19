@@ -45,4 +45,9 @@ declare global {
   }
 }
 
-export const neutralino = window.Neutralino;
+let neutralino: Neutralino;
+if (typeof window !== "undefined") {
+  neutralino = window.Neutralino;
+}
+
+export { neutralino };
