@@ -21,6 +21,7 @@
   }
 
   &.bordered {
+    background-color: transparent;
     border: 2px solid v.$primary-color;
     border-radius: v.$border-radius-regular;
     transition: color v.$animation-duration-base ease, border-color v.$animation-duration-base ease;
