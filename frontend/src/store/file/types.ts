@@ -1,7 +1,9 @@
 import { BaseState } from "generic/generic";
+import { TreeItem } from "react-complex-tree";
+import { TreeItemData } from "./helpers";
 
 export interface FileState extends BaseState {
-  colors: Colors;
+  colors: ColorTreeItems;
 }
 
 export interface RGBColor {
@@ -10,12 +12,9 @@ export interface RGBColor {
   blue: number;
 }
 
-export interface Colors {
-  [key: string]: ColorGroup;
-}
+export type ColorTreeItems = { [key: string]: TreeItem<TreeItemData> };
 
 export interface ColorGroup {
-  color: RGBColor;
-  coloredNames: string[];
-  contourUsernames: string[];
+  name: string;
+  color?: RGBColor;
 }

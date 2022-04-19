@@ -1,6 +1,6 @@
 import { FunctionalComponent, h } from "preact";
 import { useCallback, useEffect, useState } from "preact/hooks";
-import { Link } from "preact-router";
+import { route } from "preact-router";
 import { AiFillFolderOpen, AiFillEdit } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "store/store";
@@ -14,7 +14,6 @@ import {
 import Button from "components/Button/Button";
 import { neutralino } from "neutralino/neutralino";
 import { readFileContent } from "store/file/actions";
-
 import "./style.scss";
 
 const Start: FunctionalComponent = () => {
@@ -34,8 +33,22 @@ const Start: FunctionalComponent = () => {
         filters: NAME_COLORIZING_FILE_FILTERS,
       })
       .then((res) => {
-        dispatch(readFileContent(res[0]));
+        if (res.length === 0) {
+          return;
+        }
+
+        dispatch(readFileContent(res[0])).then(() => {
+          route("/editor");
+        });
       });
+  }, [dispatch]);
+
+  const onFoundClick = useCallback(() => {
+    const dir = CURRENT_DIR + NAME_COLORIZING_FILE_NAME;
+
+    dispatch(readFileContent(dir)).then(() => {
+      route("/editor");
+    });
   }, [dispatch]);
 
   return (
@@ -47,19 +60,25 @@ const Start: FunctionalComponent = () => {
           src="assets/img/fallout_boy.png"
         />
         <div className="start-container-content">
-          <h1>Fonline Name Colorizing</h1>
+          <h1 className="start-container-content-header">
+            Fonline Name Colorizing
+          </h1>
           {isFileInCurrentDir ? (
-            <span>
-              We found a <b>NameColorizing</b> file in the current directory!{" "}
-              <Link href="/editor">Click here to open it</Link>
-            </span>
+            <div className="start-container-content-found">
+              <span>
+                We found a <b>NameColorizing</b> file in the current directory!{" "}
+              </span>
+              <Button onClick={onFoundClick} variant="minimal" size="tiny">
+                Click here to open it
+              </Button>
+            </div>
           ) : null}
           <div className="start-container-content-btns">
             <Button
               icon={<AiFillEdit />}
               className="start-container-content-btns-btn"
             >
-              Create New Name Colorizing
+              Create new Name Colorizing
             </Button>
             <Button
               onClick={openFileDialog}

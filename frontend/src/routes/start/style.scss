@@ -6,18 +6,27 @@
   height: 100%;
 
   &-container {
-    width: 550px;
+    width: 600px;
+
     &-img {
       max-width: 300px;
-      margin-left: 100px;
+      margin-left: 120px;
     }
 
     &-content {
       margin-top: v.$margin-big;
       text-align: center;
 
+      &-header {
+        margin-bottom: v.$margin-medium;
+      }
+
+      &-found {
+        @include m.center-horizontally;
+      }
+
       &-btns {
-        margin-top: v.$margin-big;
+        margin-top: v.$margin-medium;
 
         &-btn:not(:last-child) {
           margin-right: v.$margin-big;

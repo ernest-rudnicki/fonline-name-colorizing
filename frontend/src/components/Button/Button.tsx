@@ -1,14 +1,17 @@
-import { PreactMouseEvent } from "generic/generic";
+import { GenericPreactContent, PreactMouseEvent } from "generic/generic";
 import { FunctionalComponent, h, VNode } from "preact";
+import { joinClassNames } from "utils/utils";
 
 import "./style.scss";
 
 export interface ButtonProps {
-  children: React.ReactNode;
+  children?: GenericPreactContent;
   className?: string;
   type?: "button" | "submit" | "reset";
-  variant?: "standard" | "bordered";
-  size?: "medium";
+  variant?: "standard" | "bordered" | "minimal";
+  size?: "medium" | "tiny" | "icon";
+  mode?: "dark" | "light";
+  tooltipText?: string;
   disabled?: boolean;
   icon?: VNode;
   onClick?: (e: PreactMouseEvent) => void;
@@ -19,24 +22,26 @@ const Button: FunctionalComponent<ButtonProps> = (props) => {
     children,
     className,
     icon,
+    tooltipText,
     onClick,
     disabled,
     type = "button",
     variant = "standard",
     size = "medium",
+    mode = "light",
   } = props;
-  const joinedClasssName = `btn ${variant} ${size} ${className}`.trimEnd();
 
   return (
     <button
       disabled={disabled}
       onClick={onClick}
       type={type}
-      className={joinedClasssName}
+      className={joinClassNames(["btn", variant, size, mode, className])}
     >
+      {tooltipText && <div className="btn-tooltip">{tooltipText}</div>}
       <div className="btn-content">
         {icon && <span className="btn-content-icon">{icon}</span>}
-        {children}
+        {children && <span className="btn-content-text">{children}</span>}
       </div>
     </button>
   );

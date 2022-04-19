@@ -28,6 +28,7 @@ export interface CustomThunkConfig<ErrorData> {
 export function createCustomThunk<Data, ThunkArg, ErrorData>(
   prefix: string,
   action: (payload: ThunkArg) => Promise<Data>,
+  middleware?: <Returned>(response: Data) => Returned,
   options?: {
     errorMsg: string;
   }
@@ -37,7 +38,12 @@ export function createCustomThunk<Data, ThunkArg, ErrorData>(
     async (payload, { rejectWithValue }) => {
       const { errorMsg } = options || {};
       try {
-        const response = await action(payload);
+        let response = await action(payload);
+
+        if (middleware) {
+          response = middleware(response);
+        }
+
         return response;
       } catch (e) {
         return rejectWithValue({ error: e, errorMsg });

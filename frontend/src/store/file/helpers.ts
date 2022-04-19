@@ -1,10 +1,93 @@
-import { colorGroupTemplate } from "reusable-structures/reusable-structures";
-import { Colors } from "./types";
-import cloneDeep from "lodash.clonedeep";
+import { ColorGroup, ColorTreeItems } from "./types";
 import { parseIntBaseTen } from "utils/utils";
+import { TreeItem } from "react-complex-tree";
 
-export function parseFileContent(content: string[]): Colors {
-  const colorHashMap: Colors = {};
+export type TreeItemData = string | ColorGroup;
+
+export function isColorGroup(item: TreeItemData): item is ColorGroup {
+  return !!(item as ColorGroup).name;
+}
+
+export function createColorItem(
+  colorName: string,
+  nameGroup: string,
+  contourGroup: string
+): ColorTreeItems {
+  const colorGroup: ColorTreeItems = {};
+
+  colorGroup[colorName] = {
+    index: colorName,
+    canMove: false,
+    hasChildren: true,
+    children: [nameGroup, contourGroup],
+    data: {
+      name: colorName,
+    },
+  };
+
+  colorGroup[nameGroup] = {
+    index: nameGroup,
+    canMove: false,
+    hasChildren: true,
+    children: [],
+    data: "Name Color",
+  };
+
+  colorGroup[contourGroup] = {
+    index: contourGroup,
+    canMove: false,
+    hasChildren: true,
+    children: [],
+    data: "Contour Color",
+  };
+
+  return colorGroup;
+}
+
+export function createUsernameItem(username: string): TreeItem<string> {
+  return {
+    index: username,
+    canMove: true,
+    hasChildren: false,
+    data: username,
+  };
+}
+
+export function fillTree(
+  treeItems: ColorTreeItems,
+  colorName: string,
+  username?: string
+): ColorTreeItems {
+  const nameColorItem = `name${colorName}`;
+  const nameContourItem = `contour${colorName}`;
+  let treeItemsCopy = { ...treeItems };
+
+  if (!treeItemsCopy[colorName]) {
+    treeItemsCopy = {
+      ...treeItemsCopy,
+      ...createColorItem(colorName, nameColorItem, nameContourItem),
+    };
+    treeItemsCopy["root"].children?.push(colorName);
+  }
+
+  if (!username) {
+    return treeItemsCopy;
+  }
+
+  treeItemsCopy[nameColorItem].children?.push(username);
+  return treeItemsCopy;
+}
+
+export function parseFileContent(content: string[]): ColorTreeItems {
+  let treeItems: ColorTreeItems = {
+    root: {
+      index: "root",
+      canMove: true,
+      hasChildren: true,
+      children: [],
+      data: "root",
+    },
+  };
 
   content.forEach((el) => {
     const splittedLine = el.split(" ");
@@ -16,18 +99,15 @@ export function parseFileContent(content: string[]): Colors {
 
       const username = splittedLine[1];
       const nameColor = splittedLine[2];
-      const countourColor = splittedLine[3];
+      const contourColor = splittedLine[3];
 
-      if (!colorHashMap[nameColor]) {
-        colorHashMap[nameColor] = cloneDeep(colorGroupTemplate);
-      }
+      treeItems = fillTree(treeItems, nameColor, username);
+      treeItems = fillTree(treeItems, contourColor, username);
 
-      if (!colorHashMap[countourColor]) {
-        colorHashMap[countourColor] = cloneDeep(colorGroupTemplate);
-      }
-
-      colorHashMap[nameColor].coloredNames.push(username);
-      colorHashMap[countourColor].contourUsernames.push(username);
+      treeItems = {
+        ...treeItems,
+        [username]: createUsernameItem(username),
+      };
 
       return;
     }
@@ -42,16 +122,25 @@ export function parseFileContent(content: string[]): Colors {
       const green = splittedLine[3];
       const blue = splittedLine[4];
 
-      if (!colorHashMap[colorName]) {
-        colorHashMap[colorName] = cloneDeep(colorGroupTemplate);
+      treeItems = fillTree(treeItems, colorName);
+
+      const treeItemData = treeItems[colorName].data;
+      if (!isColorGroup(treeItemData)) {
+        return;
       }
 
-      colorHashMap[colorName].color.red = parseIntBaseTen(red);
-      colorHashMap[colorName].color.green = parseIntBaseTen(green);
-      colorHashMap[colorName].color.blue = parseIntBaseTen(blue);
+      treeItems[colorName].data = {
+        ...treeItemData,
+        color: {
+          red: parseIntBaseTen(red),
+          green: parseIntBaseTen(green),
+          blue: parseIntBaseTen(blue),
+        },
+      };
+
       return;
     }
   });
 
-  return colorHashMap;
+  return treeItems;
 }

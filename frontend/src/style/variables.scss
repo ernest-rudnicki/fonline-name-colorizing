@@ -1,6 +1,8 @@
 // COLORS
 $white: #FAFAFA;
+$divider: #d3d3d3;
 $primary-color: #285486;
+$mask: #000000cc;
 
 // FONTS COLOR
 $font-color-regular: #444;
@@ -32,6 +34,7 @@ $padding-minimal: 3px;
 $font-size-enormous: 42px;
 $font-size-huge: 32px;
 $font-size-big: 26px;
+$font-size-between: 18px;
 $font-size-regular: 16px;
 $font-size-small: 14px;
 $font-size-very-small: 12px;
@@ -39,7 +42,14 @@ $font-size-tiny: 10px;
 
 // BORDER RADIUS
 $border-radius-regular: 6px;
+$border-radius-small: 3px;
 
 // ANIMATION TIME
 $animation-duration-base: 0.3s;
+$animation-duration-between: 0.15s;
 $animation-duration-short: 0.1s;
+
+// REACT COMPLEX TREE OVERRIDES
+:root {
+  --rct-color-tree-bg: $white;
+}

@@ -22,3 +22,9 @@ export function removeAdditionalSpaces(text: string): string {
 export function parseIntBaseTen(textNumber: string): number {
   return parseInt(textNumber, 10);
 }
+
+export function joinClassNames(
+  classNames: Array<string | null | undefined>
+): string {
+  return classNames.filter((el) => !!el).join(" ");
+}
