@@ -3,7 +3,7 @@ import { FunctionalComponent, h } from "preact";
 import Button from "components/Button/Button";
 import ColoredSquare from "components/ColoredSquare/ColoredSquare";
 import { ColorGroupHashMap } from "store/file/types";
-import { getEntries, joinClassNames } from "utils/utils";
+import { getEntries, isTestingEnv, joinClassNames } from "utils/utils";
 
 import "./style.scss";
 
@@ -20,6 +20,9 @@ const ColorList: FunctionalComponent<ColoredSquareProps> = (props) => {
 
   const _onClick = (key: string) => {
     if (!onClick) {
+      if (isTestingEnv()) {
+        console.log("jest test");
+      }
       return;
     }
     onClick(key);
