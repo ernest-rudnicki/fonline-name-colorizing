@@ -9,7 +9,7 @@
     width: 100%;
     transition: background-color v.$animation-duration-base ease;
     padding: v.$padding-tiny 0 v.$padding-tiny v.$padding-tiny;
-    border-radius: 3px;
+    border-radius: v.$border-radius-small;
 
     &:hover, &:focus {
       background-color: v.$hover-regular;
