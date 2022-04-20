@@ -2,10 +2,10 @@
 @use "style/mixins" as m;
 
 .color-list {
-  padding: v.$padding-small;
+  padding: v.$padding-between;
   &-item {
     display: block;
-    margin-bottom: v.$margin-tiny;
+    margin-bottom: v.$margin-between;
     &-content {
       display: flex;
       align-items: flex-end;

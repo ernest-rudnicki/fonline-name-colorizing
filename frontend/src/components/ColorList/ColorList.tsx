@@ -41,7 +41,7 @@ const TitleBar: FunctionalComponent<ColoredSquareProps> = (props) => {
           <div className="color-list-item-content">
             <ColoredSquare
               className="color-list-item-content-square"
-              size={20}
+              size={16}
               color={value.color}
             />
             <b>{key}</b>

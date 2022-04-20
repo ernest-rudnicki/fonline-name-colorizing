@@ -68,7 +68,7 @@ const Start: FunctionalComponent = () => {
               <span>
                 We found a <b>NameColorizing</b> file in the current directory!{" "}
               </span>
-              <Button onClick={onFoundClick} variant="minimal" size="tiny">
+              <Button onClick={onFoundClick} variant="minimal" size="small">
                 Click here to open it
               </Button>
             </div>
