@@ -6,8 +6,8 @@ import { ColorGroup, FileState } from "./types";
 
 const initialState: FileState = {
   isLoading: false,
-  treeItems: {},
-  selectedTreeItem: null,
+  usernames: [],
+  colors: {},
 };
 
 export const fileSlice = createCustomSlice(
@@ -20,7 +20,7 @@ export const fileSlice = createCustomSlice(
         action: PayloadAction<TreeItem<ColorGroup>>
       ) => {
         console.log(action.payload);
-        state.selectedTreeItem = action.payload;
+        // state.selectedTreeItem = action.payload;
       },
     },
   },
@@ -28,7 +28,8 @@ export const fileSlice = createCustomSlice(
   (builder) => {
     builder.addCase(readFileContent.fulfilled, (state, action) => {
       console.log(action.payload);
-      state.treeItems = action.payload;
+      state.colors = action.payload.colors;
+      state.usernames = action.payload.usernames;
     });
   }
 );

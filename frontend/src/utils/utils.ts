@@ -1,3 +1,4 @@
+import { Entries } from "generic/generic";
 import { DirectoryItem, neutralino } from "neutralino/neutralino";
 
 export function checkIfFileExist(
@@ -27,4 +28,8 @@ export function joinClassNames(
   classNames: Array<string | null | undefined>
 ): string {
   return classNames.filter((el) => !!el).join(" ");
+}
+
+export function getEntries<T>(obj: T): Entries<T> {
+  return Object.entries(obj) as Entries<T>;
 }
