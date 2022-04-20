@@ -14,7 +14,7 @@ export interface ColoredSquareProps {
   onClick?: (colorKey: string) => void;
 }
 
-const TitleBar: FunctionalComponent<ColoredSquareProps> = (props) => {
+const ColorList: FunctionalComponent<ColoredSquareProps> = (props) => {
   const { colors, selectedKey, className, onClick } = props;
   const entries = getEntries(colors);
 
@@ -52,4 +52,4 @@ const TitleBar: FunctionalComponent<ColoredSquareProps> = (props) => {
   );
 };
 
-export default TitleBar;
+export default ColorList;
