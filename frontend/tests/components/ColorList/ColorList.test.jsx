@@ -39,7 +39,14 @@ describe("ColorList rendering", () => {
     expect(buttons[1].textContent).toBe("white");
     expect(buttons[2].textContent).toBe("enemy");
   });
+  test("button is selected when selectedKey is provided", async () => {
+    render(<ColorList colors={colors} selectedKey="black" />);
 
+    expect(screen.getAllByRole("button")[0].classList).toContain("selected");
+  });
+});
+
+describe("ColorList handlers", () => {
   test("triggers on click handler", async () => {
     const onClick = jest.fn();
     render(<ColorList colors={colors} onClick={onClick} />);
@@ -66,11 +73,5 @@ describe("ColorList rendering", () => {
     fireEvent.click(screen.getByText("enemy"));
 
     expect(onClick).toBeCalledTimes(3);
-  });
-
-  test("button is selected when selectedKey is provided", async () => {
-    render(<ColorList colors={colors} selectedKey="black" />);
-
-    expect(screen.getAllByRole("button")[0].classList).toContain("selected");
   });
 });
