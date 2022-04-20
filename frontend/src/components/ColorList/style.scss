@@ -2,10 +2,19 @@
 @use "style/mixins" as m;
 
 .color-list {
-  padding: v.$padding-between;
+  padding: v.$padding-between 0 v.$padding-between v.$padding-between;
+
   &-item {
     display: block;
-    margin-bottom: v.$margin-between;
+    width: 100%;
+    transition: background-color v.$animation-duration-base ease;
+    padding: v.$padding-tiny 0 v.$padding-tiny v.$padding-tiny;
+    border-radius: 3px;
+
+    &:hover, &:focus {
+      background-color: v.$hover-regular;
+    }
+
     &-content {
       display: flex;
       align-items: flex-end;
