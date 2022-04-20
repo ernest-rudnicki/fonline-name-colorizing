@@ -7,9 +7,17 @@
   &-item {
     display: block;
     width: 100%;
-    transition: background-color v.$animation-duration-base ease;
+    border-right: 4px solid transparent;
+    transition: background-color v.$animation-duration-base ease, border-color v.$animation-duration-base ease;
     padding: v.$padding-minimal-between 0 v.$padding-minimal-between v.$padding-tiny;
-    border-radius: v.$border-radius-small;
+
+    &.selected {
+      background-color: v.$selected-regular;
+      border-color: v.$primary-color;
+      &:focus {
+        background-color: v.$selected-regular;
+      }
+    }
 
     &:hover, &:focus {
       background-color: v.$hover-regular;

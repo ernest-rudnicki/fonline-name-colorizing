@@ -8,12 +8,22 @@ import { useCallback } from "preact/hooks";
 import Button from "components/Button/Button";
 import TitleBar from "components/TitleBar/TitleBar";
 import ColorList from "components/ColorList/ColorList";
+import { changeSelectedColor } from "store/file/slice";
 
 import "./style.scss";
 
 const Editor: FunctionalComponent = () => {
-  const { colors } = useSelector((state: RootState) => state.file);
+  const { colors, selectedColorKey } = useSelector(
+    (state: RootState) => state.file
+  );
   const dispatch: AppDispatch = useDispatch();
+
+  const onColorListItemClick = useCallback(
+    (colorKey: string) => {
+      dispatch(changeSelectedColor(colorKey));
+    },
+    [dispatch]
+  );
 
   return (
     <div className="editor">
@@ -28,7 +38,11 @@ const Editor: FunctionalComponent = () => {
           />
         </TitleBar>
         <div className="editor-list-content">
-          <ColorList colors={colors} />
+          <ColorList
+            selectedKey={selectedColorKey}
+            onClick={onColorListItemClick}
+            colors={colors}
+          />
         </div>
       </div>
       <div className="editor-config">

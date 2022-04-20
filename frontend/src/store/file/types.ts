@@ -2,6 +2,7 @@ import { BaseState } from "generic/generic";
 
 export interface FileState extends BaseState {
   colors: ColorGroupHashMap;
+  selectedColorKey: string | null;
   usernames: Username[];
 }
 

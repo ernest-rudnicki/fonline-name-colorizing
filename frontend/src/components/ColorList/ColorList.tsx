@@ -2,16 +2,16 @@ import { FunctionalComponent, h } from "preact";
 
 import Button from "components/Button/Button";
 import ColoredSquare from "components/ColoredSquare/ColoredSquare";
-import { ColorGroup, ColorGroupHashMap } from "store/file/types";
+import { ColorGroupHashMap } from "store/file/types";
 import { getEntries, joinClassNames } from "utils/utils";
 
 import "./style.scss";
 
 export interface ColoredSquareProps {
   colors: ColorGroupHashMap;
-  selectedKey?: string;
+  selectedKey?: string | null;
   className?: string;
-  onClick?: (color: ColorGroup) => void;
+  onClick?: (colorKey: string) => void;
 }
 
 const TitleBar: FunctionalComponent<ColoredSquareProps> = (props) => {
@@ -22,7 +22,7 @@ const TitleBar: FunctionalComponent<ColoredSquareProps> = (props) => {
     if (!onClick) {
       return;
     }
-    onClick(colors[key]);
+    onClick(key);
   };
 
   return (
