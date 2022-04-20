@@ -1,5 +1,6 @@
 import { GenericPreactContent, PreactMouseEvent } from "generic/generic";
 import { FunctionalComponent, h, VNode } from "preact";
+import { useCallback } from "preact/hooks";
 import { joinClassNames } from "utils/utils";
 
 import "./style.scss";
@@ -31,14 +32,29 @@ const Button: FunctionalComponent<ButtonProps> = (props) => {
     mode = "light",
   } = props;
 
+  const _onClick = useCallback(
+    (e: PreactMouseEvent) => {
+      if (!onClick || disabled) {
+        return;
+      }
+
+      onClick(e);
+    },
+    [onClick, disabled]
+  );
+
   return (
     <button
       disabled={disabled}
-      onClick={onClick}
+      onClick={_onClick}
       type={type}
       className={joinClassNames(["btn", variant, size, mode, className])}
     >
-      {tooltipText && <div className="btn-tooltip">{tooltipText}</div>}
+      {tooltipText && (
+        <div className="btn-tooltip" role="tooltip">
+          {tooltipText}
+        </div>
+      )}
       <div className="btn-content">
         {icon && <span className="btn-content-icon">{icon}</span>}
         {children && <span className="btn-content-text">{children}</span>}
