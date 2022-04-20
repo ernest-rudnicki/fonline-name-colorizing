@@ -1,7 +1,7 @@
 {
   "name": "fonline-name-colorizing",
   "version": "1.0.0",
-  "description": "Utility tool for colorizing nicknames in Fonline",
+  "description": "Utility tool for colorizing usernames in Fonline",
   "scripts": {
     "setup": "cd frontend && npm install && npm run build",
     "dev:front": "cd frontend && npm run dev",
