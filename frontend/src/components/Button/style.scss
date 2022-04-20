@@ -6,6 +6,7 @@
   cursor: pointer;
   position: relative;
   transition: transform v.$animation-duration-short ease;
+  font-family: inherit;
   
   &.standard {
     background-color: v.$primary-color;

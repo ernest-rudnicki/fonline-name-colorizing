@@ -8,7 +8,7 @@
     display: block;
     width: 100%;
     transition: background-color v.$animation-duration-base ease;
-    padding: v.$padding-tiny 0 v.$padding-tiny v.$padding-tiny;
+    padding: v.$padding-minimal-between 0 v.$padding-minimal-between v.$padding-tiny;
     border-radius: v.$border-radius-small;
 
     &:hover, &:focus {
