@@ -12,7 +12,7 @@ export interface RGBColor {
 }
 
 export interface ColorGroup {
-  color: RGBColor | null;
+  color: RGBColor;
   usernames: Username[];
 }
 

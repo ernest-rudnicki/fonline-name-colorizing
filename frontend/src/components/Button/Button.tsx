@@ -8,8 +8,8 @@ export interface ButtonProps {
   children?: GenericPreactContent;
   className?: string;
   type?: "button" | "submit" | "reset";
-  variant?: "standard" | "bordered" | "minimal";
-  size?: "medium" | "tiny" | "icon";
+  variant?: "standard" | "bordered" | "minimal" | "text";
+  size?: "medium" | "small" | "tiny" | "icon";
   mode?: "dark" | "light";
   tooltipText?: string;
   disabled?: boolean;

@@ -21,7 +21,11 @@ export function fillColors(
   if (!hashMap[color]) {
     hashMap[color] = {
       usernames: [],
-      color: null,
+      color: {
+        red: 0,
+        green: 0,
+        blue: 0,
+      },
     };
   }
 

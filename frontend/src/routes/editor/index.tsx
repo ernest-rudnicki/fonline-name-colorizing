@@ -10,8 +10,10 @@ import TitleBar from "components/TitleBar/TitleBar";
 
 import "./style.scss";
 import "react-complex-tree/lib/style.css";
+import ColorList from "components/ColorList/ColorList";
 
 const Editor: FunctionalComponent = () => {
+  const { colors } = useSelector((state: RootState) => state.file);
   const dispatch: AppDispatch = useDispatch();
 
   return (
@@ -20,13 +22,15 @@ const Editor: FunctionalComponent = () => {
         <TitleBar title="Color Groups">
           <Button
             variant="minimal"
-            size="tiny"
+            size="small"
             mode="dark"
             tooltipText="Add new color group"
             icon={<AiFillPlusCircle />}
           />
         </TitleBar>
-        <div className="editor-list-content">test</div>
+        <div className="editor-list-content">
+          <ColorList colors={colors} />
+        </div>
       </div>
       <div className="editor-config">
         <div className="editor-config-content">

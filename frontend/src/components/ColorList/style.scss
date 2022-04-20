@@ -1,0 +1,17 @@
+@use "style/variables" as v;
+@use "style/mixins" as m;
+
+.color-list {
+  padding: v.$padding-small;
+  &-item {
+    display: block;
+    margin-bottom: v.$margin-tiny;
+    &-content {
+      display: flex;
+      align-items: flex-end;
+      &-square {
+        margin-right: v.$margin-small;
+      }
+    }
+  }
+}
