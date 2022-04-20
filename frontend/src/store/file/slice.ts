@@ -1,5 +1,4 @@
 import { PayloadAction } from "@reduxjs/toolkit";
-import { TreeItem } from "react-complex-tree";
 import { createCustomSlice } from "store/store-utils";
 import { readFileContent } from "./actions";
 import { ColorGroup, FileState } from "./types";
@@ -15,10 +14,7 @@ export const fileSlice = createCustomSlice(
     name: "file",
     initialState,
     reducers: {
-      changeSelectedColor: (
-        state,
-        action: PayloadAction<TreeItem<ColorGroup>>
-      ) => {
+      changeSelectedColor: (state, action: PayloadAction<ColorGroup>) => {
         console.log(action.payload);
         // state.selectedTreeItem = action.payload;
       },

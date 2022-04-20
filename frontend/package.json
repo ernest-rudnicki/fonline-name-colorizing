@@ -16,7 +16,6 @@
     "preact": "^10.3.1",
     "preact-render-to-string": "^5.1.4",
     "preact-router": "^3.2.1",
-    "react-complex-tree": "^1.1.5",
     "react-icons": "^4.3.1",
     "react-redux": "^7.2.8"
   },

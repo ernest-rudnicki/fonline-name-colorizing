@@ -7,10 +7,9 @@ import { useCallback } from "preact/hooks";
 
 import Button from "components/Button/Button";
 import TitleBar from "components/TitleBar/TitleBar";
+import ColorList from "components/ColorList/ColorList";
 
 import "./style.scss";
-import "react-complex-tree/lib/style.css";
-import ColorList from "components/ColorList/ColorList";
 
 const Editor: FunctionalComponent = () => {
   const { colors } = useSelector((state: RootState) => state.file);
