@@ -30,6 +30,7 @@ const Editor: FunctionalComponent = () => {
       <div className="editor-list">
         <TitleBar title="Color Groups">
           <Button
+            data-testid="add-btn"
             variant="minimal"
             size="small"
             mode="dark"

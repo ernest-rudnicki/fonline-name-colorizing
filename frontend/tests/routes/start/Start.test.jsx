@@ -38,12 +38,11 @@ neutralino.os.showOpenDialog.mockReturnValue(
     ])
   )
 );
+const initialState = {};
+const mockStore = configureStore([thunk]);
+let store;
 
-describe("Editor rendering", () => {
-  const initialState = {};
-  const mockStore = configureStore([thunk]);
-  let store;
-
+describe("Start rendering", () => {
   beforeEach(() => {
     store = mockStore(initialState);
   });
@@ -114,6 +113,12 @@ describe("Editor rendering", () => {
       const buttons = await screen.findAllByRole("button");
       expect(buttons.length).toBe(2);
     });
+  });
+});
+
+describe("Start actions", () => {
+  beforeEach(() => {
+    store = mockStore(initialState);
   });
 
   test("triggers import when clicking on found file button", async () => {
