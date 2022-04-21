@@ -4,34 +4,25 @@ import { AppDispatch, RootState } from "store/store";
 import { Link } from "preact-router";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { useCallback } from "preact/hooks";
-import { TreeItemIndex } from "react-complex-tree";
 
 import Button from "components/Button/Button";
 import TitleBar from "components/TitleBar/TitleBar";
-import ColorGroupsTree from "components/ColorGroupsTree/ColorGroupsTree";
+import ColorList from "components/ColorList/ColorList";
 import { changeSelectedColor } from "store/file/slice";
-import { isColorGroup } from "store/file/helpers";
 
 import "./style.scss";
-import "react-complex-tree/lib/style.css";
 
 const Editor: FunctionalComponent = () => {
-  const { treeItems } = useSelector((state: RootState) => state.file);
+  const { colors, selectedColorKey } = useSelector(
+    (state: RootState) => state.file
+  );
   const dispatch: AppDispatch = useDispatch();
 
-  const onSelectItem = useCallback(
-    (itemIndex: TreeItemIndex) => {
-      const item = treeItems[itemIndex];
-
-      if (item.data.rootParent) {
-        dispatch(changeSelectedColor(item.data.rootParent));
-      }
-
-      if (isColorGroup(item.data)) {
-        dispatch(changeSelectedColor(item));
-      }
+  const onColorListItemClick = useCallback(
+    (colorKey: string) => {
+      dispatch(changeSelectedColor(colorKey));
     },
-    [treeItems, dispatch]
+    [dispatch]
   );
 
   return (
@@ -39,18 +30,19 @@ const Editor: FunctionalComponent = () => {
       <div className="editor-list">
         <TitleBar title="Color Groups">
           <Button
+            data-testid="add-btn"
             variant="minimal"
-            size="tiny"
+            size="small"
             mode="dark"
             tooltipText="Add new color group"
             icon={<AiFillPlusCircle />}
           />
         </TitleBar>
         <div className="editor-list-content">
-          <ColorGroupsTree
-            onSelectItem={onSelectItem}
-            treeId="color-groups"
-            treeItems={treeItems}
+          <ColorList
+            selectedKey={selectedColorKey}
+            onClick={onColorListItemClick}
+            colors={colors}
           />
         </div>
       </div>

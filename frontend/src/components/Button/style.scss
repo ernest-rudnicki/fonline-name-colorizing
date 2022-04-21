@@ -6,6 +6,7 @@
   cursor: pointer;
   position: relative;
   transition: transform v.$animation-duration-short ease;
+  font-family: inherit;
   
   &.standard {
     background-color: v.$primary-color;
@@ -41,13 +42,26 @@
     }
   }
 
+  &.text {
+    background-color: transparent;
+    color: inherit;
+
+    &:active {
+      transform: none;
+    }
+  }
+
   &.medium {
     font-size: v.$font-size-regular;
     padding: v.$padding-between v.$padding-medium;
   }
   
-  &.tiny {
+  &.small {
     font-size: v.$font-size-regular;
+  }
+
+  &.tiny {
+    font-size: v.$font-size-very-small;
   }
 
   &.icon {

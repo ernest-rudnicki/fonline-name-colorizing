@@ -1,120 +1,45 @@
-import {
-  ColorGroup,
-  ColorTreeItems,
-  TreeItemData,
-  TreeItemNodeData,
-} from "./types";
+import { ColorGroupHashMap, Username } from "./types";
 import { parseIntBaseTen } from "utils/utils";
-import { TreeItem } from "react-complex-tree";
 
-export function isColorGroup(item: TreeItemData): item is ColorGroup {
-  return !!(item as ColorGroup).color;
-}
-
-export function createColorItem(
-  colorName: string,
-  nameGroup: string,
-  contourGroup: string
-): ColorTreeItems {
-  const colorGroup: ColorTreeItems = {};
-
-  colorGroup[colorName] = {
-    index: colorName,
-    canMove: false,
-    hasChildren: true,
-    children: [nameGroup, contourGroup],
-    data: {
-      name: colorName,
-      rootParent: null,
-    },
-  };
-
-  colorGroup[nameGroup] = {
-    index: nameGroup,
-    canMove: false,
-    hasChildren: false,
-    children: [],
-    data: {
-      name: "Name Color",
-      rootParent: colorGroup[colorName],
-    },
-  };
-
-  colorGroup[contourGroup] = {
-    index: contourGroup,
-    canMove: false,
-    hasChildren: false,
-    children: [],
-    data: {
-      name: "Contour Color",
-      rootParent: colorGroup[colorName],
-    },
-  };
-
-  return colorGroup;
-}
-
-export function createUsernameItem(
+export function createUsernameObject(
   username: string,
-  rootParent: TreeItem<ColorGroup>
-): TreeItem<TreeItemNodeData> {
+  nameColor: string,
+  contourColor: string
+): Username {
   return {
-    index: username,
-    canMove: true,
-    hasChildren: false,
-    data: {
-      name: username,
-      rootParent,
-    },
+    name: username,
+    nameColor,
+    contourColor,
   };
 }
 
-export function fillTree(
-  treeItems: ColorTreeItems,
-  colorName: string,
-  username?: string,
-  place?: "name" | "contour"
-): ColorTreeItems {
-  const nameItem = `name${colorName}`;
-  const contourItem = `contour${colorName}`;
-  let treeItemsCopy = { ...treeItems };
-
-  if (!treeItemsCopy[colorName]) {
-    treeItemsCopy = {
-      ...treeItemsCopy,
-      ...createColorItem(colorName, nameItem, contourItem),
-    };
-    treeItemsCopy["root"].children?.push(colorName);
-  }
-
-  if (!username) {
-    return treeItemsCopy;
-  }
-
-  if (place === "name") {
-    treeItemsCopy[nameItem].children?.push(place + username);
-    treeItemsCopy[nameItem].hasChildren = true;
-  } else {
-    treeItemsCopy[contourItem].children?.push(place + username);
-    treeItemsCopy[contourItem].hasChildren = true;
-  }
-
-  return treeItemsCopy;
-}
-
-export function parseFileContent(content: string[]): ColorTreeItems {
-  let treeItems: ColorTreeItems = {
-    root: {
-      index: "root",
-      canMove: true,
-      hasChildren: true,
-      children: [],
-      data: {
-        name: "root",
-        rootParent: null,
+export function fillColors(
+  color: string,
+  hashMap: ColorGroupHashMap,
+  username?: Username
+): void {
+  if (!hashMap[color]) {
+    hashMap[color] = {
+      usernames: [],
+      color: {
+        red: 0,
+        green: 0,
+        blue: 0,
       },
-    },
-  };
+    };
+  }
+
+  if (username) {
+    hashMap[color].usernames.push(username);
+  }
+}
+
+export function parseFileContent(content: string[]): {
+  colors: ColorGroupHashMap;
+  usernames: Username[];
+} {
+  const colors: ColorGroupHashMap = {};
+  const usernames: Username[] = [];
 
   content.forEach((el) => {
     const splittedLine = el.split(" ");
@@ -124,25 +49,20 @@ export function parseFileContent(content: string[]): ColorTreeItems {
         return;
       }
 
-      const username = splittedLine[1];
+      const textUsername = splittedLine[1];
       const nameColor = splittedLine[2];
       const contourColor = splittedLine[3];
 
-      treeItems = fillTree(treeItems, nameColor, username, "name");
-      treeItems = fillTree(treeItems, contourColor, username, "contour");
+      const usernameObject = createUsernameObject(
+        textUsername,
+        nameColor,
+        contourColor
+      );
 
-      treeItems = {
-        ...treeItems,
-        [`name${username}`]: createUsernameItem(username, treeItems[nameColor]),
-      };
+      usernames.push(usernameObject);
 
-      treeItems = {
-        ...treeItems,
-        [`contour${username}`]: createUsernameItem(
-          username,
-          treeItems[contourColor]
-        ),
-      };
+      fillColors(nameColor, colors, usernameObject);
+      fillColors(contourColor, colors, usernameObject);
 
       return;
     }
@@ -157,21 +77,17 @@ export function parseFileContent(content: string[]): ColorTreeItems {
       const green = splittedLine[3];
       const blue = splittedLine[4];
 
-      treeItems = fillTree(treeItems, colorName);
+      fillColors(colorName, colors);
 
-      const treeItemData = treeItems[colorName].data;
-      treeItems[colorName].data = {
-        ...treeItemData,
-        color: {
-          red: parseIntBaseTen(red),
-          green: parseIntBaseTen(green),
-          blue: parseIntBaseTen(blue),
-        },
+      colors[colorName].color = {
+        red: parseIntBaseTen(red),
+        green: parseIntBaseTen(green),
+        blue: parseIntBaseTen(blue),
       };
 
       return;
     }
   });
 
-  return treeItems;
+  return { colors, usernames };
 }

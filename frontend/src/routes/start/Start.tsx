@@ -14,6 +14,8 @@ import {
 import Button from "components/Button/Button";
 import { neutralino } from "neutralino/neutralino";
 import { readFileContent } from "store/file/actions";
+import { isTestingEnv } from "utils/testing-utils";
+
 import "./style.scss";
 
 const Start: FunctionalComponent = () => {
@@ -34,6 +36,9 @@ const Start: FunctionalComponent = () => {
       })
       .then((res) => {
         if (res.length === 0) {
+          if (isTestingEnv()) {
+            console.log("goes if route when there is no file selected");
+          }
           return;
         }
 
@@ -68,8 +73,8 @@ const Start: FunctionalComponent = () => {
               <span>
                 We found a <b>NameColorizing</b> file in the current directory!{" "}
               </span>
-              <Button onClick={onFoundClick} variant="minimal" size="tiny">
-                Click here to open it
+              <Button onClick={onFoundClick} variant="minimal" size="small">
+                Click here to import it
               </Button>
             </div>
           ) : null}
@@ -86,7 +91,7 @@ const Start: FunctionalComponent = () => {
               variant="bordered"
               className="start-container-content-btns-btn"
             >
-              Open existing file
+              Import existing file
             </Button>
           </div>
         </div>

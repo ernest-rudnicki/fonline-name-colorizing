@@ -4,10 +4,14 @@ $divider: #d3d3d3;
 $primary-color: #285486;
 $mask: #000000cc;
 
+// STATE COLORS
+$hover-regular: #bebebe;
+$selected-regular: #d6d6d6;
+
 // FONTS COLOR
 $font-color-regular: #444;
 $font-color-white: #FFFFFF;
-$link-color: #3281DB;
+$link-color: #1d5faa;
 
 // FONT WEIGHT
 $font-weight-regular: 400;
@@ -19,6 +23,7 @@ $margin-medium: 16px;
 $margin-small: 12px;
 $margin-between: 8px;
 $margin-tiny: 6px;
+$margin-minmal-between: 4.5px;
 $margin-minimal: 3px;
 
 // PADDING
@@ -28,6 +33,7 @@ $padding-medium: 16px;
 $padding-small: 12px;
 $padding-between: 8px;
 $padding-tiny: 6px;
+$padding-minimal-between: 4.5px;
 $padding-minimal: 3px;
 
 // FONT SIZE
@@ -37,7 +43,7 @@ $font-size-big: 26px;
 $font-size-between: 18px;
 $font-size-regular: 16px;
 $font-size-small: 14px;
-$font-size-very-small: 12px;
+$font-size-very-small: 13px;
 $font-size-tiny: 10px;
 
 // BORDER RADIUS
@@ -48,8 +54,3 @@ $border-radius-small: 3px;
 $animation-duration-base: 0.3s;
 $animation-duration-between: 0.15s;
 $animation-duration-short: 0.1s;
-
-// REACT COMPLEX TREE OVERRIDES
-:root {
-  --rct-color-tree-bg: $white;
-}

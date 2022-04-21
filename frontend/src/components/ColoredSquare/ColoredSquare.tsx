@@ -10,7 +10,7 @@ export interface ColoredSquareProps {
   className?: string;
 }
 
-const TitleBar: FunctionalComponent<ColoredSquareProps> = (props) => {
+const ColoredSquare: FunctionalComponent<ColoredSquareProps> = (props) => {
   const { size, color, className } = props;
   const { red, green, blue } = color;
 
@@ -26,4 +26,4 @@ const TitleBar: FunctionalComponent<ColoredSquareProps> = (props) => {
   );
 };
 
-export default TitleBar;
+export default ColoredSquare;

@@ -1,14 +1,16 @@
 {
   "name": "fonline-name-colorizing",
   "version": "1.0.0",
-  "description": "Utility tool for colorizing nicknames in Fonline",
+  "description": "Utility tool for colorizing usernames in Fonline",
   "scripts": {
     "setup": "cd frontend && npm install && npm run build",
+    "test": "cd frontend && npm run test",
+    "test:coverage": "cd frontend && npm run test:coverage",
+    "test:watch": "cd frontend && npm run test:watch",
     "dev:front": "cd frontend && npm run dev",
     "dev": "concurrently \"npm run dev:front\" \"neu run --frontend-lib-dev\"",
     "lint": "cd ./frontend && npm run lint",
-    "lint-fix": "cd ./frontend && npm run lint -- --fix",
-    "pre-commit": "npm run lint-fix"
+    "lint-fix": "cd ./frontend && npm run lint -- --fix"
   },
   "keywords": [
     "Fonline",
@@ -23,8 +25,7 @@
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
     "@typescript-eslint/eslint-plugin": "^5.19.0",
-    "husky": "^7.0.4",
-    "pre-commit": "^1.2.2",
-    "concurrently": "^7.1.0"
+    "concurrently": "^7.1.0",
+    "husky": "^7.0.4"
   }
 }

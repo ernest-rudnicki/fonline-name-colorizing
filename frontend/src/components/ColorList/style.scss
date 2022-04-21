@@ -1,0 +1,34 @@
+@use "style/variables" as v;
+@use "style/mixins" as m;
+
+.color-list {
+  padding: v.$padding-between 0 v.$padding-between v.$padding-between;
+
+  &-item {
+    display: block;
+    width: 100%;
+    border-right: 4px solid transparent;
+    transition: background-color v.$animation-duration-base ease, border-color v.$animation-duration-base ease;
+    padding: v.$padding-minimal-between 0 v.$padding-minimal-between v.$padding-tiny;
+
+    &.selected {
+      background-color: v.$selected-regular;
+      border-color: v.$primary-color;
+      &:focus {
+        background-color: v.$selected-regular;
+      }
+    }
+
+    &:hover, &:focus {
+      background-color: v.$hover-regular;
+    }
+
+    &-content {
+      display: flex;
+      align-items: flex-end;
+      &-square {
+        margin-right: v.$margin-small;
+      }
+    }
+  }
+}
