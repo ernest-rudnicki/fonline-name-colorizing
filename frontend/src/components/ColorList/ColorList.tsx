@@ -3,7 +3,8 @@ import { FunctionalComponent, h } from "preact";
 import Button from "components/Button/Button";
 import ColoredSquare from "components/ColoredSquare/ColoredSquare";
 import { ColorGroupHashMap } from "store/file/types";
-import { getEntries, isTestingEnv, joinClassNames } from "utils/utils";
+import { getEntries, joinClassNames } from "utils/utils";
+import { isTestingEnv } from "utils/testing-utils";
 
 import "./style.scss";
 

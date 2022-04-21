@@ -5,7 +5,7 @@ import { AiFillFolderOpen, AiFillEdit } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "store/store";
 
-import { checkIfFileExist, isTestingEnv } from "utils/utils";
+import { checkIfFileExist } from "utils/utils";
 import {
   CURRENT_DIR,
   NAME_COLORIZING_FILE_FILTERS,
@@ -14,6 +14,7 @@ import {
 import Button from "components/Button/Button";
 import { neutralino } from "neutralino/neutralino";
 import { readFileContent } from "store/file/actions";
+import { isTestingEnv } from "utils/testing-utils";
 
 import "./style.scss";
 

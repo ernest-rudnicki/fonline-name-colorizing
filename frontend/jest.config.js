@@ -14,5 +14,20 @@ module.exports = async () => {
       "^constants/(.*)$": "<rootDir>/src/constants/$1",
       "^generic/(.*)$": "<rootDir>/src/generic/$1",
     },
+    coveragePathIgnorePatterns: [
+      "neutralino",
+      "assets",
+      "constants",
+      "generic",
+      "store-utils.ts",
+      "store.ts",
+      "StoreWrappedApp.jsx",
+      "App.tsx",
+      "sw.js",
+      "slice.ts",
+      "types.ts",
+      "src/index.ts",
+      "testing-utils.ts",
+    ],
   };
 };
