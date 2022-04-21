@@ -1,8 +1,8 @@
 import { FunctionalComponent, h } from "preact";
 import { Route, Router } from "preact-router";
 
-import Editor from "routes/editor";
-import Start from "routes/start";
+import Editor from "routes/Editor/Editor";
+import Start from "routes/Start/Start";
 
 const App: FunctionalComponent = () => {
   return (

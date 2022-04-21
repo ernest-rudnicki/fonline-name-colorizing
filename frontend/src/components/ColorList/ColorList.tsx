@@ -21,7 +21,7 @@ const ColorList: FunctionalComponent<ColoredSquareProps> = (props) => {
   const _onClick = (key: string) => {
     if (!onClick) {
       if (isTestingEnv()) {
-        console.log("jest test");
+        console.log("triggers if route when no handler is provided");
       }
       return;
     }

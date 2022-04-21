@@ -1,10 +1,7 @@
 // There are no Neutralino types available on the npm, therefore I had to write types myself
 // Refer to https://neutralino.js.org/docs/api/overview
 
-export enum DirectoryItem {
-  FILE = "FILE",
-  DIRECTORY = "DIRECTORY",
-}
+import { DirectoryItem } from "generic/generic";
 
 export interface DirectoryEntry {
   entry: string;

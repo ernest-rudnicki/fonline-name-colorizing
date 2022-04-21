@@ -56,7 +56,7 @@ describe("ColorList handlers", () => {
     expect(onClick).toBeCalledWith("black");
   });
 
-  test("it triggers if route when no handler is provided", async () => {
+  test("triggers if route when no handler is provided", async () => {
     const spy = jest.spyOn(console, "log");
     render(<ColorList colors={colors} />);
 

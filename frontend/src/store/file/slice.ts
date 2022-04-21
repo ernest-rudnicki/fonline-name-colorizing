@@ -23,7 +23,6 @@ export const fileSlice = createCustomSlice(
   undefined,
   (builder) => {
     builder.addCase(readFileContent.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.colors = action.payload.colors;
       state.usernames = action.payload.usernames;
     });

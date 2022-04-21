@@ -1,5 +1,5 @@
-import { Entries } from "generic/generic";
-import { DirectoryItem, neutralino } from "neutralino/neutralino";
+import { DirectoryItem, Entries } from "generic/generic";
+import { neutralino } from "neutralino/neutralino";
 
 export function checkIfFileExist(
   dir: string,

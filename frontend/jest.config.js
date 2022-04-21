@@ -11,6 +11,8 @@ module.exports = async () => {
       "^routes/(.*)$": "<rootDir>/src/routes/$1",
       "^utils/(.*)$": "<rootDir>/src/utils/$1",
       "^neutralino/(.*)$": "<rootDir>/src/neutralino/$1",
+      "^constants/(.*)$": "<rootDir>/src/constants/$1",
+      "^generic/(.*)$": "<rootDir>/src/generic/$1",
     },
   };
 };

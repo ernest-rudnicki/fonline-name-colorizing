@@ -5,7 +5,7 @@ import { AiFillFolderOpen, AiFillEdit } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "store/store";
 
-import { checkIfFileExist } from "utils/utils";
+import { checkIfFileExist, isTestingEnv } from "utils/utils";
 import {
   CURRENT_DIR,
   NAME_COLORIZING_FILE_FILTERS,
@@ -14,6 +14,7 @@ import {
 import Button from "components/Button/Button";
 import { neutralino } from "neutralino/neutralino";
 import { readFileContent } from "store/file/actions";
+
 import "./style.scss";
 
 const Start: FunctionalComponent = () => {
@@ -34,6 +35,9 @@ const Start: FunctionalComponent = () => {
       })
       .then((res) => {
         if (res.length === 0) {
+          if (isTestingEnv()) {
+            console.log("goes if route when there is no file selected");
+          }
           return;
         }
 
@@ -69,7 +73,7 @@ const Start: FunctionalComponent = () => {
                 We found a <b>NameColorizing</b> file in the current directory!{" "}
               </span>
               <Button onClick={onFoundClick} variant="minimal" size="small">
-                Click here to open it
+                Click here to import it
               </Button>
             </div>
           ) : null}
@@ -86,7 +90,7 @@ const Start: FunctionalComponent = () => {
               variant="bordered"
               className="start-container-content-btns-btn"
             >
-              Open existing file
+              Import existing file
             </Button>
           </div>
         </div>

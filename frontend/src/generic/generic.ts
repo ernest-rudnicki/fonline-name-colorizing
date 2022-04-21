@@ -1,5 +1,10 @@
 import { h, VNode } from "preact";
 
+export enum DirectoryItem {
+  FILE = "FILE",
+  DIRECTORY = "DIRECTORY",
+}
+
 export type PreactMouseEvent = h.JSX.TargetedMouseEvent<HTMLButtonElement>;
 export type GenericPreactContent = VNode | string;
 
