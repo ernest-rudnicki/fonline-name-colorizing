@@ -1,0 +1,52 @@
+@use "style/variables" as v;
+@use "style/mixins" as m;
+
+.color-details {
+  &-content {
+    padding: v.$padding-big;
+
+    &-header {
+      border-bottom: 1px solid v.$divider;
+      margin-bottom: v.$margin-big;
+      padding-bottom: v.$margin-small;
+
+      &-text {
+        margin-bottom: v.$margin-small;
+      }
+
+      &-color {
+        @include m.center-vertically;
+
+        &-data {
+          margin-left: v.$margin-small;
+          font-weight: bold;
+          &-red {
+            color: red;
+          }
+
+          &-green {
+            color: green;
+          }
+
+          &-red, &-green {
+            margin-right: v.$margin-medium;
+          }
+
+          &-blue {
+            color: blue;
+          }
+        }
+      }
+    }
+
+    &-name, &-picker {
+      margin-bottom: v.$margin-big;
+    }
+
+    &-buttons {
+      &-btn:not(:last-child) {
+        margin-right: v.$margin-small;
+      }
+    }
+  }
+}

@@ -9,7 +9,7 @@ export interface ButtonProps {
   children?: GenericPreactContent;
   className?: string;
   type?: "button" | "submit" | "reset";
-  variant?: "standard" | "bordered" | "minimal" | "text";
+  variant?: "standard" | "bordered" | "minimal" | "text" | "rounded-square";
   size?: "medium" | "small" | "tiny" | "icon";
   mode?: "dark" | "light";
   tooltipText?: string;

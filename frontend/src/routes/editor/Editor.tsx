@@ -1,7 +1,6 @@
 import { FunctionalComponent, h } from "preact";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "store/store";
-import { Link } from "preact-router";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { useCallback } from "preact/hooks";
 
@@ -9,6 +8,7 @@ import Button from "components/Button/Button";
 import TitleBar from "components/TitleBar/TitleBar";
 import ColorList from "components/ColorList/ColorList";
 import { changeSelectedColor } from "store/file/slice";
+import ColorDetails from "./ColorDetails/ColorDetails";
 
 import "./style.scss";
 
@@ -16,6 +16,7 @@ const Editor: FunctionalComponent = () => {
   const { colors, selectedColorKey } = useSelector(
     (state: RootState) => state.file
   );
+
   const dispatch: AppDispatch = useDispatch();
 
   const onColorListItemClick = useCallback(
@@ -47,9 +48,7 @@ const Editor: FunctionalComponent = () => {
         </div>
       </div>
       <div className="editor-config">
-        <div className="editor-config-content">
-          <Link href="/">Go back</Link>
-        </div>
+        <ColorDetails />
       </div>
     </div>
   );

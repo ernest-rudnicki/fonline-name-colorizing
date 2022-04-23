@@ -7,9 +7,9 @@ export interface FileState extends BaseState {
 }
 
 export interface RGBColor {
-  red: number;
-  green: number;
-  blue: number;
+  r: number;
+  g: number;
+  b: number;
 }
 
 export interface ColorGroup {

@@ -1,0 +1,10 @@
+@use "style/variables" as v;
+
+.color-picker {
+  &-label {
+    display: block;
+    margin-bottom: v.$margin-tiny;
+    font-weight: bold;
+    font-size: v.$font-size-small;
+  }
+}

@@ -22,9 +22,9 @@ export function fillColors(
     hashMap[color] = {
       usernames: [],
       color: {
-        red: 0,
-        green: 0,
-        blue: 0,
+        r: 0,
+        g: 0,
+        b: 0,
       },
     };
   }
@@ -80,9 +80,9 @@ export function parseFileContent(content: string[]): {
       fillColors(colorName, colors);
 
       colors[colorName].color = {
-        red: parseIntBaseTen(red),
-        green: parseIntBaseTen(green),
-        blue: parseIntBaseTen(blue),
+        r: parseIntBaseTen(red),
+        g: parseIntBaseTen(green),
+        b: parseIntBaseTen(blue),
       };
 
       return;

@@ -12,7 +12,7 @@ export interface ColoredSquareProps {
 
 const ColoredSquare: FunctionalComponent<ColoredSquareProps> = (props) => {
   const { size, color, className } = props;
-  const { red, green, blue } = color;
+  const { r, g, b } = color;
 
   return (
     <div
@@ -20,7 +20,7 @@ const ColoredSquare: FunctionalComponent<ColoredSquareProps> = (props) => {
       style={{
         width: size,
         height: size,
-        backgroundColor: `rgb(${red}, ${green}, ${blue})`,
+        backgroundColor: `rgb(${r}, ${g}, ${b})`,
       }}
     />
   );

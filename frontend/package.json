@@ -14,10 +14,12 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.1",
+    "antd": "^4.19.5",
     "lodash.clonedeep": "^4.5.0",
     "preact": "^10.3.1",
     "preact-render-to-string": "^5.1.4",
     "preact-router": "^3.2.1",
+    "react-colorful": "^5.5.1",
     "react-icons": "^4.3.1",
     "react-redux": "^7.2.8"
   },
