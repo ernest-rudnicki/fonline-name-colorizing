@@ -48,7 +48,9 @@ const Editor: FunctionalComponent = () => {
         </div>
       </div>
       <div className="editor-config">
-        <ColorDetails />
+        {selectedColorKey && (
+          <ColorDetails colors={colors} selectedColorKey={selectedColorKey} />
+        )}
       </div>
     </div>
   );

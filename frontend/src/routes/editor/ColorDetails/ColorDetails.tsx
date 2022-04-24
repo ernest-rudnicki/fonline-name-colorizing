@@ -5,33 +5,34 @@
 import { FunctionalComponent, h } from "preact";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 import { Form, Input } from "antd";
+import { useCallback, useMemo } from "preact/hooks";
 
 import ColoredSquare from "components/ColoredSquare/ColoredSquare";
 import ColorPicker from "components/ColorPicker/ColorPicker";
 import Button from "components/Button/Button";
-import { useSelector } from "react-redux";
-import { RootState } from "store/store";
-import { useCallback } from "preact/hooks";
+import { getEntries } from "utils/utils";
+import { ColorGroupHashMap } from "store/file/types";
+import UsernameList from "components/UsernameList/UsernameList";
 
 import "./style.scss";
 
 const { useForm } = Form;
 
-const ColorDetails: FunctionalComponent = () => {
-  const { colors, selectedColorKey } = useSelector(
-    (state: RootState) => state.file
-  );
+export interface ColorDetailsProps {
+  colors: ColorGroupHashMap;
+  selectedColorKey: string;
+}
+
+const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
+  const { colors, selectedColorKey } = props;
+  const selectedColor = colors[selectedColorKey];
+  const colorEntries = useMemo(() => getEntries(colors), [colors]);
   const [form] = useForm();
 
   const onFinish = useCallback((values) => {
     console.log(values);
   }, []);
 
-  if (!selectedColorKey) {
-    return null;
-  }
-
-  const selectedColor = colors[selectedColorKey];
   return (
     <div className="color-details-content">
       <div className="color-details-content-header">
@@ -76,6 +77,9 @@ const ColorDetails: FunctionalComponent = () => {
             name="color"
           >
             <ColorPicker />
+          </Form.Item>
+          <Form.Item initialValue={selectedColor.usernames} name="usernames">
+            <UsernameList colors={colorEntries} />
           </Form.Item>
           <div className="color-details-content-buttons">
             <Button

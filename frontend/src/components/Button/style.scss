@@ -8,13 +8,11 @@
   transition: transform v.$animation-duration-short ease;
   font-family: inherit;
   line-height: normal;
-  
-  &.standard {
+
+  &.primary.standard {
     background-color: v.$primary-color;
-    color: v.$font-color-white;
     border: 2px solid v.$primary-color;
-    border-radius: v.$border-radius-regular;
-    transition: transform v.$animation-duration-short ease, background-color v.$animation-duration-base ease, border-color v.$animation-duration-base ease;
+    color: v.$font-color-white;
 
     &:hover, &:focus {
       background-color: lighten(v.$primary-color, 15%);
@@ -22,9 +20,62 @@
     }
   }
 
+  &.danger.standard {
+    background-color: v.$danger;
+    border: 2px solid v.$danger;
+    color: v.$font-color-white;
+
+    &:hover, &:focus {
+      background-color: lighten(v.$danger, 15%);
+      border-color: lighten(v.$danger, 15%);
+    }
+  }
+
+  &.grayish.standard {
+    background-color: v.$white-accent;
+    border: 2px solid v.$white-accent;
+    color: v.$font-color-regular;
+
+    &:hover, &:focus {
+      background-color: darken(v.$white-accent, 15%);
+      border-color: darken(v.$white-accent, 15%);
+    }
+  }
+  
+  &.standard {
+    border-radius: v.$border-radius-regular;
+    transition: transform v.$animation-duration-short ease, background-color v.$animation-duration-base ease, border-color v.$animation-duration-base ease;
+  }
+
+  &.primary.bordered {
+    border: 2px solid v.$primary-color;
+
+    &:hover, &:focus {
+      border-color: lighten(v.$primary-color, 15%);
+    }
+  }
+
+  &.danger.bordered {
+    border: 2px solid v.$danger;
+
+    &:hover, &:focus {
+      border-color: lighten(v.$danger, 15%);
+    }
+  }
+
+  &.grayish.bordered {
+    background-color: v.$white-accent;
+    border: 2px solid v.$white-accent;
+    color: v.$font-color-regular;
+
+    &:hover, &:focus {
+      background-color: darken(v.$white-accent, 15%);
+      border-color: darken(v.$white-accent, 15%);
+    }
+  }
+
   &.bordered {
     background-color: transparent;
-    border: 2px solid v.$primary-color;
     border-radius: v.$border-radius-regular;
     transition: transform v.$animation-duration-short ease, color v.$animation-duration-base ease, border-color v.$animation-duration-base ease;
     
@@ -43,14 +94,36 @@
     }
   }
 
-  &.rounded-square {
+  &.primary.rounded-square {
+    background-color: v.$primary-color;
+    color: v.$font-color-white;
+
+    &:hover, &:focus {
+      background-color: lighten(v.$primary-color, 15%);
+    }
+  }
+
+  &.danger.rounded-square {
+    background-color: v.$danger;
+    color: v.$font-color-white;
+
+    &:hover, &:focus {
+      background-color: lighten(v.$danger, 15%);
+    }
+  }
+
+  &.grayish.rounded-gray {
     background-color: v.$white-accent;
-    transition: transform v.$animation-duration-short ease, background-color v.$animation-duration-base ease;
-    border-radius: v.$border-radius-small;
+    color: v.$font-color-regular;
 
     &:hover, &:focus {
       background-color: darken(v.$white-accent, 15%);
     }
+  }
+
+  &.rounded-square {
+    transition: transform v.$animation-duration-short ease, background-color v.$animation-duration-base ease;
+    border-radius: v.$border-radius-small;
   }
 
   &.text {
@@ -65,6 +138,10 @@
   &.medium {
     font-size: v.$font-size-regular;
     padding: v.$padding-between v.$padding-medium;
+  }
+
+  &.between {
+    padding: v.$padding-tiny;
   }
   
   &.small {

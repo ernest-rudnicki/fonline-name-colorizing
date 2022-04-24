@@ -1,0 +1,60 @@
+@use "style/variables" as v;
+@use "style/mixins" as m;
+
+.username-list {
+  &-row {
+    @include m.center-vertically;
+    padding-bottom: v.$padding-small;
+
+    &-header {
+      font-weight: bold;
+
+      &-actions {
+        width: 100px;
+      }
+    }
+
+
+    &-title {
+      @include m.center-vertically;
+      flex-basis: 350px;
+
+      &-buttons {
+        width: 100px;
+
+        &-btn:not(:last-child) {
+          margin-right: v.$margin-small;
+        }
+      }
+    }
+
+    &-color, &-contour {
+      flex-grow: 1;
+      flex-basis: 50%;
+      width: auto !important;
+    }
+
+    &-item:not(:last-child) {
+      margin-right: v.$margin-small;
+    }
+
+    &-item {
+      &-option {
+        @include m.center-vertically;
+
+        &-square {
+          margin-right: v.$margin-small;
+        }
+      }
+    }
+  }
+  
+
+  &-data {
+    border-bottom: 1px solid v.$divider;
+  }
+
+  &-row:not(:first-child) {
+    margin-bottom: v.$margin-small;
+  }
+}

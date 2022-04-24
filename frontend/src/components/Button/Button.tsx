@@ -10,7 +10,8 @@ export interface ButtonProps {
   className?: string;
   type?: "button" | "submit" | "reset";
   variant?: "standard" | "bordered" | "minimal" | "text" | "rounded-square";
-  size?: "medium" | "small" | "tiny" | "icon";
+  size?: "medium" | "between" | "small" | "tiny" | "icon";
+  color?: "primary" | "danger" | "grayish";
   mode?: "dark" | "light";
   tooltipText?: string;
   disabled?: boolean;
@@ -30,6 +31,7 @@ const Button: FunctionalComponent<ButtonProps> = (props) => {
     variant = "standard",
     size = "medium",
     mode = "light",
+    color = "primary",
   } = props;
 
   const _onClick = useCallback(
@@ -48,7 +50,7 @@ const Button: FunctionalComponent<ButtonProps> = (props) => {
       disabled={disabled}
       onClick={_onClick}
       type={type}
-      className={joinClassNames(["btn", variant, size, mode, className])}
+      className={joinClassNames(["btn", variant, size, mode, color, className])}
     >
       {tooltipText && (
         <div className="btn-tooltip" role="tooltip">

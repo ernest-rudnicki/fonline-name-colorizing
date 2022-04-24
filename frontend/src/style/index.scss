@@ -37,7 +37,23 @@ a {
 	font-size: v.$font-size-small;
 	font-weight: bold;
 }
-.ant-input:hover, .ant-input:focus {
-	border-color: v.$primary-color;
-	box-shadow: none;
+
+.ant-select-open, .ant-select-focused {
+	.ant-select-selector {
+		box-shadow: none !important;
+		border-color: v.$primary-color !important;
+	}
+}
+
+.ant-input:hover, .ant-select-selector:hover, .ant-select-selector:focus, .ant-input:focus {
+	border-color: v.$primary-color !important;
+	box-shadow: none !important;
+}
+
+.ant-select-item-option-selected {
+	background-color: lighten(v.$primary-color, 50%) !important;
+}
+
+.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+	background-color: v.$hover-regular;
 }
