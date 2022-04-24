@@ -48,7 +48,7 @@ const ColorList: FunctionalComponent<ColoredSquareProps> = (props) => {
               size={16}
               color={value.color}
             />
-            <b>{key}</b>
+            {key}
           </div>
         </Button>
       ))}
