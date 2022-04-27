@@ -26,3 +26,11 @@ export interface Username {
   contourColor: string;
   nameColor: string;
 }
+
+export type UsernameFormItemError = {
+  [key in keyof Username]: string;
+};
+
+export interface UsernameFormItem extends Username {
+  errors?: UsernameFormItemError[];
+}

@@ -3,26 +3,23 @@
 
 .username-list {
   &-row {
-    @include m.center-vertically;
+    display: flex;
     padding-bottom: v.$padding-small;
 
     &-header {
       font-weight: bold;
-
-      &-actions {
-        width: 100px;
-      }
     }
 
 
-    &-title {
-      @include m.center-vertically;
+    &-title { 
+      display: flex;
       flex-basis: 350px;
+      .ant-form-item {
+        width: 100%;
+      }
 
       &-buttons {
-        width: 100px;
-
-        &-btn:not(:last-child) {
+        &-btn {
           margin-right: v.$margin-small;
         }
       }
@@ -56,5 +53,10 @@
 
   &-row:not(:first-child) {
     margin-bottom: v.$margin-small;
+  }
+
+  .ant-form-item {
+    padding: 0;
+    margin: 0;
   }
 }

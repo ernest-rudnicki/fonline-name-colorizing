@@ -20,11 +20,12 @@ const { useForm } = Form;
 
 export interface ColorDetailsProps {
   colors: ColorGroupHashMap;
+  allUsernames: Username[];
   selectedColorKey: string;
 }
 
 const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
-  const { colors, selectedColorKey } = props;
+  const { colors, selectedColorKey, allUsernames } = props;
   const selectedColor = colors[selectedColorKey];
   const colorEntries = useMemo(() => getEntries(colors), [colors]);
   const [form] = useForm();
@@ -79,7 +80,11 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
             <ColorPicker />
           </Form.Item>
           <Form.Item initialValue={selectedColor.usernames} name="usernames">
-            <UsernameList colors={colorEntries} />
+            <UsernameList
+              allUsernames={allUsernames}
+              colors={colorEntries}
+              selectedColorKey={selectedColorKey}
+            />
           </Form.Item>
           <div className="color-details-content-buttons">
             <Button

@@ -13,7 +13,7 @@ import ColorDetails from "./ColorDetails/ColorDetails";
 import "./style.scss";
 
 const Editor: FunctionalComponent = () => {
-  const { colors, selectedColorKey } = useSelector(
+  const { colors, selectedColorKey, usernames } = useSelector(
     (state: RootState) => state.file
   );
 
@@ -49,7 +49,11 @@ const Editor: FunctionalComponent = () => {
       </div>
       <div className="editor-config">
         {selectedColorKey && (
-          <ColorDetails colors={colors} selectedColorKey={selectedColorKey} />
+          <ColorDetails
+            allUsernames={usernames}
+            colors={colors}
+            selectedColorKey={selectedColorKey}
+          />
         )}
       </div>
     </div>

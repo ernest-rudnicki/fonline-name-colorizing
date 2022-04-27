@@ -33,3 +33,19 @@ export function joinClassNames(
 export function getEntries<T>(obj: T): Entries<T> {
   return Object.entries(obj) as Entries<T>;
 }
+
+export function debounce<Args extends any[], F extends (...args: Args) => any>(
+  fn: F,
+  delay: number
+): (...args: Args) => void {
+  let timerId: NodeJS.Timeout | null;
+  return function (...args: Args) {
+    if (timerId) {
+      clearTimeout(timerId);
+    }
+    timerId = setTimeout(() => {
+      fn(...args);
+      timerId = null;
+    }, delay);
+  };
+}
