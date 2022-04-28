@@ -4,7 +4,7 @@ import { Route, Router } from "preact-router";
 import Editor from "routes/Editor/Editor";
 import Start from "routes/Start/Start";
 
-import "antd/dist/antd.css";
+import "antd/dist/antd.less";
 
 const App: FunctionalComponent = () => {
   return (
