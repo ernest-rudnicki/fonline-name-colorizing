@@ -5,7 +5,9 @@ import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import Editor from "routes/Editor/Editor";
 import { changeSelectedColor } from "store/file/slice";
+import { addMatchMedia } from "utils/testing-utils";
 
+addMatchMedia();
 jest.mock("store/file/slice");
 
 const usernames = [
@@ -89,11 +91,11 @@ describe("Editor rendering", () => {
 
     expect(screen.getAllByRole("button").length).toBe(6);
 
-    expect(await screen.findByText("testNameColor")).toBeTruthy();
-    expect(await screen.findByText("testContourColor")).toBeTruthy();
-    expect(await screen.findByText("testEnemyContourColor")).toBeTruthy();
-    expect(await screen.findByText("testFriendColor")).toBeTruthy();
-    expect(await screen.findByText("testFriendContourColor")).toBeTruthy();
+    expect(await screen.findByText("testNameColor (2)")).toBeTruthy();
+    expect(await screen.findByText("testContourColor (1)")).toBeTruthy();
+    expect(await screen.findByText("testEnemyContourColor (1)")).toBeTruthy();
+    expect(await screen.findByText("testFriendColor (1)")).toBeTruthy();
+    expect(await screen.findByText("testFriendContourColor (1)")).toBeTruthy();
   });
 
   test("renders title bar", async () => {
@@ -136,7 +138,7 @@ describe("Editor actions", () => {
       </Provider>
     );
 
-    fireEvent.click(screen.getByText("testNameColor"));
+    fireEvent.click(screen.getByText("testNameColor (2)"));
     expect(changeSelectedColor).toBeCalledTimes(1);
     expect(changeSelectedColor).toBeCalledWith("testNameColor");
   });

@@ -38,9 +38,9 @@ describe("File store helpers", () => {
     );
 
     expect(result.colors["NameCvet"].color).toMatchObject({
-      red: 250,
-      green: 230,
-      blue: 90,
+      r: 250,
+      g: 230,
+      b: 90,
     });
   });
 
@@ -56,21 +56,21 @@ describe("File store helpers", () => {
     );
 
     expect(result.colors["NameCvet"].color).toMatchObject({
-      red: 250,
-      green: 230,
-      blue: 90,
+      r: 250,
+      g: 230,
+      b: 90,
     });
 
     expect(result.colors["ContourCvet"].color).toMatchObject({
-      red: 120,
-      green: 190,
-      blue: 220,
+      r: 120,
+      g: 190,
+      b: 220,
     });
 
     expect(result.colors["NameGray"].color).toMatchObject({
-      red: 173,
-      green: 173,
-      blue: 185,
+      r: 173,
+      g: 173,
+      b: 185,
     });
   });
 

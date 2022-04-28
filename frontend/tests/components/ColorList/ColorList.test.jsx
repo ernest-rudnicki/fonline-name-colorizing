@@ -35,9 +35,9 @@ describe("ColorList rendering", () => {
     const buttons = await screen.findAllByRole("button");
     expect(buttons.length).toBe(3);
 
-    expect(buttons[0].textContent).toBe("black");
-    expect(buttons[1].textContent).toBe("white");
-    expect(buttons[2].textContent).toBe("enemy");
+    expect(buttons[0].textContent).toBe("black (2)");
+    expect(buttons[1].textContent).toBe("white (2)");
+    expect(buttons[2].textContent).toBe("enemy (2)");
   });
   test("button is selected when selectedKey is provided", async () => {
     render(<ColorList colors={colors} selectedKey="black" />);
@@ -51,7 +51,7 @@ describe("ColorList handlers", () => {
     const onClick = jest.fn();
     render(<ColorList colors={colors} onClick={onClick} />);
 
-    fireEvent.click(screen.getByText("black"));
+    fireEvent.click(screen.getByText("black (2)"));
     expect(onClick).toBeCalledTimes(1);
     expect(onClick).toBeCalledWith("black");
   });
@@ -60,7 +60,7 @@ describe("ColorList handlers", () => {
     const spy = jest.spyOn(console, "log");
     render(<ColorList colors={colors} />);
 
-    fireEvent.click(screen.getByText("black"));
+    fireEvent.click(screen.getByText("black (2)"));
     expect(spy).toBeCalledTimes(1);
   });
 
@@ -68,9 +68,9 @@ describe("ColorList handlers", () => {
     const onClick = jest.fn();
     render(<ColorList colors={colors} onClick={onClick} />);
 
-    fireEvent.click(screen.getByText("black"));
-    fireEvent.click(screen.getByText("white"));
-    fireEvent.click(screen.getByText("enemy"));
+    fireEvent.click(screen.getByText("black (2)"));
+    fireEvent.click(screen.getByText("white (2)"));
+    fireEvent.click(screen.getByText("enemy (2)"));
 
     expect(onClick).toBeCalledTimes(3);
   });
