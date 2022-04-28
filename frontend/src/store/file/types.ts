@@ -1,4 +1,4 @@
-import { BaseState } from "generic/generic";
+import { BaseItem, BaseState } from "generic/generic";
 
 export interface FileState extends BaseState {
   colors: ColorGroupHashMap;
@@ -12,7 +12,7 @@ export interface RGBColor {
   b: number;
 }
 
-export interface ColorGroup {
+export interface ColorGroup extends BaseItem {
   color: RGBColor;
   usernames: Username[];
 }
@@ -21,7 +21,7 @@ export interface ColorGroupHashMap {
   [key: string]: ColorGroup;
 }
 
-export interface Username {
+export interface Username extends BaseItem {
   name: string;
   contourColor: string;
   nameColor: string;
@@ -32,5 +32,5 @@ export type UsernameFormItemError = {
 };
 
 export interface UsernameFormItem extends Username {
-  errors?: UsernameFormItemError[];
+  errors?: Partial<UsernameFormItemError>;
 }

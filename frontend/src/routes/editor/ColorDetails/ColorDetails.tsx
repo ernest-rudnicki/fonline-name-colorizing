@@ -5,7 +5,7 @@
 import { FunctionalComponent, h } from "preact";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 import { Form, Input } from "antd";
-import { useCallback, useMemo } from "preact/hooks";
+import { useCallback, useEffect, useMemo } from "preact/hooks";
 
 import ColoredSquare from "components/ColoredSquare/ColoredSquare";
 import ColorPicker from "components/ColorPicker/ColorPicker";
@@ -29,6 +29,14 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
   const selectedColor = colors[selectedColorKey];
   const colorEntries = useMemo(() => getEntries(colors), [colors]);
   const [form] = useForm();
+
+  useEffect(() => {
+    form.setFieldsValue({
+      name: selectedColorKey,
+      color: selectedColor.color,
+      usernames: selectedColor.usernames,
+    });
+  }, [selectedColorKey, selectedColor, form]);
 
   const onFinish = useCallback((values) => {
     console.log(values);
@@ -56,14 +64,8 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
         </div>
       </div>
       <div>
-        <Form
-          form={form}
-          key={selectedColorKey}
-          layout="vertical"
-          onFinish={onFinish}
-        >
+        <Form form={form} layout="vertical" onFinish={onFinish}>
           <Form.Item
-            initialValue={selectedColorKey}
             name="name"
             label="Color Group Name"
             rules={[
@@ -72,14 +74,10 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
           >
             <Input />
           </Form.Item>
-          <Form.Item
-            initialValue={selectedColor.color}
-            label="RGB Color"
-            name="color"
-          >
+          <Form.Item label="RGB Color" name="color">
             <ColorPicker />
           </Form.Item>
-          <Form.Item initialValue={selectedColor.usernames} name="usernames">
+          <Form.Item name="usernames">
             <UsernameList
               allUsernames={allUsernames}
               colors={colorEntries}

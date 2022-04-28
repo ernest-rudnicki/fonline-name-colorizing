@@ -1,12 +1,13 @@
 import { ColorGroupHashMap, Username } from "./types";
 import { parseIntBaseTen } from "utils/utils";
-
+import { v4 as uuidv4 } from "uuid";
 export function createUsernameObject(
   username: string,
   nameColor: string,
   contourColor: string
 ): Username {
   return {
+    id: uuidv4(),
     name: username,
     nameColor,
     contourColor,
@@ -20,6 +21,7 @@ export function fillColors(
 ): void {
   if (!hashMap[color]) {
     hashMap[color] = {
+      id: uuidv4(),
       usernames: [],
       color: {
         r: 0,

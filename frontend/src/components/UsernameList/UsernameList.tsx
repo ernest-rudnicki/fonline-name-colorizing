@@ -1,8 +1,10 @@
 import { Form, Input, Select } from "antd";
 import { Entries } from "generic/generic";
-import { FunctionalComponent, h, Fragment } from "preact";
+import { FunctionalComponent, h } from "preact";
 import { AiFillPlusCircle, AiFillDelete } from "react-icons/ai";
 import { useCallback, useEffect, useState } from "preact/hooks";
+import cloneDeep from "lodash.clonedeep";
+import { v4 as uuidv4 } from "uuid";
 
 import { debounce, joinClassNames } from "utils/utils";
 import {
@@ -10,12 +12,12 @@ import {
   RGBColor,
   Username,
   UsernameFormItem,
+  UsernameFormItemError,
 } from "store/file/types";
 import Button from "components/Button/Button";
 import ColoredSquare from "components/ColoredSquare/ColoredSquare";
 
 import "./style.scss";
-import cloneDeep from "lodash.clonedeep";
 
 export interface UsernameListProps {
   value?: Username[];
@@ -40,7 +42,7 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
   }, [value]);
 
   const _onChange = useCallback(
-    (newValue: Username[]) => {
+    (newValue: UsernameFormItem[]) => {
       setInternalValue(newValue);
 
       if (!onChange) {
@@ -53,16 +55,13 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
   );
 
   const validateUsername = useCallback(
-    (username: string): boolean => {
+    (id: string, username: string): Username | null => {
       const filtered = allUsernames.filter(
-        (el) =>
-          el.name === username &&
-          el.nameColor !== selectedColorKey &&
-          el.contourColor !== selectedColorKey
+        (el) => el.name === username && el.id !== id
       );
-      return filtered.length === 0;
+      return filtered.length !== 0 ? filtered[0] : null;
     },
-    [allUsernames, selectedColorKey]
+    [allUsernames]
   );
 
   const updateUsername = useCallback(
@@ -70,8 +69,8 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
       updateValue: string,
       username: string,
       objectKey: keyof Username,
-      values: Username[]
-    ): [Username[], number] => {
+      values: UsernameFormItem[]
+    ): [UsernameFormItem[], number] => {
       const valuesCopy = cloneDeep(values);
       const foundIndex = valuesCopy.findIndex((el) => el.name === username);
 
@@ -86,6 +85,46 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
     []
   );
 
+  const updateItemErrors = useCallback(
+    (
+      item: UsernameFormItem,
+      errors: Partial<UsernameFormItemError>
+    ): UsernameFormItem => {
+      if (item.errors) {
+        return {
+          ...item,
+          errors: {
+            ...item.errors,
+            ...errors,
+          },
+        };
+      }
+
+      item.errors = errors;
+      return item;
+    },
+    []
+  );
+
+  const removeItemError = useCallback(
+    (
+      item: UsernameFormItem,
+      errorKey: keyof UsernameFormItemError
+    ): UsernameFormItem => {
+      if (!item.errors) {
+        return item;
+      }
+
+      delete item.errors[errorKey];
+      if (Object.keys(item.errors)) {
+        delete item.errors;
+      }
+
+      return item;
+    },
+    []
+  );
+
   const onInputChange = debounce((value: string, username: string) => {
     const [updated, foundIndex] = updateUsername(
       value,
@@ -93,6 +132,15 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
       "name",
       internalValue
     );
+    const { id, name } = updated[foundIndex];
+    const duplicatedUsername = validateUsername(id, name);
+    if (duplicatedUsername) {
+      updated[foundIndex] = updateItemErrors(updated[foundIndex], {
+        name: `This username is arleady assigned to: ${duplicatedUsername.nameColor} and ${duplicatedUsername.contourColor}`,
+      });
+    } else {
+      updated[foundIndex] = removeItemError(updated[foundIndex], "name");
+    }
 
     if (foundIndex === -1) {
       return;
@@ -161,6 +209,7 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
   const addUsername = useCallback(() => {
     const internalValueCopy = [...internalValue];
     internalValueCopy.push({
+      id: uuidv4(),
       name: "",
       nameColor: selectedColorKey,
       contourColor: selectedColorKey,
@@ -192,7 +241,7 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
         </div>
       </div>
       {internalValue.map((el) => (
-        <div className="username-list-row username-list-data" key={el.name}>
+        <div className="username-list-row username-list-data" key={el.id}>
           <div className="username-list-row-item username-list-row-title">
             <span className="username-list-row-title-buttons">
               <Button
@@ -205,7 +254,12 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
                 icon={<AiFillDelete />}
               />
             </span>
-            <Form.Item>{renderInput(el)}</Form.Item>
+            <Form.Item
+              validateStatus={el.errors ? "error" : undefined}
+              help={el.errors?.name}
+            >
+              {renderInput(el)}
+            </Form.Item>
           </div>
           <Select
             onChange={(value) => onSelectChange(value, el.name, "nameColor")}

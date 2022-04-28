@@ -12,6 +12,10 @@ export type GenericPreactContent = VNode | string;
 export interface BaseState {
   isLoading: boolean;
 }
+
+export interface BaseItem {
+  id: string;
+}
 export type Entries<T> = {
   [K in keyof T]: [K, T[K]];
 }[keyof T][];

@@ -57,3 +57,7 @@ a {
 .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
 	background-color: v.$hover-regular;
 }
+
+.ant-input-status-error {
+	border-color: #ff4d4f !important;
+}
