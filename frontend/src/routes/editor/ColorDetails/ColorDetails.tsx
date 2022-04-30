@@ -30,13 +30,17 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
   const colorEntries = useMemo(() => getEntries(colors), [colors]);
   const [form] = useForm();
 
-  useEffect(() => {
+  const resetValues = useCallback(() => {
     form.setFieldsValue({
       name: selectedColorKey,
       color: selectedColor.color,
       usernames: selectedColor.usernames,
     });
   }, [selectedColorKey, selectedColor, form]);
+
+  useEffect(() => {
+    resetValues();
+  }, [selectedColorKey, selectedColor, form, resetValues]);
 
   const onFinish = useCallback((values) => {
     console.log(values);
@@ -93,7 +97,7 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
               Save
             </Button>
             <Button
-              type="reset"
+              onClick={resetValues}
               icon={<AiOutlineClose />}
               className="color-details-content-buttons-btn"
               variant="bordered"

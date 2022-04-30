@@ -261,20 +261,24 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
               {renderInput(el)}
             </Form.Item>
           </div>
-          <Select
-            onChange={(value) => onSelectChange(value, el.name, "nameColor")}
-            className="username-list-row-item username-list-row-color"
-            value={el.nameColor}
-          >
-            {renderSelectOptions(colors)}
-          </Select>
-          <Select
-            onChange={(value) => onSelectChange(value, el.name, "contourColor")}
-            className="username-list-row-item username-list-row-contour"
-            value={el.contourColor}
-          >
-            {renderSelectOptions(colors)}
-          </Select>
+          <div className="username-list-row-item username-list-row-color">
+            <Select
+              onChange={(value) => onSelectChange(value, el.name, "nameColor")}
+              value={el.nameColor}
+            >
+              {renderSelectOptions(colors)}
+            </Select>
+          </div>
+          <div className="username-list-row-item username-list-row-contour">
+            <Select
+              onChange={(value) =>
+                onSelectChange(value, el.name, "contourColor")
+              }
+              value={el.contourColor}
+            >
+              {renderSelectOptions(colors)}
+            </Select>
+          </div>
         </div>
       ))}
       <div className="username-list-row">
