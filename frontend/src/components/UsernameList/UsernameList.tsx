@@ -136,7 +136,7 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
     const duplicatedUsername = validateUsername(id, name);
     if (duplicatedUsername) {
       updated[foundIndex] = updateItemErrors(updated[foundIndex], {
-        name: `This username is arleady assigned to: ${duplicatedUsername.nameColor} and ${duplicatedUsername.contourColor}`,
+        name: `Username assigned to:\n${duplicatedUsername.nameColor} and ${duplicatedUsername.contourColor}`,
       });
     } else {
       updated[foundIndex] = removeItemError(updated[foundIndex], "name");
