@@ -13,25 +13,26 @@ jest.mock("store/file/slice");
 const usernames = [
   {
     name: "testUsername1",
-    contourColor: "testNameColor",
-    nameColor: "testContourColor",
+    contourColor: "id1",
+    nameColor: "id2",
   },
   {
     name: "testEnemy",
-    contourColor: "testNameColor",
-    nameColor: "testEnemyContourColor",
+    contourColor: "id1",
+    nameColor: "id3",
   },
   {
     name: "testFriend",
-    contourColor: "testFriendColor",
-    nameColor: "testFriendContourColor",
+    contourColor: "id4",
+    nameColor: "id5",
   },
 ];
 
 const initialState = {
   file: {
     colors: {
-      testNameColor: {
+      id1: {
+        name: "testNameColor",
         color: {
           red: 0,
           green: 0,
@@ -39,7 +40,8 @@ const initialState = {
         },
         usernames: [usernames[0], usernames[1]],
       },
-      testContourColor: {
+      id2: {
+        name: "testContourColor",
         color: {
           red: 255,
           green: 255,
@@ -47,7 +49,8 @@ const initialState = {
         },
         usernames: [usernames[0]],
       },
-      testEnemyContourColor: {
+      id3: {
+        name: "testEnemyContourColor",
         color: {
           red: 255,
           green: 0,
@@ -55,7 +58,8 @@ const initialState = {
         },
         usernames: [usernames[1]],
       },
-      testFriendColor: {
+      id4: {
+        name: "testFriendColor",
         color: {
           red: 0,
           green: 0,
@@ -63,7 +67,8 @@ const initialState = {
         },
         usernames: [usernames[3]],
       },
-      testFriendContourColor: {
+      id5: {
+        name: "testFriendContourColor",
         color: {
           red: 0,
           green: 0,
@@ -113,7 +118,7 @@ describe("Editor rendering", () => {
       ...initialState,
       file: {
         ...initialState.file,
-        selectedColorKey: "testNameColor",
+        selectedColorKey: "id1",
       },
     });
     render(
@@ -140,6 +145,6 @@ describe("Editor actions", () => {
 
     fireEvent.click(screen.getByText("testNameColor (2)"));
     expect(changeSelectedColor).toBeCalledTimes(1);
-    expect(changeSelectedColor).toBeCalledWith("testNameColor");
+    expect(changeSelectedColor).toBeCalledWith("id1");
   });
 });
