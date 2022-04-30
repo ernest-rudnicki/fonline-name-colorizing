@@ -12,7 +12,8 @@ export interface RGBColor {
   b: number;
 }
 
-export interface ColorGroup extends BaseItem {
+export interface ColorGroup {
+  name: string;
   color: RGBColor;
   usernames: Username[];
 }
@@ -23,8 +24,8 @@ export interface ColorGroupHashMap {
 
 export interface Username extends BaseItem {
   name: string;
-  contourColor: string;
-  nameColor: string;
+  contourColorId: string;
+  nameColorId: string;
 }
 
 export type UsernameFormItemError = {

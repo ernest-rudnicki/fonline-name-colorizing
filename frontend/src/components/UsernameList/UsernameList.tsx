@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from "preact/hooks";
 import cloneDeep from "lodash.clonedeep";
 import { v4 as uuidv4 } from "uuid";
 
-import { debounce, joinClassNames } from "utils/utils";
+import { debounce, getEntries, joinClassNames } from "utils/utils";
 import {
   ColorGroupHashMap,
   RGBColor,
@@ -22,7 +22,7 @@ import "./style.scss";
 export interface UsernameListProps {
   value?: Username[];
   className?: string;
-  colors: Entries<ColorGroupHashMap>;
+  colors: ColorGroupHashMap;
   selectedColorKey: string;
   allUsernames: Username[];
   onChange?: (value: UsernameFormItem[]) => void;
@@ -32,6 +32,7 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
   const { value, className, colors, selectedColorKey, allUsernames, onChange } =
     props;
   const [internalValue, setInternalValue] = useState<UsernameFormItem[]>([]);
+  const colorEntries = getEntries(colors);
 
   useEffect(() => {
     if (!value) {
@@ -135,8 +136,12 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
     const { id, name } = updated[foundIndex];
     const duplicatedUsername = validateUsername(id, name);
     if (duplicatedUsername) {
+      const { nameColorId, contourColorId } = duplicatedUsername;
+      const nameColor = colors[nameColorId].name;
+      const contourColor = colors[contourColorId].name;
+
       updated[foundIndex] = updateItemErrors(updated[foundIndex], {
-        name: `Username assigned to:\n${duplicatedUsername.nameColor} and ${duplicatedUsername.contourColor}`,
+        name: `Username assigned to:\n${nameColor} and ${contourColor}`,
       });
     } else {
       updated[foundIndex] = removeItemError(updated[foundIndex], "name");
@@ -167,9 +172,9 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
 
   const renderSelectOptions = useCallback(
     (colorEntries: Entries<ColorGroupHashMap>) => {
-      return colorEntries.map(([username, value]) => (
-        <Select.Option key={username} value={username}>
-          {renderOptionContent(value.color, username)}
+      return colorEntries.map(([colorKey, value]) => (
+        <Select.Option key={colorKey} value={colorKey}>
+          {renderOptionContent(value.color, value.name)}
         </Select.Option>
       )) as React.ReactNode;
     },
@@ -180,7 +185,7 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
     (
       value: string,
       username: string,
-      colorKey: "nameColor" | "contourColor"
+      colorKey: "nameColorId" | "contourColorId"
     ) => {
       const [updated, foundIndex] = updateUsername(
         value,
@@ -211,8 +216,8 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
     internalValueCopy.push({
       id: uuidv4(),
       name: "",
-      nameColor: selectedColorKey,
-      contourColor: selectedColorKey,
+      nameColorId: selectedColorKey,
+      contourColorId: selectedColorKey,
     });
 
     _onChange(internalValueCopy);
@@ -263,20 +268,22 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
           </div>
           <div className="username-list-row-item username-list-row-color">
             <Select
-              onChange={(value) => onSelectChange(value, el.name, "nameColor")}
-              value={el.nameColor}
+              onChange={(value) =>
+                onSelectChange(value, el.name, "nameColorId")
+              }
+              value={el.nameColorId}
             >
-              {renderSelectOptions(colors)}
+              {renderSelectOptions(colorEntries)}
             </Select>
           </div>
           <div className="username-list-row-item username-list-row-contour">
             <Select
               onChange={(value) =>
-                onSelectChange(value, el.name, "contourColor")
+                onSelectChange(value, el.name, "contourColorId")
               }
-              value={el.contourColor}
+              value={el.contourColorId}
             >
-              {renderSelectOptions(colors)}
+              {renderSelectOptions(colorEntries)}
             </Select>
           </div>
         </div>

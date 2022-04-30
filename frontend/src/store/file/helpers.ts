@@ -1,27 +1,28 @@
 import { ColorGroupHashMap, Username } from "./types";
-import { parseIntBaseTen } from "utils/utils";
+import { getEntries, parseIntBaseTen } from "utils/utils";
 import { v4 as uuidv4 } from "uuid";
 export function createUsernameObject(
   username: string,
-  nameColor: string,
-  contourColor: string
+  nameColorId: string,
+  contourColorId: string
 ): Username {
   return {
     id: uuidv4(),
     name: username,
-    nameColor,
-    contourColor,
+    nameColorId,
+    contourColorId,
   };
 }
 
 export function fillColors(
   color: string,
   hashMap: ColorGroupHashMap,
+  colorKey: string,
   username?: Username
 ): void {
-  if (!hashMap[color]) {
-    hashMap[color] = {
-      id: uuidv4(),
+  if (!hashMap[colorKey]) {
+    hashMap[colorKey] = {
+      name: color,
       usernames: [],
       color: {
         r: 0,
@@ -32,7 +33,7 @@ export function fillColors(
   }
 
   if (username) {
-    hashMap[color].usernames.push(username);
+    hashMap[colorKey].usernames.push(username);
   }
 }
 
@@ -54,17 +55,30 @@ export function parseFileContent(content: string[]): {
       const textUsername = splittedLine[1];
       const nameColor = splittedLine[2];
       const contourColor = splittedLine[3];
+      const entries = getEntries(colors);
+
+      const nameColorEntry = entries.find(
+        ([, value]) => value.name === nameColor
+      );
+      const contourColorEntry = entries.find(
+        ([, value]) => value.name === contourColor
+      );
+
+      const nameColorId = nameColorEntry ? nameColorEntry[0] : uuidv4();
+      const contourColorId = contourColorEntry
+        ? contourColorEntry[0]
+        : uuidv4();
 
       const usernameObject = createUsernameObject(
         textUsername,
-        nameColor,
-        contourColor
+        nameColorId,
+        contourColorId
       );
 
       usernames.push(usernameObject);
 
-      fillColors(nameColor, colors, usernameObject);
-      fillColors(contourColor, colors, usernameObject);
+      fillColors(nameColor, colors, nameColorId, usernameObject);
+      fillColors(contourColor, colors, contourColorId, usernameObject);
 
       return;
     }
@@ -79,9 +93,14 @@ export function parseFileContent(content: string[]): {
       const green = splittedLine[3];
       const blue = splittedLine[4];
 
-      fillColors(colorName, colors);
+      const colorEntry = getEntries(colors).find(
+        ([, value]) => value.name === colorName
+      );
 
-      colors[colorName].color = {
+      const colorKey = colorEntry ? colorEntry[0] : uuidv4();
+      fillColors(colorName, colors, colorKey);
+
+      colors[colorKey].color = {
         r: parseIntBaseTen(red),
         g: parseIntBaseTen(green),
         b: parseIntBaseTen(blue),

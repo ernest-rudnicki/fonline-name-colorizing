@@ -5,12 +5,11 @@
 import { FunctionalComponent, h } from "preact";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 import { Form, Input } from "antd";
-import { useCallback, useEffect, useMemo } from "preact/hooks";
+import { useCallback, useEffect } from "preact/hooks";
 
 import ColoredSquare from "components/ColoredSquare/ColoredSquare";
 import ColorPicker from "components/ColorPicker/ColorPicker";
 import Button from "components/Button/Button";
-import { getEntries } from "utils/utils";
 import { ColorGroupHashMap } from "store/file/types";
 import UsernameList from "components/UsernameList/UsernameList";
 
@@ -27,20 +26,19 @@ export interface ColorDetailsProps {
 const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
   const { colors, selectedColorKey, allUsernames } = props;
   const selectedColor = colors[selectedColorKey];
-  const colorEntries = useMemo(() => getEntries(colors), [colors]);
   const [form] = useForm();
 
   const resetValues = useCallback(() => {
     form.setFieldsValue({
-      name: selectedColorKey,
+      name: selectedColor.name,
       color: selectedColor.color,
       usernames: selectedColor.usernames,
     });
-  }, [selectedColorKey, selectedColor, form]);
+  }, [selectedColor, form]);
 
   useEffect(() => {
     resetValues();
-  }, [selectedColorKey, selectedColor, form, resetValues]);
+  }, [selectedColorKey, resetValues]);
 
   const onFinish = useCallback((values) => {
     console.log(values);
@@ -50,7 +48,7 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
     <div className="color-details-content">
       <div className="color-details-content-header">
         <h2 className="color-details-content-header-text">
-          {selectedColorKey}
+          {selectedColor.name}
         </h2>
         <div className="color-details-content-header-color">
           <ColoredSquare size={36} color={selectedColor.color} />
@@ -84,7 +82,7 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
           <Form.Item name="usernames">
             <UsernameList
               allUsernames={allUsernames}
-              colors={colorEntries}
+              colors={colors}
               selectedColorKey={selectedColorKey}
             />
           </Form.Item>
