@@ -6,12 +6,16 @@ import { FunctionalComponent, h } from "preact";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 import { Form, Input } from "antd";
 import { useCallback, useEffect } from "preact/hooks";
+import { cloneDeep, isEqual } from "lodash";
+import { useDispatch } from "react-redux";
 
 import ColoredSquare from "components/ColoredSquare/ColoredSquare";
 import ColorPicker from "components/ColorPicker/ColorPicker";
 import Button from "components/Button/Button";
-import { ColorGroupHashMap } from "store/file/types";
+import { ColorGroup, ColorGroupHashMap } from "store/file/types";
 import UsernameList from "components/UsernameList/UsernameList";
+import { AppDispatch } from "store/store";
+import { updateUnsavedColors } from "store/file/slice";
 
 import "./style.scss";
 
@@ -19,30 +23,62 @@ const { useForm } = Form;
 
 export interface ColorDetailsProps {
   colors: ColorGroupHashMap;
+  unsavedColors: ColorGroupHashMap;
   allUsernames: Username[];
   selectedColorKey: string;
 }
 
 const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
-  const { colors, selectedColorKey, allUsernames } = props;
-  const selectedColor = colors[selectedColorKey];
+  const { colors, unsavedColors, selectedColorKey, allUsernames } = props;
+  const selectedColor =
+    unsavedColors[selectedColorKey] || colors[selectedColorKey];
   const [form] = useForm();
+  const dispatch: AppDispatch = useDispatch();
 
   const resetValues = useCallback(() => {
+    const originalColor = colors[selectedColorKey];
+    const unsavedColorsCopy = cloneDeep(unsavedColors);
+
+    form.setFieldsValue({
+      name: originalColor.name,
+      color: originalColor.color,
+      usernames: originalColor.usernames,
+    });
+
+    delete unsavedColorsCopy[selectedColorKey];
+    dispatch(updateUnsavedColors(unsavedColorsCopy));
+  }, [form, unsavedColors, colors, selectedColorKey, dispatch]);
+
+  useEffect(() => {
     form.setFieldsValue({
       name: selectedColor.name,
       color: selectedColor.color,
       usernames: selectedColor.usernames,
     });
-  }, [selectedColor, form]);
-
-  useEffect(() => {
-    resetValues();
-  }, [selectedColorKey, resetValues]);
+  }, [selectedColorKey]);
 
   const onFinish = useCallback((values) => {
     console.log(values);
   }, []);
+
+  const onValuesChange = useCallback(
+    (changedValues: Partial<ColorGroup>, allValues: ColorGroup) => {
+      const originalColor = colors[selectedColorKey];
+      const unsavedColorsCopy = cloneDeep(unsavedColors);
+
+      if (
+        unsavedColorsCopy[selectedColorKey] &&
+        isEqual(originalColor, allValues)
+      ) {
+        delete unsavedColorsCopy[selectedColorKey];
+      } else {
+        unsavedColorsCopy[selectedColorKey] = allValues;
+      }
+
+      dispatch(updateUnsavedColors(unsavedColorsCopy));
+    },
+    [unsavedColors, selectedColorKey, colors, dispatch]
+  );
 
   return (
     <div className="color-details-content">
@@ -66,7 +102,12 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
         </div>
       </div>
       <div>
-        <Form form={form} layout="vertical" onFinish={onFinish}>
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={onFinish}
+          onValuesChange={onValuesChange}
+        >
           <Form.Item
             name="name"
             label="Color Group Name"

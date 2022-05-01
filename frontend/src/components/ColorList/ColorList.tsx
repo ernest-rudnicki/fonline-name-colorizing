@@ -9,6 +9,7 @@ import { isTestingEnv } from "utils/testing-utils";
 import "./style.scss";
 
 export interface ColoredSquareProps {
+  unsavedColors: ColorGroupHashMap;
   colors: ColorGroupHashMap;
   selectedKey?: string | null;
   className?: string;
@@ -16,7 +17,7 @@ export interface ColoredSquareProps {
 }
 
 const ColorList: FunctionalComponent<ColoredSquareProps> = (props) => {
-  const { colors, selectedKey, className, onClick } = props;
+  const { colors, unsavedColors, selectedKey, className, onClick } = props;
   const entries = getEntries(colors);
 
   const _onClick = (key: string) => {
@@ -48,7 +49,15 @@ const ColorList: FunctionalComponent<ColoredSquareProps> = (props) => {
               size={16}
               color={value.color}
             />
-            {value.name} ({value.usernames.length})
+            {unsavedColors[key] ? (
+              <i>
+                {value.name} ({value.usernames.length})*
+              </i>
+            ) : (
+              <span>
+                {value.name} ({value.usernames.length})
+              </span>
+            )}
           </div>
         </Button>
       ))}

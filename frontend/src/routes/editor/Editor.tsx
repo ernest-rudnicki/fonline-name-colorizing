@@ -13,7 +13,7 @@ import ColorDetails from "./ColorDetails/ColorDetails";
 import "./style.scss";
 
 const Editor: FunctionalComponent = () => {
-  const { colors, selectedColorKey, usernames } = useSelector(
+  const { colors, selectedColorKey, usernames, unsavedColors } = useSelector(
     (state: RootState) => state.file
   );
 
@@ -41,6 +41,7 @@ const Editor: FunctionalComponent = () => {
         </TitleBar>
         <div className="editor-list-content">
           <ColorList
+            unsavedColors={unsavedColors}
             selectedKey={selectedColorKey}
             onClick={onColorListItemClick}
             colors={colors}
@@ -50,6 +51,7 @@ const Editor: FunctionalComponent = () => {
       <div className="editor-config">
         {selectedColorKey && (
           <ColorDetails
+            unsavedColors={unsavedColors}
             allUsernames={usernames}
             colors={colors}
             selectedColorKey={selectedColorKey}

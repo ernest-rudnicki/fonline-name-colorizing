@@ -30,6 +30,7 @@ const usernames = [
 
 const initialState = {
   file: {
+    unsavedColors: {},
     colors: {
       id1: {
         name: "testNameColor",

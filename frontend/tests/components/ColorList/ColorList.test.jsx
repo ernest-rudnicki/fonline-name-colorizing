@@ -34,7 +34,7 @@ const colors = {
 
 describe("ColorList rendering", () => {
   test("renders color buttons", async () => {
-    render(<ColorList colors={colors} />);
+    render(<ColorList unsavedColors={{}} colors={colors} />);
     const buttons = await screen.findAllByRole("button");
     expect(buttons.length).toBe(3);
 
@@ -43,7 +43,7 @@ describe("ColorList rendering", () => {
     expect(buttons[2].textContent).toBe("enemy (2)");
   });
   test("button is selected when selectedKey is provided", async () => {
-    render(<ColorList colors={colors} selectedKey="id1" />);
+    render(<ColorList unsavedColors={{}} colors={colors} selectedKey="id1" />);
 
     expect(screen.getAllByRole("button")[0].classList).toContain("selected");
   });
@@ -52,7 +52,7 @@ describe("ColorList rendering", () => {
 describe("ColorList handlers", () => {
   test("triggers on click handler", async () => {
     const onClick = jest.fn();
-    render(<ColorList colors={colors} onClick={onClick} />);
+    render(<ColorList unsavedColors={{}} colors={colors} onClick={onClick} />);
 
     fireEvent.click(screen.getByText("black (2)"));
     expect(onClick).toBeCalledTimes(1);
@@ -61,7 +61,7 @@ describe("ColorList handlers", () => {
 
   test("triggers if route when no handler is provided", async () => {
     const spy = jest.spyOn(console, "log");
-    render(<ColorList colors={colors} />);
+    render(<ColorList unsavedColors={{}} colors={colors} />);
 
     fireEvent.click(screen.getByText("black (2)"));
     expect(spy).toBeCalledTimes(1);
@@ -69,7 +69,7 @@ describe("ColorList handlers", () => {
 
   test("all buttons trigger on click", async () => {
     const onClick = jest.fn();
-    render(<ColorList colors={colors} onClick={onClick} />);
+    render(<ColorList unsavedColors={{}} colors={colors} onClick={onClick} />);
 
     fireEvent.click(screen.getByText("black (2)"));
     fireEvent.click(screen.getByText("white (2)"));

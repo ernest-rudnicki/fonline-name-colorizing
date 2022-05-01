@@ -17,6 +17,7 @@
     "antd": "^4.19.5",
     "less-loader": "^7.3.0",
     "lodash.clonedeep": "^4.5.0",
+    "lodash.isequal": "^4.5.0",
     "preact": "^10.3.1",
     "preact-render-to-string": "^5.1.4",
     "preact-router": "^3.2.1",
