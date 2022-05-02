@@ -22,7 +22,7 @@ module.exports = async () => {
       "store-utils.ts",
       "store.ts",
       "StoreWrappedApp.jsx",
-      "App.tsx",
+      "app.tsx",
       "sw.js",
       "slice.ts",
       "types.ts",
