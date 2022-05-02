@@ -23,16 +23,13 @@ export interface ColorGroupHashMap {
   [key: string]: ColorGroup;
 }
 
-export interface Username extends BaseItem {
-  name: string;
-  contourColorId: string;
-  nameColorId: string;
-}
-
 export type UsernameFormItemError = {
   [key in keyof Username]: string;
 };
 
-export interface UsernameFormItem extends Username {
+export interface Username extends BaseItem {
+  name: string;
+  contourColorId: string;
+  nameColorId: string;
   errors?: Partial<UsernameFormItemError>;
 }

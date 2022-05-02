@@ -11,7 +11,6 @@ import {
   ColorGroupHashMap,
   RGBColor,
   Username,
-  UsernameFormItem,
   UsernameFormItemError,
 } from "store/file/types";
 import Button from "components/Button/Button";
@@ -25,13 +24,13 @@ export interface UsernameListProps {
   colors: ColorGroupHashMap;
   selectedColorKey: string;
   allUsernames: Username[];
-  onChange?: (value: UsernameFormItem[]) => void;
+  onChange?: (value: Username[]) => void;
 }
 
 const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
   const { value, className, colors, selectedColorKey, allUsernames, onChange } =
     props;
-  const [internalValue, setInternalValue] = useState<UsernameFormItem[]>([]);
+  const [internalValue, setInternalValue] = useState<Username[]>([]);
   const colorEntries = getEntries(colors);
 
   useEffect(() => {
@@ -43,7 +42,7 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
   }, [value]);
 
   const _onChange = useCallback(
-    (newValue: UsernameFormItem[]) => {
+    (newValue: Username[]) => {
       setInternalValue(newValue);
 
       if (!onChange) {
@@ -70,8 +69,8 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
       updateValue: string,
       username: string,
       objectKey: keyof Username,
-      values: UsernameFormItem[]
-    ): [UsernameFormItem[], number] => {
+      values: Username[]
+    ): [Username[], number] => {
       const valuesCopy = cloneDeep(values);
       const foundIndex = valuesCopy.findIndex((el) => el.name === username);
 
@@ -87,10 +86,7 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
   );
 
   const updateItemErrors = useCallback(
-    (
-      item: UsernameFormItem,
-      errors: Partial<UsernameFormItemError>
-    ): UsernameFormItem => {
+    (item: Username, errors: Partial<UsernameFormItemError>): Username => {
       if (item.errors) {
         return {
           ...item,
@@ -108,10 +104,7 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
   );
 
   const removeItemError = useCallback(
-    (
-      item: UsernameFormItem,
-      errorKey: keyof UsernameFormItemError
-    ): UsernameFormItem => {
+    (item: Username, errorKey: keyof Username): Username => {
       if (!item.errors) {
         return item;
       }
@@ -127,6 +120,7 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
   );
 
   const onInputChange = debounce((value: string, username: string) => {
+    console.log("Hello");
     const [updated, foundIndex] = updateUsername(
       value,
       username,
@@ -135,6 +129,7 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
     );
     const { id, name } = updated[foundIndex];
     const duplicatedUsername = validateUsername(id, name);
+
     if (duplicatedUsername) {
       const { nameColorId, contourColorId } = duplicatedUsername;
       const nameColor = colors[nameColorId].name;
