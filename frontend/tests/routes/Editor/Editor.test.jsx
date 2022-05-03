@@ -12,19 +12,22 @@ jest.mock("store/file/slice");
 
 const usernames = [
   {
+    id: "username1",
     name: "testUsername1",
-    contourColor: "id1",
-    nameColor: "id2",
+    contourColorId: "id1",
+    nameColorId: "id2",
   },
   {
+    id: "username2",
     name: "testEnemy",
-    contourColor: "id1",
-    nameColor: "id3",
+    contourColorId: "id1",
+    nameColorId: "id3",
   },
   {
+    id: "username3",
     name: "testFriend",
-    contourColor: "id4",
-    nameColor: "id5",
+    contourColorId: "id4",
+    nameColorId: "id5",
   },
 ];
 

@@ -17,6 +17,7 @@ import Button from "components/Button/Button";
 import ColoredSquare from "components/ColoredSquare/ColoredSquare";
 
 import "./style.scss";
+import { isTestingEnv } from "utils/testing-utils";
 
 export interface UsernameListProps {
   value?: Username[];
@@ -46,6 +47,9 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
       setInternalValue(newValue);
 
       if (!onChange) {
+        if (isTestingEnv()) {
+          console.log("triggers if route when onChange is not passed");
+        }
         return;
       }
 
@@ -106,6 +110,9 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
   const removeItemError = useCallback(
     (item: Username, errorKey: keyof Username): Username => {
       if (!item.errors) {
+        if (isTestingEnv()) {
+          console.log("triggers if route when the are no errors on the item");
+        }
         return item;
       }
 
@@ -120,7 +127,6 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
   );
 
   const onInputChange = debounce((value: string, username: string) => {
-    console.log("Hello");
     const [updated, foundIndex] = updateUsername(
       value,
       username,
@@ -129,7 +135,6 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
     );
     const { id, name } = updated[foundIndex];
     const duplicatedUsername = validateUsername(id, name);
-
     if (duplicatedUsername) {
       const { nameColorId, contourColorId } = duplicatedUsername;
       const nameColor = colors[nameColorId].name;
@@ -221,6 +226,7 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
   const renderInput = (el: Username) => {
     return (
       <Input
+        aria-label="Username"
         value={el.name}
         onChange={(value) => onInputChange(value.currentTarget.value, el.name)}
       />
