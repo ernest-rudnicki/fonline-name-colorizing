@@ -6,7 +6,12 @@ import { useCallback, useEffect, useState } from "preact/hooks";
 import cloneDeep from "lodash.clonedeep";
 import { v4 as uuidv4 } from "uuid";
 
-import { debounce, getEntries, joinClassNames } from "utils/utils";
+import {
+  debounce,
+  getEntries,
+  joinClassNames,
+  overrideReactType,
+} from "utils/utils";
 import {
   ColorGroupHashMap,
   RGBColor,
@@ -71,12 +76,12 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
   const updateUsername = useCallback(
     (
       updateValue: string,
-      username: string,
-      objectKey: keyof Username,
+      id: string,
+      objectKey: Exclude<keyof Username, "unsaved">,
       values: Username[]
     ): [Username[], number] => {
       const valuesCopy = cloneDeep(values);
-      const foundIndex = valuesCopy.findIndex((el) => el.name === username);
+      const foundIndex = valuesCopy.findIndex((el) => el.id === id);
 
       if (foundIndex === -1) {
         return [valuesCopy, -1];
@@ -126,14 +131,19 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
     []
   );
 
-  const onInputChange = debounce((value: string, username: string) => {
+  const onInputChange = debounce((value: string, id: string) => {
     const [updated, foundIndex] = updateUsername(
       value,
-      username,
+      id,
       "name",
       internalValue
     );
-    const { id, name } = updated[foundIndex];
+
+    if (foundIndex === -1) {
+      return;
+    }
+
+    const { name } = updated[foundIndex];
     const duplicatedUsername = validateUsername(id, name);
     if (duplicatedUsername) {
       const { nameColorId, contourColorId } = duplicatedUsername;
@@ -145,10 +155,6 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
       });
     } else {
       updated[foundIndex] = removeItemError(updated[foundIndex], "name");
-    }
-
-    if (foundIndex === -1) {
-      return;
     }
 
     _onChange(updated);
@@ -182,14 +188,10 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
   );
 
   const onSelectChange = useCallback(
-    (
-      value: string,
-      username: string,
-      colorKey: "nameColorId" | "contourColorId"
-    ) => {
+    (value: string, id: string, colorKey: "nameColorId" | "contourColorId") => {
       const [updated, foundIndex] = updateUsername(
         value,
-        username,
+        id,
         colorKey,
         internalValue
       );
@@ -204,8 +206,8 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
   );
 
   const deleteUsername = useCallback(
-    (username: string) => {
-      const filtered = internalValue.filter((el) => el.name !== username);
+    (id: string) => {
+      const filtered = internalValue.filter((el) => el.id !== id);
       _onChange(filtered);
     },
     [internalValue, _onChange]
@@ -218,20 +220,11 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
       name: "",
       nameColorId: selectedColorKey,
       contourColorId: selectedColorKey,
+      unsaved: true,
     });
 
     _onChange(internalValueCopy);
   }, [internalValue, selectedColorKey, _onChange]);
-
-  const renderInput = (el: Username) => {
-    return (
-      <Input
-        aria-label="Username"
-        value={el.name}
-        onChange={(value) => onInputChange(value.currentTarget.value, el.name)}
-      />
-    ) as React.ReactNode;
-  };
 
   return (
     <div className={joinClassNames(["username-list", className])}>
@@ -256,7 +249,7 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
                 size="between"
                 className="username-list-row-title-buttons-btn"
                 variant="rounded-square"
-                onClick={() => deleteUsername(el.name)}
+                onClick={() => deleteUsername(el.id)}
                 icon={<AiFillDelete />}
               />
             </span>
@@ -264,14 +257,20 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
               validateStatus={el.errors ? "error" : undefined}
               help={el.errors?.name}
             >
-              {renderInput(el)}
+              {overrideReactType(
+                <Input
+                  aria-label="Username"
+                  value={el.name}
+                  onChange={(value) =>
+                    onInputChange(value.currentTarget.value, el.id)
+                  }
+                />
+              )}
             </Form.Item>
           </div>
           <div className="username-list-row-item username-list-row-color">
             <Select
-              onChange={(value) =>
-                onSelectChange(value, el.name, "nameColorId")
-              }
+              onChange={(value) => onSelectChange(value, el.id, "nameColorId")}
               value={el.nameColorId}
             >
               {renderSelectOptions(colorEntries)}
@@ -280,7 +279,7 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
           <div className="username-list-row-item username-list-row-contour">
             <Select
               onChange={(value) =>
-                onSelectChange(value, el.name, "contourColorId")
+                onSelectChange(value, el.id, "contourColorId")
               }
               value={el.contourColorId}
             >
