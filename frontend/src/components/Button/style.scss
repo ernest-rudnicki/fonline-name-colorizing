@@ -8,6 +8,7 @@
   transition: transform v.$animation-duration-short ease;
   font-family: inherit;
   line-height: normal;
+  z-index: 5;
 
   &.primary.standard {
     background-color: v.$primary-color;
