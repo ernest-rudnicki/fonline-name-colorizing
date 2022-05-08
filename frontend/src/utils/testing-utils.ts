@@ -1,9 +1,8 @@
 export function isTestingEnv(): boolean {
   return (
-    !process ||
-    !process.env ||
-    process.env.JEST_WORKER_ID !== undefined ||
-    process.env.NODE_ENV === "test"
+    !!process &&
+    (process.env.JEST_WORKER_ID !== undefined ||
+      process.env.NODE_ENV === "test")
   );
 }
 
