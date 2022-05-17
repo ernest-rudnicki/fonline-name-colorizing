@@ -72,6 +72,7 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
 
         if (el.state === UsernameState.UNSAVED) {
           delete el.state;
+          usernamesCopy.push(el);
           return el;
         }
 

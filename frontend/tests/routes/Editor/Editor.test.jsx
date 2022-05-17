@@ -1,11 +1,16 @@
 import { h } from "preact";
-import { fireEvent, render, screen } from "@testing-library/preact";
+import { fireEvent, render, screen, waitFor } from "@testing-library/preact";
 import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import Editor from "routes/Editor/Editor";
-import { changeSelectedColor } from "store/file/slice";
+import {
+  changeSelectedColor,
+  updateUnsavedColors,
+  saveColorChanges,
+} from "store/file/slice";
 import { addMatchMedia } from "utils/testing-utils";
+import { UsernameState } from "store/file/types";
 
 addMatchMedia();
 jest.mock("store/file/slice");
@@ -81,6 +86,7 @@ const initialState = {
         usernames: [usernames[3]],
       },
     },
+    usernames,
     selectedColorKey: null,
   },
 };
@@ -91,6 +97,7 @@ describe("Editor rendering", () => {
   beforeEach(() => {
     store = mockStore(initialState);
   });
+
   test("renders color list", async () => {
     render(
       <Provider store={store}>
@@ -140,6 +147,10 @@ describe("Editor actions", () => {
     store = mockStore(initialState);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   test("triggers select color", async () => {
     render(
       <Provider store={store}>
@@ -150,5 +161,152 @@ describe("Editor actions", () => {
     fireEvent.click(screen.getByText("testNameColor (2)"));
     expect(changeSelectedColor).toBeCalledTimes(1);
     expect(changeSelectedColor).toBeCalledWith("id1");
+  });
+
+  test("reset form values", async () => {
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        selectedColorKey: "id1",
+      },
+    });
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+
+    fireEvent.click(await screen.findByText("Reset"));
+    expect(updateUnsavedColors).toBeCalledTimes(1);
+  });
+
+  test("submit form with removed username", async () => {
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        unsavedColors: {
+          id1: {
+            name: "newNameColor",
+            color: {
+              red: 255,
+              green: 255,
+              blue: 255,
+            },
+            usernames: [
+              {
+                ...usernames[0],
+                state: UsernameState.DELETED,
+              },
+              usernames[1],
+            ],
+          },
+        },
+        selectedColorKey: "id1",
+      },
+    });
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+
+    fireEvent.click(await screen.findByText("Save"));
+
+    await waitFor(async () => {
+      expect(saveColorChanges).toBeCalledTimes(1);
+      expect(saveColorChanges).toHaveBeenCalledWith({
+        unsavedColors: {},
+        colors: {
+          ...initialState.file.colors,
+          id1: {
+            name: "newNameColor",
+            color: {
+              red: 255,
+              green: 255,
+              blue: 255,
+            },
+            usernames: [usernames[1]],
+          },
+        },
+        usernames: [usernames[1], usernames[2]],
+      });
+    });
+  });
+
+  test("submit form with new username", async () => {
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        unsavedColors: {
+          id1: {
+            name: "newNameColor",
+            color: {
+              red: 255,
+              green: 255,
+              blue: 255,
+            },
+            usernames: [
+              usernames[0],
+              usernames[1],
+              {
+                id: "newUsername",
+                name: "newUsername",
+                contourColorId: "id1",
+                nameColorId: "id1",
+                state: UsernameState.UNSAVED,
+              },
+            ],
+          },
+        },
+        selectedColorKey: "id1",
+      },
+    });
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+
+    fireEvent.click(await screen.findByText("Save"));
+
+    await waitFor(async () => {
+      expect(saveColorChanges).toBeCalledTimes(1);
+      expect(saveColorChanges).toHaveBeenCalledWith({
+        unsavedColors: {},
+        colors: {
+          ...initialState.file.colors,
+          id1: {
+            name: "newNameColor",
+            color: {
+              red: 255,
+              green: 255,
+              blue: 255,
+            },
+            usernames: [
+              usernames[0],
+              usernames[1],
+              {
+                id: "newUsername",
+                name: "newUsername",
+                contourColorId: "id1",
+                nameColorId: "id1",
+              },
+            ],
+          },
+        },
+        usernames: [
+          ...usernames,
+          {
+            id: "newUsername",
+            name: "newUsername",
+            contourColorId: "id1",
+            nameColorId: "id1",
+          },
+        ],
+      });
+    });
   });
 });
