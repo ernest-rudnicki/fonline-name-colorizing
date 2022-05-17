@@ -15,6 +15,7 @@ export interface ColorPickerProps {
 const ColorPicker: FunctionalComponent<ColorPickerProps> = (props) => {
   const { value, className, onChange } = props;
 
+  /* istanbul ignore next */
   const _onChange = debounce((color: RGBColor) => {
     if (!onChange) {
       return;
