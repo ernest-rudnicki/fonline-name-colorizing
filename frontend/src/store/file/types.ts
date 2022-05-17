@@ -27,9 +27,22 @@ export type UsernameFormItemError = {
   [key in keyof Username]: string;
 };
 
+export enum UsernameState {
+  NONE,
+  UNSAVED,
+  DELETED,
+}
+
 export interface Username extends BaseItem {
   name: string;
   contourColorId: string;
   nameColorId: string;
   errors?: Partial<UsernameFormItemError>;
+  state?: UsernameState;
+}
+
+export interface SaveColorChangesPayload {
+  colors: ColorGroupHashMap;
+  unsavedColors: ColorGroupHashMap;
+  usernames: Username[];
 }

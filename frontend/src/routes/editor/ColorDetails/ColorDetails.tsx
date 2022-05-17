@@ -1,8 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-
-// TypeScript no-check due to preact issue with react types
-import { FunctionalComponent, h } from "preact";
+import { FunctionalComponent, h, Fragment } from "preact";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 import { Form, Input } from "antd";
 import { useCallback, useEffect } from "preact/hooks";
@@ -12,10 +8,16 @@ import { useDispatch } from "react-redux";
 import ColoredSquare from "components/ColoredSquare/ColoredSquare";
 import ColorPicker from "components/ColorPicker/ColorPicker";
 import Button from "components/Button/Button";
-import { ColorGroup, ColorGroupHashMap } from "store/file/types";
+import {
+  ColorGroup,
+  ColorGroupHashMap,
+  Username,
+  UsernameState,
+} from "store/file/types";
 import UsernameList from "components/UsernameList/UsernameList";
 import { AppDispatch } from "store/store";
-import { updateUnsavedColors } from "store/file/slice";
+import { saveColorChanges, updateUnsavedColors } from "store/file/slice";
+import { overrideReactType } from "utils/utils";
 
 import "./style.scss";
 
@@ -30,13 +32,12 @@ export interface ColorDetailsProps {
 
 const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
   const { colors, unsavedColors, selectedColorKey, allUsernames } = props;
-  const selectedColor =
-    unsavedColors[selectedColorKey] || colors[selectedColorKey];
+  const originalColor = colors[selectedColorKey];
+  const selectedColor = unsavedColors[selectedColorKey] || originalColor;
   const [form] = useForm();
   const dispatch: AppDispatch = useDispatch();
 
   const resetValues = useCallback(() => {
-    const originalColor = colors[selectedColorKey];
     const unsavedColorsCopy = cloneDeep(unsavedColors);
 
     form.setFieldsValue({
@@ -47,7 +48,7 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
 
     delete unsavedColorsCopy[selectedColorKey];
     dispatch(updateUnsavedColors(unsavedColorsCopy));
-  }, [form, unsavedColors, colors, selectedColorKey, dispatch]);
+  }, [form, unsavedColors, originalColor, selectedColorKey, dispatch]);
 
   useEffect(() => {
     form.setFieldsValue({
@@ -57,9 +58,62 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
     });
   }, [selectedColorKey]);
 
-  const onFinish = useCallback((values) => {
-    console.log(values);
-  }, []);
+  const onFinish = useCallback(() => {
+    const unsavedColorsCopy = cloneDeep(unsavedColors);
+    const unsavedColor = unsavedColorsCopy[selectedColorKey];
+    const colorsCopy = cloneDeep(colors);
+    const usernamesCopy = cloneDeep(allUsernames);
+
+    unsavedColor.usernames = unsavedColor.usernames
+      .map((el) => {
+        if (!el.state) {
+          return el;
+        }
+
+        if (el.state === UsernameState.UNSAVED) {
+          delete el.state;
+          return el;
+        }
+
+        const index = usernamesCopy.findIndex(
+          (username) => el.id === username.id
+        );
+        const deletedUsername = usernamesCopy[index];
+        usernamesCopy.splice(index, 1);
+
+        if (deletedUsername.nameColorId === selectedColorKey) {
+          colorsCopy[deletedUsername.contourColorId].usernames = colorsCopy[
+            deletedUsername.contourColorId
+          ].usernames.filter((username) => username.id === deletedUsername.id);
+
+          return null;
+        }
+
+        if (deletedUsername.contourColorId === selectedColorKey) {
+          colorsCopy[deletedUsername.nameColorId].usernames = colorsCopy[
+            deletedUsername.contourColorId
+          ].usernames.filter((username) => username.id === deletedUsername.id);
+        }
+
+        return null;
+      })
+      .filter((el) => el !== null) as Username[];
+
+    const newColors = {
+      ...colorsCopy,
+      [selectedColorKey]: unsavedColor,
+    };
+
+    delete unsavedColorsCopy[selectedColorKey];
+
+    dispatch(
+      saveColorChanges({
+        colors: newColors,
+        usernames: usernamesCopy,
+        unsavedColors: unsavedColorsCopy,
+      })
+    );
+  }, [selectedColorKey, unsavedColors, colors, allUsernames, dispatch]);
 
   const onValuesChange = useCallback(
     (changedValues: Partial<ColorGroup>, allValues: ColorGroup) => {
@@ -79,24 +133,23 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
     },
     [unsavedColors, selectedColorKey, colors, dispatch]
   );
-
   return (
     <div className="color-details-content">
       <div className="color-details-content-header">
         <h2 className="color-details-content-header-text">
-          {selectedColor.name}
+          {originalColor.name}
         </h2>
         <div className="color-details-content-header-color">
           <ColoredSquare size={36} color={selectedColor.color} />
           <span className="color-details-content-header-color-data">
             <span className="color-details-content-header-color-data-red">
-              Red: {selectedColor.color.r}
+              Red: {originalColor.color.r}
             </span>{" "}
             <span className="color-details-content-header-color-data-green">
-              Green: {selectedColor.color.g}
+              Green: {originalColor.color.g}
             </span>{" "}
             <span className="color-details-content-header-color-data-blue">
-              Blue: {selectedColor.color.b}
+              Blue: {originalColor.color.b}
             </span>
           </span>
         </div>
@@ -108,42 +161,48 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
           onFinish={onFinish}
           onValuesChange={onValuesChange}
         >
-          <Form.Item
-            name="name"
-            label="Color Group Name"
-            rules={[
-              { required: true, message: "Color Group Name is required" },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item label="RGB Color" name="color">
-            <ColorPicker />
-          </Form.Item>
-          <Form.Item name="usernames">
-            <UsernameList
-              allUsernames={allUsernames}
-              colors={colors}
-              selectedColorKey={selectedColorKey}
-            />
-          </Form.Item>
-          <div className="color-details-content-buttons">
-            <Button
-              type="submit"
-              icon={<AiOutlineCheck />}
-              className="color-details-content-buttons-btn"
-            >
-              Save
-            </Button>
-            <Button
-              onClick={resetValues}
-              icon={<AiOutlineClose />}
-              className="color-details-content-buttons-btn"
-              variant="bordered"
-            >
-              Reset
-            </Button>
-          </div>
+          {overrideReactType(
+            <>
+              <Form.Item
+                name="name"
+                label="Color Group Name"
+                rules={[
+                  { required: true, message: "Color Group Name is required" },
+                ]}
+              >
+                {overrideReactType(<Input />)}
+              </Form.Item>
+              <Form.Item label="RGB Color" name="color">
+                {overrideReactType(<ColorPicker />)}
+              </Form.Item>
+              <Form.Item name="usernames">
+                {overrideReactType(
+                  <UsernameList
+                    allUsernames={allUsernames}
+                    colors={colors}
+                    selectedColorKey={selectedColorKey}
+                  />
+                )}
+              </Form.Item>
+              <div className="color-details-content-buttons">
+                <Button
+                  type="submit"
+                  icon={<AiOutlineCheck />}
+                  className="color-details-content-buttons-btn"
+                >
+                  Save
+                </Button>
+                <Button
+                  onClick={resetValues}
+                  icon={<AiOutlineClose />}
+                  className="color-details-content-buttons-btn"
+                  variant="bordered"
+                >
+                  Reset
+                </Button>
+              </div>
+            </>
+          )}
         </Form>
       </div>
     </div>

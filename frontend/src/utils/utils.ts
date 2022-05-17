@@ -1,5 +1,6 @@
 import { DirectoryItem, Entries } from "generic/generic";
 import { neutralino } from "neutralino/neutralino";
+import { VNode } from "preact";
 
 export function checkIfFileExist(
   dir: string,
@@ -48,4 +49,8 @@ export function debounce<Args extends any[], F extends (...args: Args) => any>(
       timerId = null;
     }, delay);
   };
+}
+
+export function overrideReactType(el: VNode): React.ReactNode {
+  return el as React.ReactNode;
 }

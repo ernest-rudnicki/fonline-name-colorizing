@@ -17,12 +17,13 @@ import {
   RGBColor,
   Username,
   UsernameFormItemError,
+  UsernameState,
 } from "store/file/types";
 import Button from "components/Button/Button";
 import ColoredSquare from "components/ColoredSquare/ColoredSquare";
+import { isTestingEnv } from "utils/testing-utils";
 
 import "./style.scss";
-import { isTestingEnv } from "utils/testing-utils";
 
 export interface UsernameListProps {
   value?: Username[];
@@ -77,7 +78,7 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
     (
       updateValue: string,
       id: string,
-      objectKey: Exclude<keyof Username, "unsaved">,
+      objectKey: Exclude<keyof Username, "state">,
       values: Username[]
     ): [Username[], number] => {
       const valuesCopy = cloneDeep(values);
@@ -145,6 +146,7 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
 
     const { name } = updated[foundIndex];
     const duplicatedUsername = validateUsername(id, name);
+
     if (duplicatedUsername) {
       const { nameColorId, contourColorId } = duplicatedUsername;
       const nameColor = colors[nameColorId].name;
@@ -207,8 +209,21 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
 
   const deleteUsername = useCallback(
     (id: string) => {
-      const filtered = internalValue.filter((el) => el.id !== id);
-      _onChange(filtered);
+      const index = internalValue.findIndex((el) => el.id === id);
+      const newInternalValue = cloneDeep(internalValue);
+      const username = newInternalValue[index];
+      if (index === -1) {
+        return;
+      }
+
+      if (username.state === UsernameState.UNSAVED) {
+        newInternalValue.splice(index, 1);
+        _onChange(newInternalValue);
+        return;
+      }
+
+      newInternalValue[index].state = UsernameState.DELETED;
+      _onChange(newInternalValue);
     },
     [internalValue, _onChange]
   );
@@ -220,7 +235,7 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
       name: "",
       nameColorId: selectedColorKey,
       contourColorId: selectedColorKey,
-      unsaved: true,
+      state: UsernameState.UNSAVED,
     });
 
     _onChange(internalValueCopy);
@@ -239,55 +254,60 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
           Contour color
         </div>
       </div>
-      {internalValue.map((el) => (
-        <div className="username-list-row username-list-data" key={el.id}>
-          <div className="username-list-row-item username-list-row-title">
-            <span className="username-list-row-title-buttons">
-              <Button
-                tooltipText="Delete username"
-                color="danger"
-                size="between"
-                className="username-list-row-title-buttons-btn"
-                variant="rounded-square"
-                onClick={() => deleteUsername(el.id)}
-                icon={<AiFillDelete />}
-              />
-            </span>
-            <Form.Item
-              validateStatus={el.errors ? "error" : undefined}
-              help={el.errors?.name}
-            >
-              {overrideReactType(
-                <Input
-                  aria-label="Username"
-                  value={el.name}
+      {internalValue.map(
+        (el) =>
+          el.state !== UsernameState.DELETED && (
+            <div className="username-list-row username-list-data" key={el.id}>
+              <div className="username-list-row-item username-list-row-title">
+                <span className="username-list-row-title-buttons">
+                  <Button
+                    tooltipText="Delete username from both colors"
+                    color="danger"
+                    size="between"
+                    className="username-list-row-title-buttons-btn"
+                    variant="rounded-square"
+                    onClick={() => deleteUsername(el.id)}
+                    icon={<AiFillDelete />}
+                  />
+                </span>
+                <Form.Item
+                  validateStatus={el.errors ? "error" : undefined}
+                  help={el.errors?.name}
+                >
+                  {overrideReactType(
+                    <Input
+                      aria-label="Username"
+                      value={el.name}
+                      onChange={(value) =>
+                        onInputChange(value.currentTarget.value, el.id)
+                      }
+                    />
+                  )}
+                </Form.Item>
+              </div>
+              <div className="username-list-row-item username-list-row-color">
+                <Select
                   onChange={(value) =>
-                    onInputChange(value.currentTarget.value, el.id)
+                    onSelectChange(value, el.id, "nameColorId")
                   }
-                />
-              )}
-            </Form.Item>
-          </div>
-          <div className="username-list-row-item username-list-row-color">
-            <Select
-              onChange={(value) => onSelectChange(value, el.id, "nameColorId")}
-              value={el.nameColorId}
-            >
-              {renderSelectOptions(colorEntries)}
-            </Select>
-          </div>
-          <div className="username-list-row-item username-list-row-contour">
-            <Select
-              onChange={(value) =>
-                onSelectChange(value, el.id, "contourColorId")
-              }
-              value={el.contourColorId}
-            >
-              {renderSelectOptions(colorEntries)}
-            </Select>
-          </div>
-        </div>
-      ))}
+                  value={el.nameColorId}
+                >
+                  {renderSelectOptions(colorEntries)}
+                </Select>
+              </div>
+              <div className="username-list-row-item username-list-row-contour">
+                <Select
+                  onChange={(value) =>
+                    onSelectChange(value, el.id, "contourColorId")
+                  }
+                  value={el.contourColorId}
+                >
+                  {renderSelectOptions(colorEntries)}
+                </Select>
+              </div>
+            </div>
+          )
+      )}
       <div className="username-list-row">
         <Button
           size="between"

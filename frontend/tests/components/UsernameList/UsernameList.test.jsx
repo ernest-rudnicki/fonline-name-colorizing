@@ -3,6 +3,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/preact";
 import UsernameList from "components/UsernameList/UsernameList";
 import { addMatchMedia } from "utils/testing-utils";
 import userEvent from "@testing-library/user-event";
+import { UsernameState } from "store/file/types";
 
 addMatchMedia();
 jest.mock("uuid", () => ({
@@ -125,6 +126,13 @@ describe("UsernameList actions", () => {
     expect(onChange).toBeCalledTimes(1);
     expect(onChange).toHaveBeenCalledWith([
       {
+        id: "username1",
+        name: "testUsername1",
+        nameColorId: "id2",
+        contourColorId: "id1",
+        state: UsernameState.DELETED,
+      },
+      {
         id: "username2",
         name: "testEnemy",
         contourColorId: "id1",
@@ -165,6 +173,7 @@ describe("UsernameList actions", () => {
         name: "",
         nameColorId: "id1",
         contourColorId: "id1",
+        state: UsernameState.UNSAVED,
       },
     ]);
   });
@@ -220,6 +229,7 @@ describe("UsernameList actions", () => {
             name: "Username assigned to:\ntestFriendContourColor and testFriendColor",
           },
           nameColorId: "id1",
+          state: UsernameState.UNSAVED,
         },
       ]);
     });
@@ -279,6 +289,7 @@ describe("UsernameList actions", () => {
           name: "testFriendtest",
           contourColorId: "id1",
           nameColorId: "id1",
+          state: UsernameState.UNSAVED,
         },
       ]);
     });

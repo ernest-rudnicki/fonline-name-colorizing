@@ -1,7 +1,7 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import { createCustomSlice } from "store/store-utils";
 import { readFileContent } from "./actions";
-import { ColorGroupHashMap, FileState } from "./types";
+import { ColorGroupHashMap, FileState, SaveColorChangesPayload } from "./types";
 
 const initialState: FileState = {
   isLoading: false,
@@ -25,6 +25,14 @@ export const fileSlice = createCustomSlice(
       ) => {
         state.unsavedColors = action.payload;
       },
+      saveColorChanges: (
+        state,
+        action: PayloadAction<SaveColorChangesPayload>
+      ) => {
+        state.colors = action.payload.colors;
+        state.usernames = action.payload.usernames;
+        state.unsavedColors = action.payload.unsavedColors;
+      },
     },
   },
   undefined,
@@ -37,4 +45,5 @@ export const fileSlice = createCustomSlice(
 );
 
 export const fileReducer = fileSlice.reducer;
-export const { changeSelectedColor, updateUnsavedColors } = fileSlice.actions;
+export const { changeSelectedColor, updateUnsavedColors, saveColorChanges } =
+  fileSlice.actions;
