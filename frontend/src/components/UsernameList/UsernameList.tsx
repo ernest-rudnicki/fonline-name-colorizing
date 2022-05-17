@@ -212,6 +212,7 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
       const index = internalValue.findIndex((el) => el.id === id);
       const newInternalValue = cloneDeep(internalValue);
       const username = newInternalValue[index];
+
       if (index === -1) {
         return;
       }

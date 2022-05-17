@@ -178,6 +178,39 @@ describe("UsernameList actions", () => {
     ]);
   });
 
+  test("removes unsaved username entirely", async () => {
+    const onChange = jest.fn();
+    render(
+      <UsernameList
+        value={colors["id1"].usernames}
+        colors={colors}
+        selectedColorKey="id1"
+        allUsernames={usernames}
+        onChange={onChange}
+      />
+    );
+
+    fireEvent.click(await screen.findByText("Add new username"));
+    const btns = await screen.findAllByRole("button");
+    fireEvent.click(btns[2]);
+
+    expect(onChange).toBeCalledTimes(2);
+    expect(onChange).toHaveBeenLastCalledWith([
+      {
+        id: "username1",
+        name: "testUsername1",
+        contourColorId: "id1",
+        nameColorId: "id2",
+      },
+      {
+        id: "username2",
+        name: "testEnemy",
+        contourColorId: "id1",
+        nameColorId: "id3",
+      },
+    ]);
+  });
+
   test("shows error when the username arleady exists", async () => {
     const onChange = jest.fn();
 
