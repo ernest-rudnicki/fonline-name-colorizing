@@ -14,6 +14,9 @@ import { UsernameState } from "store/file/types";
 
 addMatchMedia();
 jest.mock("store/file/slice");
+jest.mock("uuid", () => ({
+  v4: () => "username4",
+}));
 
 const usernames = [
   {
@@ -74,7 +77,7 @@ const initialState = {
           green: 0,
           blue: 255,
         },
-        usernames: [usernames[3]],
+        usernames: [usernames[2]],
       },
       id5: {
         name: "testFriendContourColor",
@@ -83,7 +86,7 @@ const initialState = {
           green: 0,
           blue: 255,
         },
-        usernames: [usernames[3]],
+        usernames: [usernames[2]],
       },
     },
     usernames,
@@ -181,6 +184,45 @@ describe("Editor actions", () => {
     expect(updateUnsavedColors).toBeCalledTimes(1);
   });
 
+  test("update unsaved colors", async () => {
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        selectedColorKey: "id1",
+      },
+    });
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+
+    fireEvent.click(await screen.findByText("Add new username"));
+    expect(updateUnsavedColors).toBeCalledTimes(1);
+    expect(updateUnsavedColors).toBeCalledWith({
+      id1: {
+        name: "testNameColor",
+        color: {
+          red: 0,
+          green: 0,
+          blue: 0,
+        },
+        usernames: [
+          usernames[0],
+          usernames[1],
+          {
+            contourColorId: "id1",
+            id: "username4",
+            name: "",
+            nameColorId: "id1",
+            state: UsernameState.UNSAVED,
+          },
+        ],
+      },
+    });
+  });
+
   test("submit form with removed username", async () => {
     store = mockStore({
       ...initialState,
@@ -229,8 +271,79 @@ describe("Editor actions", () => {
             },
             usernames: [usernames[1]],
           },
+          id2: {
+            name: "testContourColor",
+            color: {
+              red: 255,
+              green: 255,
+              blue: 255,
+            },
+            usernames: [],
+          },
         },
         usernames: [usernames[1], usernames[2]],
+      });
+    });
+  });
+
+  test("submit form with removed username from name color", async () => {
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        unsavedColors: {
+          id5: {
+            name: "newNameColor",
+            color: {
+              red: 255,
+              green: 255,
+              blue: 255,
+            },
+            usernames: [
+              {
+                ...usernames[2],
+                state: UsernameState.DELETED,
+              },
+            ],
+          },
+        },
+        selectedColorKey: "id5",
+      },
+    });
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+
+    fireEvent.click(await screen.findByText("Save"));
+
+    await waitFor(async () => {
+      expect(saveColorChanges).toBeCalledTimes(1);
+      expect(saveColorChanges).toHaveBeenCalledWith({
+        unsavedColors: {},
+        colors: {
+          ...initialState.file.colors,
+          id5: {
+            name: "newNameColor",
+            color: {
+              red: 255,
+              green: 255,
+              blue: 255,
+            },
+            usernames: [],
+          },
+          id4: {
+            name: "testFriendColor",
+            color: {
+              red: 0,
+              green: 0,
+              blue: 255,
+            },
+            usernames: [],
+          },
+        },
+        usernames: [usernames[0], usernames[1]],
       });
     });
   });

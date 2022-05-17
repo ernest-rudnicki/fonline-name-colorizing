@@ -85,15 +85,15 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
         if (deletedUsername.nameColorId === selectedColorKey) {
           colorsCopy[deletedUsername.contourColorId].usernames = colorsCopy[
             deletedUsername.contourColorId
-          ].usernames.filter((username) => username.id === deletedUsername.id);
+          ].usernames.filter((username) => username.id !== deletedUsername.id);
 
           return null;
         }
 
         if (deletedUsername.contourColorId === selectedColorKey) {
           colorsCopy[deletedUsername.nameColorId].usernames = colorsCopy[
-            deletedUsername.contourColorId
-          ].usernames.filter((username) => username.id === deletedUsername.id);
+            deletedUsername.nameColorId
+          ].usernames.filter((username) => username.id !== deletedUsername.id);
         }
 
         return null;
