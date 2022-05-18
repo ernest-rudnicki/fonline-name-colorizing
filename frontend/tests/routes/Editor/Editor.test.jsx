@@ -474,22 +474,15 @@ describe("Editor actions", () => {
         selectedColorKey: "id1",
       },
     });
-    console.log({
-      ...initialState,
-      file: {
-        ...initialState.file,
-        selectedColorKey: "id1",
-      },
-    });
+
     render(
       <Provider store={store}>
         <Editor />
       </Provider>
     );
 
-    fireEvent.click(await screen.findByText("Save"));
-
     await waitFor(async () => {
+      fireEvent.click(await screen.findByText("Save"));
       expect(saveColorChanges).toBeCalledTimes(0);
     });
   });
@@ -516,8 +509,42 @@ describe("Editor actions", () => {
     // waits for the error to appear
     await screen.findByText(/Username assigned/);
 
-    fireEvent.click(await screen.findByText("Save"));
     await waitFor(async () => {
+      fireEvent.click(await screen.findByText("Save"));
+      expect(saveColorChanges).toBeCalledTimes(0);
+    });
+  });
+
+  test("do not submit color when there is duplicated color name", async () => {
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        colors: {
+          ...initialState.file.colors,
+          id1: {
+            ...initialState.file.colors["id1"],
+            name: "",
+          },
+        },
+        selectedColorKey: "id1",
+      },
+    });
+
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+
+    const input = await screen.findByLabelText("Color Group Name");
+    await userEvent.type(input, "testContourColor");
+
+    // waits for the error to appear
+    await screen.findByText("Color group with this name already exists");
+
+    await waitFor(async () => {
+      fireEvent.click(await screen.findByText("Save"));
       expect(saveColorChanges).toBeCalledTimes(0);
     });
   });

@@ -17,7 +17,7 @@ import {
 import UsernameList from "components/UsernameList/UsernameList";
 import { AppDispatch } from "store/store";
 import { saveColorChanges, updateUnsavedColors } from "store/file/slice";
-import { overrideReactType } from "utils/utils";
+import { getEntries, overrideReactType } from "utils/utils";
 
 import "./style.scss";
 
@@ -139,6 +139,26 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
     [unsavedColors, selectedColorKey, colors, dispatch]
   );
 
+  const validateColorName = useCallback(
+    (_: unknown, value: string) => {
+      let isError = false;
+      const entries = getEntries(colors);
+
+      entries.some(([key, color]) => {
+        if (color.name === value && key !== selectedColorKey) {
+          isError = true;
+        }
+      });
+
+      if (isError) {
+        return Promise.reject("Color group with this name already exists");
+      }
+
+      return Promise.resolve();
+    },
+    [colors, selectedColorKey]
+  );
+
   const validateUsernames = useCallback((_: unknown, value: Username[]) => {
     let isError = false;
 
@@ -189,9 +209,10 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
                 label="Color Group Name"
                 rules={[
                   { required: true, message: "Color Group Name is required" },
+                  { validator: validateColorName },
                 ]}
               >
-                {overrideReactType(<Input />)}
+                {overrideReactType(<Input aria-label="Color Group Name" />)}
               </Form.Item>
               <Form.Item label="RGB Color" name="color">
                 {overrideReactType(<ColorPicker />)}
