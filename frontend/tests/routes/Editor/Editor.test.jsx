@@ -11,6 +11,7 @@ import {
 } from "store/file/slice";
 import { addMatchMedia } from "utils/testing-utils";
 import { UsernameState } from "store/file/types";
+import userEvent from "@testing-library/user-event";
 
 addMatchMedia();
 jest.mock("store/file/slice");
@@ -462,6 +463,62 @@ describe("Editor actions", () => {
           },
         ],
       });
+    });
+  });
+
+  test("do not save color when there is no unsaved color", async () => {
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        selectedColorKey: "id1",
+      },
+    });
+    console.log({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        selectedColorKey: "id1",
+      },
+    });
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+
+    fireEvent.click(await screen.findByText("Save"));
+
+    await waitFor(async () => {
+      expect(saveColorChanges).toBeCalledTimes(0);
+    });
+  });
+
+  test("do not submit color when there is duplicated username", async () => {
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        selectedColorKey: "id1",
+      },
+    });
+
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+
+    fireEvent.click(screen.getByText("Add new username"));
+    const inputs = await screen.findAllByLabelText("Username");
+    await userEvent.type(inputs[2], "testFriend");
+
+    // waits for the error to appear
+    await screen.findByText(/Username assigned/);
+
+    fireEvent.click(await screen.findByText("Save"));
+    await waitFor(async () => {
+      expect(saveColorChanges).toBeCalledTimes(0);
     });
   });
 });

@@ -64,6 +64,10 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
     const colorsCopy = cloneDeep(colors);
     const usernamesCopy = cloneDeep(allUsernames);
 
+    if (!unsavedColor) {
+      return;
+    }
+
     unsavedColor.usernames = unsavedColor.usernames
       .map((el) => {
         if (!el.state) {
@@ -134,6 +138,22 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
     },
     [unsavedColors, selectedColorKey, colors, dispatch]
   );
+
+  const validateUsernames = useCallback((_: unknown, value: Username[]) => {
+    let isError = false;
+
+    value.some((el) => {
+      if (el.errors) {
+        isError = true;
+      }
+    });
+
+    if (isError) {
+      return Promise.reject(new Error(""));
+    }
+
+    return Promise.resolve();
+  }, []);
   return (
     <div className="color-details-content">
       <div className="color-details-content-header">
@@ -176,7 +196,10 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
               <Form.Item label="RGB Color" name="color">
                 {overrideReactType(<ColorPicker />)}
               </Form.Item>
-              <Form.Item name="usernames">
+              <Form.Item
+                name="usernames"
+                rules={[{ validator: validateUsernames }]}
+              >
                 {overrideReactType(
                   <UsernameList
                     allUsernames={allUsernames}
