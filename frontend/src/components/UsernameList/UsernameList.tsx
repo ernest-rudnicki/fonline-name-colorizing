@@ -259,7 +259,10 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
         (el) =>
           el.state !== UsernameState.DELETED && (
             <div className="username-list-row username-list-data" key={el.id}>
-              <div className="username-list-row-item username-list-row-title">
+              <div
+                data-testid={`${el.id}TestId`}
+                className="username-list-row-item username-list-row-title"
+              >
                 <span className="username-list-row-title-buttons">
                   <Button
                     tooltipText="Delete username from both colors"

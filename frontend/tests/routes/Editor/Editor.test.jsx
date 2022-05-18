@@ -348,6 +348,48 @@ describe("Editor actions", () => {
     });
   });
 
+  test("unsaved color is deleted when is equal to original color", async () => {
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        unsavedColors: {
+          id5: {
+            name: "testFriendContourColor",
+            color: {
+              red: 0,
+              green: 0,
+              blue: 255,
+            },
+            usernames: [
+              usernames[2],
+              {
+                id: "newUsername",
+                name: "newUsername",
+                contourColorId: "id5",
+                nameColorId: "id5",
+                state: UsernameState.UNSAVED,
+              },
+            ],
+          },
+        },
+        selectedColorKey: "id5",
+      },
+    });
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+    const usernameRow = await screen.findByTestId("newUsernameTestId");
+    fireEvent.click(usernameRow.querySelector("button"));
+
+    await waitFor(async () => {
+      expect(updateUnsavedColors).toBeCalledTimes(1);
+      expect(updateUnsavedColors).toBeCalledWith({});
+    });
+  });
+
   test("submit form with new username", async () => {
     store = mockStore({
       ...initialState,
