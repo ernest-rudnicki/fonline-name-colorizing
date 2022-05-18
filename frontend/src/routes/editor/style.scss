@@ -8,5 +8,13 @@
 	
 	&-list {
 		border-right: 1px solid v.$divider;
+
+		&-content {
+			overflow: auto;
+		}
+	}
+
+	&-config {
+		overflow: auto;
 	}
 }
