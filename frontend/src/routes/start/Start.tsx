@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "preact/hooks";
 import { route } from "preact-router";
 import { AiFillFolderOpen, AiFillEdit } from "react-icons/ai";
 import { useDispatch } from "react-redux";
+import { notification } from "antd";
 import { AppDispatch } from "store/store";
 
 import { checkIfFileExist } from "utils/utils";
@@ -22,7 +23,6 @@ const Start: FunctionalComponent = () => {
   const [isFileInCurrentDir, setIsFileInCurrentDir] = useState<boolean>(false);
   const dispatch: AppDispatch = useDispatch();
 
-  // TODO serve error case
   useEffect(() => {
     checkIfFileExist(CURRENT_DIR, NAME_COLORIZING_FILE_NAME).then((value) =>
       setIsFileInCurrentDir(value)
@@ -51,9 +51,19 @@ const Start: FunctionalComponent = () => {
   const onFoundClick = useCallback(() => {
     const dir = CURRENT_DIR + NAME_COLORIZING_FILE_NAME;
 
-    dispatch(readFileContent(dir)).then(() => {
-      route("/editor");
-    });
+    dispatch(readFileContent(dir))
+      .unwrap()
+      .then(() => {
+        route("/editor");
+      })
+      .catch(() => {
+        setIsFileInCurrentDir(false);
+        notification.error({
+          message: "No file found",
+          description:
+            "NameColorizing file is no longer available in the current directory",
+        });
+      });
   }, [dispatch]);
 
   return (
