@@ -121,6 +121,10 @@ describe("Start actions", () => {
     store = mockStore(initialState);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   test("triggers import when clicking on found file button", async () => {
     render(
       <Provider store={store}>
@@ -161,6 +165,25 @@ describe("Start actions", () => {
 
     await waitFor(async () => {
       fireEvent.click(screen.getByText("Import existing file"));
+      expect(spy).toBeCalledTimes(1);
+    });
+  });
+
+  test("handles error when the file to import was deleted/moved", async () => {
+    neutralino.filesystem.readFile.mockReturnValueOnce(
+      new Promise((resolve, reject) => reject())
+    );
+
+    const spy = jest.spyOn(console, "log");
+
+    render(
+      <Provider store={store}>
+        <Start />
+      </Provider>
+    );
+
+    await waitFor(async () => {
+      fireEvent.click(await screen.findByText("Click here to import it"));
       expect(spy).toBeCalledTimes(1);
     });
   });

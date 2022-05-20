@@ -180,7 +180,7 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
     <div className="color-details-content">
       <div className="color-details-content-header">
         <h2 className="color-details-content-header-text">
-          {originalColor.name}
+          {originalColor.name === "" ? "New Color" : originalColor.name}
         </h2>
         <div className="color-details-content-header-color">
           <ColoredSquare size={36} color={selectedColor.color} />

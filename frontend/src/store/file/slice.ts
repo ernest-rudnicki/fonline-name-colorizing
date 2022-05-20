@@ -25,6 +25,9 @@ export const fileSlice = createCustomSlice(
       ) => {
         state.unsavedColors = action.payload;
       },
+      updateColors: (state, action: PayloadAction<ColorGroupHashMap>) => {
+        state.colors = action.payload;
+      },
       saveColorChanges: (
         state,
         action: PayloadAction<SaveColorChangesPayload>
@@ -45,5 +48,9 @@ export const fileSlice = createCustomSlice(
 );
 
 export const fileReducer = fileSlice.reducer;
-export const { changeSelectedColor, updateUnsavedColors, saveColorChanges } =
-  fileSlice.actions;
+export const {
+  changeSelectedColor,
+  updateUnsavedColors,
+  saveColorChanges,
+  updateColors,
+} = fileSlice.actions;

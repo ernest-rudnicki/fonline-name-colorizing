@@ -16,6 +16,7 @@ export interface ButtonProps {
   tooltipText?: string;
   disabled?: boolean;
   icon?: VNode;
+  dataTestId?: string;
   onClick?: (e: PreactMouseEvent) => void;
 }
 
@@ -27,6 +28,7 @@ const Button: FunctionalComponent<ButtonProps> = (props) => {
     tooltipText,
     onClick,
     disabled,
+    dataTestId,
     type = "button",
     variant = "standard",
     size = "medium",
@@ -47,6 +49,7 @@ const Button: FunctionalComponent<ButtonProps> = (props) => {
 
   return (
     <button
+      data-testid={dataTestId}
       disabled={disabled}
       onClick={_onClick}
       type={type}

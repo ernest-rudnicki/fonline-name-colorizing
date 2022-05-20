@@ -8,6 +8,7 @@ import {
   changeSelectedColor,
   updateUnsavedColors,
   saveColorChanges,
+  updateColors,
 } from "store/file/slice";
 import { addMatchMedia } from "utils/testing-utils";
 import { UsernameState } from "store/file/types";
@@ -546,6 +547,33 @@ describe("Editor actions", () => {
     await waitFor(async () => {
       fireEvent.click(await screen.findByText("Save"));
       expect(saveColorChanges).toBeCalledTimes(0);
+    });
+  });
+
+  test("create new color", async () => {
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+
+    fireEvent.click(screen.getByTestId("add-btn"));
+
+    await waitFor(async () => {
+      expect(updateColors).toBeCalledTimes(1);
+      expect(updateColors).toBeCalledWith({
+        ...initialState.file.colors,
+        username4: {
+          name: "",
+          color: {
+            r: 0,
+            b: 0,
+            g: 0,
+          },
+          usernames: [],
+        },
+      });
+      expect(changeSelectedColor).toBeCalledTimes(1);
     });
   });
 });

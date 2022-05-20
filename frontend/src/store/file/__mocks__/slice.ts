@@ -9,3 +9,7 @@ export const updateUnsavedColors = jest.fn(() => ({
 export const saveColorChanges = jest.fn(() => ({
   type: "file/saveColorChanges",
 }));
+
+export const updateColors = jest.fn(() => ({
+  type: "file/updateColorChanges",
+}));

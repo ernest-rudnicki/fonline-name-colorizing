@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "store/store";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { useCallback } from "preact/hooks";
+import { cloneDeep } from "lodash";
+import { v4 as uuidv4 } from "uuid";
 
 import Button from "components/Button/Button";
 import TitleBar from "components/TitleBar/TitleBar";
 import ColorList from "components/ColorList/ColorList";
-import { changeSelectedColor } from "store/file/slice";
+import { changeSelectedColor, updateColors } from "store/file/slice";
 import ColorDetails from "./ColorDetails/ColorDetails";
 
 import "./style.scss";
@@ -26,12 +28,30 @@ const Editor: FunctionalComponent = () => {
     [dispatch]
   );
 
+  const createNewColor = useCallback(() => {
+    const colorsCopy = cloneDeep(colors);
+    const id = uuidv4();
+    colorsCopy[id] = {
+      name: "",
+      color: {
+        r: 0,
+        b: 0,
+        g: 0,
+      },
+      usernames: [],
+    };
+
+    dispatch(updateColors(colorsCopy));
+    dispatch(changeSelectedColor(id));
+  }, [dispatch, colors]);
+
   return (
     <div className="editor">
       <div className="editor-list">
         <TitleBar title="Color Groups">
           <Button
-            data-testid="add-btn"
+            onClick={createNewColor}
+            dataTestId="add-btn"
             variant="minimal"
             size="small"
             mode="dark"

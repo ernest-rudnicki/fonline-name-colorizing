@@ -2,7 +2,7 @@ import { FunctionalComponent, h } from "preact";
 
 import Button from "components/Button/Button";
 import ColoredSquare from "components/ColoredSquare/ColoredSquare";
-import { ColorGroupHashMap } from "store/file/types";
+import { ColorGroup, ColorGroupHashMap } from "store/file/types";
 import { getEntries, joinClassNames } from "utils/utils";
 import { isTestingEnv } from "utils/testing-utils";
 
@@ -30,6 +30,26 @@ const ColorList: FunctionalComponent<ColoredSquareProps> = (props) => {
     onClick(key);
   };
 
+  const renderListItemContent = (key: string, value: ColorGroup) => {
+    if (value.name === "") {
+      return <i>New Color ({value.usernames.length})*</i>;
+    }
+
+    if (unsavedColors[key]) {
+      return (
+        <i>
+          {value.name} ({value.usernames.length})*
+        </i>
+      );
+    }
+
+    return (
+      <span>
+        {value.name} ({value.usernames.length})
+      </span>
+    );
+  };
+
   return (
     <div className={joinClassNames(["color-list", className])}>
       {entries.map(([key, value]) => (
@@ -49,15 +69,7 @@ const ColorList: FunctionalComponent<ColoredSquareProps> = (props) => {
               size={16}
               color={value.color}
             />
-            {unsavedColors[key] ? (
-              <i>
-                {value.name} ({value.usernames.length})*
-              </i>
-            ) : (
-              <span>
-                {value.name} ({value.usernames.length})
-              </span>
-            )}
+            {renderListItemContent(key, value)}
           </div>
         </Button>
       ))}

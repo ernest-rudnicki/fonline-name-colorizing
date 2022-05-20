@@ -64,6 +64,10 @@ const Start: FunctionalComponent = () => {
             "NameColorizing file is no longer available in the current directory",
         });
       });
+
+    if (isTestingEnv()) {
+      console.log("handles error when the file to import was deleted/moved");
+    }
   }, [dispatch]);
 
   return (
