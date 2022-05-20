@@ -115,19 +115,20 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
 
   const removeItemError = useCallback(
     (item: Username, errorKey: keyof Username): Username => {
-      if (!item.errors) {
+      const newItem = { ...item };
+      if (!newItem.errors) {
         if (isTestingEnv()) {
           console.log("triggers if route when the are no errors on the item");
         }
-        return item;
+        return newItem;
       }
 
-      delete item.errors[errorKey];
-      if (Object.keys(item.errors)) {
-        delete item.errors;
+      delete newItem.errors[errorKey];
+      if (Object.keys(newItem.errors).length === 0) {
+        delete newItem.errors;
       }
 
-      return item;
+      return newItem;
     },
     []
   );
