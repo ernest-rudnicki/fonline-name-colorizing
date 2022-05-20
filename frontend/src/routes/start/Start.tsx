@@ -82,10 +82,15 @@ const Start: FunctionalComponent = () => {
             <div className="start-container-content-found">
               <span>
                 We found a <b>NameColorizing</b> file in the current directory!{" "}
+                <Button
+                  className="start-container-content-found-btn"
+                  onClick={onFoundClick}
+                  variant="minimal"
+                  size="small"
+                >
+                  Click here to import it
+                </Button>
               </span>
-              <Button onClick={onFoundClick} variant="minimal" size="small">
-                Click here to import it
-              </Button>
             </div>
           ) : null}
           <div className="start-container-content-btns">

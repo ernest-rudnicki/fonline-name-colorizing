@@ -22,7 +22,9 @@
       }
 
       &-found {
-        @include m.center-horizontally;
+        &-btn {
+          padding: 0;
+        }
       }
 
       &-btns {
