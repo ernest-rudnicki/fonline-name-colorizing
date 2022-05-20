@@ -147,6 +147,7 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
       entries.some(([key, color]) => {
         if (color.name === value && key !== selectedColorKey) {
           isError = true;
+          return true;
         }
       });
 
@@ -165,6 +166,7 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
     value.some((el) => {
       if (el.errors) {
         isError = true;
+        return true;
       }
     });
 
