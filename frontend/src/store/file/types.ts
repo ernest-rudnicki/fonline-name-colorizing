@@ -1,6 +1,6 @@
-import { BaseItem, BaseState } from "generic/generic";
+import { BaseItem } from "generic/generic";
 
-export interface FileState extends BaseState {
+export interface FileState {
   colors: ColorGroupHashMap;
   unsavedColors: ColorGroupHashMap;
   selectedColorKey: string | null;
