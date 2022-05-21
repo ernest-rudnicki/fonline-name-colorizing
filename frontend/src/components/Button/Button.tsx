@@ -1,7 +1,8 @@
+import { Tooltip } from "antd";
 import { GenericPreactContent, PreactMouseEvent } from "generic/generic";
 import { FunctionalComponent, h, VNode } from "preact";
 import { useCallback } from "preact/hooks";
-import { joinClassNames } from "utils/utils";
+import { joinClassNames, overrideReactType } from "utils/utils";
 
 import "./style.scss";
 
@@ -48,23 +49,29 @@ const Button: FunctionalComponent<ButtonProps> = (props) => {
   );
 
   return (
-    <button
-      data-testid={dataTestId}
-      disabled={disabled}
-      onClick={_onClick}
-      type={type}
-      className={joinClassNames(["btn", variant, size, mode, color, className])}
-    >
-      {tooltipText && (
-        <div className="btn-tooltip" role="tooltip">
-          {tooltipText}
-        </div>
+    <Tooltip overlay={tooltipText} placement="bottom">
+      {overrideReactType(
+        <button
+          data-testid={dataTestId}
+          disabled={disabled}
+          onClick={_onClick}
+          type={type}
+          className={joinClassNames([
+            "btn",
+            variant,
+            size,
+            mode,
+            color,
+            className,
+          ])}
+        >
+          <div className="btn-content">
+            {icon && <span className="btn-content-icon">{icon}</span>}
+            {children && <span className="btn-content-text">{children}</span>}
+          </div>
+        </button>
       )}
-      <div className="btn-content">
-        {icon && <span className="btn-content-icon">{icon}</span>}
-        {children && <span className="btn-content-text">{children}</span>}
-      </div>
-    </button>
+    </Tooltip>
   );
 };
 

@@ -161,31 +161,6 @@
     color: v.$font-color-white;
   }
 
-  &-tooltip {
-    width: max-content;
-    visibility: hidden;
-    opacity: 0;
-    position: absolute;
-    bottom: -28px;
-    left: 50%;
-    transform: translateX(-50%);
-    cursor: default;
-    z-index: 5;
-    background-color: v.$mask;
-    color: v.$font-color-white;
-    font-size: v.$font-size-very-small;
-    padding: v.$padding-minimal v.$padding-tiny;
-    border-radius: v.$border-radius-small;
-    transition: opacity v.$animation-duration-between ease;
-  }
-
-  &:hover, &:focus {
-    .btn-tooltip {
-      visibility: visible;
-      opacity: 1;
-    }
-  }
-
   &-content {
     display: flex;
 

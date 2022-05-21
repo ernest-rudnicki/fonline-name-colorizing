@@ -126,46 +126,28 @@ describe("Button rendering", () => {
     expect(context.find("button").text()).toContain("Click me");
     expect(context.containsMatchingElement(<AiFillPlusCircle />)).toEqual(true);
   });
-
-  test("Tooltip appears and renders provided text on hover", async () => {
-    render(<Button tooltipText="Tooltip text">Click me</Button>);
-    fireEvent.mouseEnter(screen.getByText("Click me"));
-
-    const tooltip = await screen.findByRole("tooltip");
-    expect(tooltip.textContent).toBe("Tooltip text");
-  });
-
-  test("Tooltip appears and renders provided text on focus", async () => {
-    render(<Button tooltipText="Tooltip text">Click me</Button>);
-    fireEvent.focus(screen.getByText("Click me"));
-
-    const tooltip = await screen.findByRole("tooltip");
-    expect(tooltip.textContent).toBe("Tooltip text");
-  });
 });
 
 describe("Button handlers", () => {
   test("onClick is called", () => {
     const onClick = jest.fn();
-    const context = shallow(
+    render(
       <Button size="icon" onClick={onClick}>
         Click me
       </Button>
     );
-
-    context.simulate("click");
+    fireEvent.click(screen.getByText("Click me"));
     expect(onClick).toBeCalledTimes(1);
   });
 
   test("onClick is not called when button is disabled", () => {
     const onClick = jest.fn();
-    const context = shallow(
-      <Button disabled size="icon" onClick={onClick}>
+    render(
+      <Button size="icon" disabled onClick={onClick}>
         Click me
       </Button>
     );
-
-    context.simulate("click");
+    fireEvent.click(screen.getByText("Click me"));
     expect(onClick).toBeCalledTimes(0);
   });
 });
