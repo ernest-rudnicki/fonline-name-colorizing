@@ -9,8 +9,10 @@
   "port": 18067,
   "nativeAllowList": [
     "app.*",
-    "filesystem.*",
-    "os.*"
+    "filesystem.readDirectory",
+    "filesystem.readFile",
+    "filesystem.writeFile",
+    "os.showOpenDialog"
   ],
   "modes": {
     "window": {
