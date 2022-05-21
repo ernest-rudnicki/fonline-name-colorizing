@@ -5,6 +5,7 @@ import { AiFillFolderOpen, AiFillEdit } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { notification } from "antd";
 import { AppDispatch } from "store/store";
+import { v4 as uuidv4 } from "uuid";
 
 import { checkIfFileExist } from "utils/utils";
 import {
@@ -18,6 +19,7 @@ import { readFileContent } from "store/file/actions";
 import { isTestingEnv } from "utils/testing-utils";
 
 import "./style.scss";
+import { updateColors } from "store/file/slice";
 
 const Start: FunctionalComponent = () => {
   const [isFileInCurrentDir, setIsFileInCurrentDir] = useState<boolean>(false);
@@ -70,6 +72,24 @@ const Start: FunctionalComponent = () => {
     }
   }, [dispatch]);
 
+  const createFromScratch = useCallback(() => {
+    const id = uuidv4();
+    dispatch(
+      updateColors({
+        [id]: {
+          name: "New Color",
+          color: {
+            r: 255,
+            g: 255,
+            b: 255,
+          },
+          usernames: [],
+        },
+      })
+    );
+    route("/editor");
+  }, [dispatch]);
+
   return (
     <div className="start">
       <div className="start-container">
@@ -99,6 +119,7 @@ const Start: FunctionalComponent = () => {
           ) : null}
           <div className="start-container-content-btns">
             <Button
+              onClick={createFromScratch}
               icon={<AiFillEdit />}
               className="start-container-content-btns-btn"
             >

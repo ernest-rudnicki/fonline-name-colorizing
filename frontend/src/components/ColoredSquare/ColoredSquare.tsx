@@ -1,6 +1,7 @@
 import { FunctionalComponent, h } from "preact";
 
 import { RGBColor } from "store/file/types";
+import { joinClassNames } from "utils/utils";
 
 import "./style.scss";
 
@@ -16,7 +17,7 @@ const ColoredSquare: FunctionalComponent<ColoredSquareProps> = (props) => {
 
   return (
     <div
-      className={className}
+      className={joinClassNames(["colored-square", className])}
       style={{
         width: size,
         height: size,

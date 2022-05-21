@@ -6,8 +6,13 @@ import Start from "routes/Start/Start";
 import { neutralino } from "neutralino/neutralino";
 import { NAME_COLORIZING_FILE_NAME } from "constants/constants";
 import thunk from "redux-thunk";
+import { updateColors } from "store/file/slice";
 
 jest.mock("neutralino/neutralino");
+jest.mock("store/file/slice");
+jest.mock("uuid", () => ({
+  v4: () => "newColor",
+}));
 
 neutralino.filesystem.readDirectory.mockReturnValue(
   new Promise((resolve) => {
@@ -148,6 +153,30 @@ describe("Start actions", () => {
     await waitFor(async () => {
       fireEvent.click(screen.getByText("Import existing file"));
       expect(neutralino.os.showOpenDialog).toBeCalledTimes(1);
+    });
+  });
+
+  test("create new file", async () => {
+    render(
+      <Provider store={store}>
+        <Start />
+      </Provider>
+    );
+
+    await waitFor(async () => {
+      fireEvent.click(screen.getByText("Create new Name Colorizing"));
+      expect(updateColors).toBeCalledTimes(1);
+      expect(updateColors).toBeCalledWith({
+        newColor: {
+          name: "New Color",
+          color: {
+            r: 255,
+            g: 255,
+            b: 255,
+          },
+          usernames: [],
+        },
+      });
     });
   });
 

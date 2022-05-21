@@ -1,0 +1,5 @@
+@use "style/variables" as v;
+
+.colored-square {
+    border: 1px solid v.$black;
+}

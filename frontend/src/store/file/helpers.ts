@@ -1,6 +1,7 @@
 import { ColorGroupHashMap, Username } from "./types";
 import { getEntries, parseIntBaseTen } from "utils/utils";
 import { v4 as uuidv4 } from "uuid";
+
 export function createUsernameObject(
   username: string,
   nameColorId: string,
