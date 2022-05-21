@@ -5,7 +5,6 @@
   border: none;
   cursor: pointer;
   position: relative;
-  transition: transform v.$animation-duration-short ease;
   font-family: inherit;
   line-height: normal;
   z-index: 5;
@@ -14,10 +13,6 @@
     background-color: v.$disabled !important;
     color: v.$disabled-font !important;
     border-color: v.$disabled !important;
-
-    &:active {
-      transform: none !important;
-    }
   }
 
   &.primary.standard {
@@ -55,7 +50,7 @@
   
   &.standard {
     border-radius: v.$border-radius-regular;
-    transition: transform v.$animation-duration-short ease, background-color v.$animation-duration-base ease, border-color v.$animation-duration-base ease;
+    transition: background-color v.$animation-duration-base ease, border-color v.$animation-duration-base ease;
   }
 
   &.primary.bordered {
@@ -88,7 +83,7 @@
   &.bordered {
     background-color: transparent;
     border-radius: v.$border-radius-regular;
-    transition: transform v.$animation-duration-short ease, color v.$animation-duration-base ease, border-color v.$animation-duration-base ease;
+    transition: color v.$animation-duration-base ease, border-color v.$animation-duration-base ease;
     
     &:hover, &:focus {
       border-color: lighten(v.$primary-color, 15%);
@@ -133,17 +128,13 @@
   }
 
   &.rounded-square {
-    transition: transform v.$animation-duration-short ease, background-color v.$animation-duration-base ease;
+    transition: background-color v.$animation-duration-base ease;
     border-radius: v.$border-radius-small;
   }
 
   &.text {
     background-color: transparent;
     color: inherit;
-
-    &:active {
-      transform: none;
-    }
   }
 
   &.medium {
@@ -184,7 +175,6 @@
   }
 
   &:active {
-    transform: translateY(3px);
+    transform: translateY(2px);
   }
-  
 }

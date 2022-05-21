@@ -202,7 +202,7 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
             <Button
               dataTestId="delete-color-btn"
               disabled
-              tooltipText="To remove a color group delete or reassign all attached colors and save it"
+              tooltipText="To remove a color group, delete or reassign all attached colors and save"
               color="danger"
               size="between"
               variant="rounded-square"

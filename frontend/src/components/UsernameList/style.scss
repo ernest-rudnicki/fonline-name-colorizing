@@ -19,6 +19,8 @@
       }
 
       &-buttons {
+        @include m.center-vertically;
+        
         &-btn {
           margin-right: v.$margin-small;
         }
