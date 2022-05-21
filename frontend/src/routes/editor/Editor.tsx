@@ -16,7 +16,7 @@ import {
   updateColors,
 } from "store/file/slice";
 import ColorDetails from "./ColorDetails/ColorDetails";
-import { checkIfFileExist, getEntries } from "utils/utils";
+import { checkIfFileExist, getCurrentDate, getEntries } from "utils/utils";
 import { CURRENT_DIR, NAME_COLORIZING_FILE_NAME } from "constants/constants";
 
 import "./style.scss";
@@ -113,7 +113,7 @@ const Editor: FunctionalComponent = () => {
 
     checkIfFileExist(CURRENT_DIR, NAME_COLORIZING_FILE_NAME).then((value) => {
       const name = value
-        ? `NameColorizing-${new Date().toISOString()}.txt`
+        ? `NameColorizing-${getCurrentDate()}.txt`
         : NAME_COLORIZING_FILE_NAME;
 
       neutralino.filesystem
@@ -121,7 +121,8 @@ const Editor: FunctionalComponent = () => {
         .then(() => {
           notification.success({ message: "The file exported successfully" });
         })
-        .catch(() => {
+        .catch((e) => {
+          console.log(e);
           notification.error({
             message: "The error occured during the file export",
           });
