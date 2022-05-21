@@ -11,7 +11,8 @@
     "dev:app": "neu run --frontend-lib-dev",
     "dev": "concurrently \"npm run dev:app\" \"npm run dev:front\"",
     "lint": "cd ./frontend && npm run lint",
-    "lint-fix": "cd ./frontend && npm run lint -- --fix"
+    "lint-fix": "cd ./frontend && npm run lint -- --fix",
+    "build-release": "cd ./frontend && npm run build && cd ../ && neu build --release"
   },
   "keywords": [
     "Fonline",
