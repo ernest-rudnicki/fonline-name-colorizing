@@ -13,3 +13,7 @@ export const saveColorChanges = jest.fn(() => ({
 export const updateColors = jest.fn(() => ({
   type: "file/updateColorChanges",
 }));
+
+export const changeValidation = jest.fn(() => ({
+  type: "file/changeValidation",
+}));

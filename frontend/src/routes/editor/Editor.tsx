@@ -1,23 +1,34 @@
 import { FunctionalComponent, h } from "preact";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "store/store";
-import { AiFillPlusCircle } from "react-icons/ai";
+import { AiFillPlusCircle, AiOutlineExport } from "react-icons/ai";
 import { useCallback } from "preact/hooks";
 import { cloneDeep } from "lodash";
 import { v4 as uuidv4 } from "uuid";
+import { notification } from "antd";
 
 import Button from "components/Button/Button";
 import TitleBar from "components/TitleBar/TitleBar";
 import ColorList from "components/ColorList/ColorList";
-import { changeSelectedColor, updateColors } from "store/file/slice";
+import {
+  changeSelectedColor,
+  changeValidation,
+  updateColors,
+} from "store/file/slice";
 import ColorDetails from "./ColorDetails/ColorDetails";
+import { getEntries } from "utils/utils";
 
 import "./style.scss";
 
 const Editor: FunctionalComponent = () => {
-  const { colors, selectedColorKey, usernames, unsavedColors } = useSelector(
-    (state: RootState) => state.file
-  );
+  const {
+    colors,
+    selectedColorKey,
+    usernames,
+    unsavedColors,
+    triggeredValidation,
+  } = useSelector((state: RootState) => state.file);
+  const colorEntries = getEntries(colors);
 
   const dispatch: AppDispatch = useDispatch();
 
@@ -28,7 +39,7 @@ const Editor: FunctionalComponent = () => {
     [dispatch]
   );
 
-  const createNewColor = useCallback(() => {
+  const onCreateNewColor = useCallback(() => {
     const colorsCopy = cloneDeep(colors);
     const id = uuidv4();
     colorsCopy[id] = {
@@ -45,12 +56,50 @@ const Editor: FunctionalComponent = () => {
     dispatch(changeSelectedColor(id));
   }, [dispatch, colors]);
 
+  const validateColors = useCallback(() => {
+    const unsavedColorEntries = getEntries(unsavedColors);
+
+    if (unsavedColorEntries.length !== 0) {
+      notification.error({
+        message: "There are some unsaved colors.",
+        description: "Please save the colors or delete them.",
+      });
+      return true;
+    }
+
+    let isError = false;
+
+    colorEntries.some(([key, color]) => {
+      if (color.name === "") {
+        isError = true;
+        return true;
+      }
+    });
+
+    if (isError) {
+      notification.error({
+        message: "There are some colors missing names.",
+        description:
+          "Please add a name to newly added color or remove it entirely.",
+      });
+    }
+
+    return isError;
+  }, [unsavedColors, colorEntries]);
+
+  const onExport = useCallback(() => {
+    if (validateColors()) {
+      dispatch(changeValidation(true));
+      return;
+    }
+  }, [validateColors, dispatch]);
+
   return (
     <div className="editor">
       <div className="editor-list">
         <TitleBar title="Color Groups">
           <Button
-            onClick={createNewColor}
+            onClick={onCreateNewColor}
             dataTestId="add-btn"
             variant="minimal"
             size="small"
@@ -61,11 +110,21 @@ const Editor: FunctionalComponent = () => {
         </TitleBar>
         <div className="editor-list-content">
           <ColorList
+            triggeredValidation={triggeredValidation}
             unsavedColors={unsavedColors}
             selectedKey={selectedColorKey}
             onClick={onColorListItemClick}
             colors={colors}
           />
+        </div>
+        <div className="editor-list-actions">
+          <Button
+            disabled={colorEntries.length === 0}
+            onClick={onExport}
+            icon={<AiOutlineExport />}
+          >
+            Export to file
+          </Button>
         </div>
       </div>
       <div className="editor-config">

@@ -13,6 +13,7 @@
   &:disabled {
     background-color: v.$disabled !important;
     color: v.$disabled-font !important;
+    border-color: v.$disabled !important;
 
     &:active {
       transform: none !important;

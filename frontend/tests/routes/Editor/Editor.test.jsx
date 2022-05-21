@@ -9,6 +9,7 @@ import {
   updateUnsavedColors,
   saveColorChanges,
   updateColors,
+  changeValidation,
 } from "store/file/slice";
 import { addMatchMedia } from "utils/testing-utils";
 import { UsernameState } from "store/file/types";
@@ -118,8 +119,6 @@ describe("Editor rendering", () => {
         <Editor />
       </Provider>
     );
-
-    expect(screen.getAllByRole("button").length).toBe(7);
 
     expect(await screen.findByText("testNameColor (2)")).toBeTruthy();
     expect(await screen.findByText("testContourColor (1)")).toBeTruthy();
@@ -616,6 +615,62 @@ describe("Editor actions", () => {
         id6: undefined,
       });
       expect(updateUnsavedColors).toBeCalledTimes(1);
+    });
+  });
+
+  test("trigger validation when there are unsaved colors", async () => {
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        unsavedColors: {
+          ...initialState.file.colors,
+        },
+      },
+    });
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+
+    fireEvent.click(screen.getByText("Export to file"));
+
+    await waitFor(async () => {
+      expect(changeValidation).toBeCalledTimes(1);
+      expect(changeValidation).toBeCalledWith(true);
+    });
+  });
+  test("trigger validation when there are colors without a name filled", async () => {
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        colors: {
+          ...initialState.file.colors,
+          id7: {
+            name: "",
+            color: {
+              r: 0,
+              g: 0,
+              b: 0,
+            },
+            usernames: [],
+          },
+        },
+      },
+    });
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+
+    fireEvent.click(screen.getByText("Export to file"));
+
+    await waitFor(async () => {
+      expect(changeValidation).toBeCalledTimes(1);
+      expect(changeValidation).toBeCalledWith(true);
     });
   });
 });

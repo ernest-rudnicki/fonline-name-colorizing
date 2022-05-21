@@ -13,11 +13,19 @@ export interface ColoredSquareProps {
   colors: ColorGroupHashMap;
   selectedKey?: string | null;
   className?: string;
+  triggeredValidation: boolean;
   onClick?: (colorKey: string) => void;
 }
 
 const ColorList: FunctionalComponent<ColoredSquareProps> = (props) => {
-  const { colors, unsavedColors, selectedKey, className, onClick } = props;
+  const {
+    colors,
+    unsavedColors,
+    selectedKey,
+    className,
+    triggeredValidation,
+    onClick,
+  } = props;
   const entries = getEntries(colors);
 
   const _onClick = (key: string) => {
@@ -32,12 +40,16 @@ const ColorList: FunctionalComponent<ColoredSquareProps> = (props) => {
 
   const renderListItemContent = (key: string, value: ColorGroup) => {
     if (value.name === "") {
-      return <i>New Color ({value.usernames.length})*</i>;
+      return (
+        <i className={triggeredValidation ? "color-list-item-error" : ""}>
+          New Color ({value.usernames.length})*
+        </i>
+      );
     }
 
     if (unsavedColors[key]) {
       return (
-        <i>
+        <i className={triggeredValidation ? "color-list-item-error" : ""}>
           {value.name} ({value.usernames.length})*
         </i>
       );

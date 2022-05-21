@@ -5,6 +5,7 @@ export interface FileState {
   unsavedColors: ColorGroupHashMap;
   selectedColorKey: string | null;
   usernames: Username[];
+  triggeredValidation: boolean;
 }
 
 export interface RGBColor {

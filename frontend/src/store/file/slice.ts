@@ -7,6 +7,7 @@ const initialState: FileState = {
   selectedColorKey: null,
   colors: {},
   unsavedColors: {},
+  triggeredValidation: false,
 };
 
 export const fileSlice = createSlice({
@@ -30,6 +31,9 @@ export const fileSlice = createSlice({
       state.usernames = action.payload.usernames;
       state.unsavedColors = action.payload.unsavedColors;
     },
+    changeValidation: (state, action: PayloadAction<boolean>) => {
+      state.triggeredValidation = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(readFileContent.fulfilled, (state, action) => {
@@ -45,4 +49,5 @@ export const {
   updateUnsavedColors,
   saveColorChanges,
   updateColors,
+  changeValidation,
 } = fileSlice.actions;
