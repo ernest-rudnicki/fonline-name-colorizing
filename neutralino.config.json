@@ -19,8 +19,7 @@
       "height": 768,
       "minWidth": 1024,
       "minHeight": 768,
-      "icon": "/frontend/src/assets/icons/favicon-32x32.png",
-      "enableInspector": true
+      "icon": "/frontend/src/assets/icons/favicon-32x32.png"
     }
   },
   "cli": {
