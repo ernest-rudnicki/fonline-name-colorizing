@@ -10,8 +10,14 @@
       margin-bottom: v.$margin-big;
       padding-bottom: v.$margin-small;
 
-      &-text {
+      &-line {
+        @include m.center-vertically;
         margin-bottom: v.$margin-small;
+
+        &-text {
+          margin-left: v.$margin-small;
+        }
+
       }
 
       &-color {

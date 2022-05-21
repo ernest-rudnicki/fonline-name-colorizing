@@ -90,6 +90,15 @@ const initialState = {
         },
         usernames: [usernames[2]],
       },
+      id6: {
+        name: "colorToDelete",
+        color: {
+          red: 0,
+          green: 0,
+          blue: 255,
+        },
+        usernames: [],
+      },
     },
     usernames,
     selectedColorKey: null,
@@ -110,7 +119,7 @@ describe("Editor rendering", () => {
       </Provider>
     );
 
-    expect(screen.getAllByRole("button").length).toBe(6);
+    expect(screen.getAllByRole("button").length).toBe(7);
 
     expect(await screen.findByText("testNameColor (2)")).toBeTruthy();
     expect(await screen.findByText("testContourColor (1)")).toBeTruthy();
@@ -551,6 +560,13 @@ describe("Editor actions", () => {
   });
 
   test("create new color", async () => {
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        selectedColorKey: "id6",
+      },
+    });
     render(
       <Provider store={store}>
         <Editor />
@@ -574,6 +590,32 @@ describe("Editor actions", () => {
         },
       });
       expect(changeSelectedColor).toBeCalledTimes(1);
+    });
+  });
+
+  test("delete a color", async () => {
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        selectedColorKey: "id6",
+      },
+    });
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+
+    fireEvent.click(screen.getByTestId("delete-color-btn"));
+
+    await waitFor(async () => {
+      expect(updateColors).toBeCalledTimes(1);
+      expect(updateColors).toBeCalledWith({
+        ...initialState.file.colors,
+        id6: undefined,
+      });
+      expect(updateUnsavedColors).toBeCalledTimes(1);
     });
   });
 });

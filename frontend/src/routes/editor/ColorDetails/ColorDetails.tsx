@@ -1,5 +1,5 @@
 import { FunctionalComponent, h, Fragment } from "preact";
-import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
+import { AiOutlineCheck, AiOutlineClose, AiFillDelete } from "react-icons/ai";
 import { Form, Input } from "antd";
 import { useCallback, useEffect } from "preact/hooks";
 import { cloneDeep, isEqual } from "lodash";
@@ -16,7 +16,12 @@ import {
 } from "store/file/types";
 import UsernameList from "components/UsernameList/UsernameList";
 import { AppDispatch } from "store/store";
-import { saveColorChanges, updateUnsavedColors } from "store/file/slice";
+import {
+  changeSelectedColor,
+  saveColorChanges,
+  updateColors,
+  updateUnsavedColors,
+} from "store/file/slice";
 import { getEntries, overrideReactType } from "utils/utils";
 
 import "./style.scss";
@@ -176,12 +181,48 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
 
     return Promise.resolve();
   }, []);
+
+  const deleteColorGroup = useCallback(() => {
+    const colorsCopy = cloneDeep(colors);
+    const unsavedColorsCopy = cloneDeep(unsavedColors);
+
+    delete colorsCopy[selectedColorKey];
+    delete unsavedColorsCopy[selectedColorKey];
+
+    dispatch(updateUnsavedColors(unsavedColorsCopy));
+    dispatch(updateColors(colorsCopy));
+    dispatch(changeSelectedColor(null));
+  }, [colors, unsavedColors, selectedColorKey, dispatch]);
+
   return (
     <div className="color-details-content">
       <div className="color-details-content-header">
-        <h2 className="color-details-content-header-text">
-          {originalColor.name === "" ? "New Color" : originalColor.name}
-        </h2>
+        <div className="color-details-content-header-line">
+          {originalColor.usernames.length !== 0 ? (
+            <Button
+              dataTestId="delete-color-btn"
+              disabled
+              tooltipText="To remove a color group delete or reassign all attached colors and save it"
+              color="danger"
+              size="between"
+              variant="rounded-square"
+              icon={<AiFillDelete />}
+            />
+          ) : (
+            <Button
+              dataTestId="delete-color-btn"
+              tooltipText="Delete color group"
+              color="danger"
+              size="between"
+              variant="rounded-square"
+              onClick={deleteColorGroup}
+              icon={<AiFillDelete />}
+            />
+          )}
+          <h2 className="color-details-content-header-line-text">
+            {originalColor.name === "" ? "New Color" : originalColor.name}
+          </h2>
+        </div>
         <div className="color-details-content-header-color">
           <ColoredSquare size={36} color={selectedColor.color} />
           <span className="color-details-content-header-color-data">

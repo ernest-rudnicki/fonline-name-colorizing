@@ -53,8 +53,8 @@ const Button: FunctionalComponent<ButtonProps> = (props) => {
       {overrideReactType(
         <button
           data-testid={dataTestId}
-          disabled={disabled}
           onClick={_onClick}
+          disabled={disabled}
           type={type}
           className={joinClassNames([
             "btn",

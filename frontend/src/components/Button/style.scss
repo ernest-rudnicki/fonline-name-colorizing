@@ -10,6 +10,15 @@
   line-height: normal;
   z-index: 5;
 
+  &:disabled {
+    background-color: v.$disabled !important;
+    color: v.$disabled-font !important;
+
+    &:active {
+      transform: none !important;
+    }
+  }
+
   &.primary.standard {
     background-color: v.$primary-color;
     border: 2px solid v.$primary-color;
