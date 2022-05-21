@@ -122,7 +122,6 @@ const Editor: FunctionalComponent = () => {
           notification.success({ message: "The file exported successfully" });
         })
         .catch((e) => {
-          console.log(e);
           notification.error({
             message: "The error occured during the file export",
           });
