@@ -21,6 +21,7 @@ export interface ShowDialogOptions {
 export interface NeutralinoFileSystem {
   readDirectory: (path: string) => Promise<DirectoryEntry[]>;
   readFile: <Content>(path: string) => Promise<Content>;
+  writeFile: (fileName: string, content: string) => Promise<void>;
 }
 
 export interface NeutralinoOS {

@@ -14,12 +14,32 @@ import {
 import { addMatchMedia } from "utils/testing-utils";
 import { UsernameState } from "store/file/types";
 import userEvent from "@testing-library/user-event";
+import { neutralino } from "neutralino/neutralino";
+import { NAME_COLORIZING_FILE_NAME } from "constants/constants";
 
 addMatchMedia();
 jest.mock("store/file/slice");
+jest.mock("neutralino/neutralino");
 jest.mock("uuid", () => ({
   v4: () => "username4",
 }));
+
+neutralino.filesystem.readDirectory.mockReturnValue(
+  new Promise((resolve) => {
+    resolve([
+      {
+        type: "DIRECTORY",
+        entry: "Test",
+      },
+    ]);
+  })
+);
+
+neutralino.filesystem.writeFile.mockReturnValue(
+  new Promise((resolve) => {
+    resolve();
+  })
+);
 
 const usernames = [
   {
@@ -671,6 +691,165 @@ describe("Editor actions", () => {
     await waitFor(async () => {
       expect(changeValidation).toBeCalledTimes(1);
       expect(changeValidation).toBeCalledWith(true);
+    });
+  });
+
+  test("trigger file export", async () => {
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        colors: {
+          id1: {
+            name: "testNameColor",
+            color: {
+              r: 0,
+              g: 0,
+              b: 0,
+            },
+            usernames: [
+              {
+                id: "username1",
+                name: "testUsername1",
+                contourColorId: "id1",
+                nameColorId: "id1",
+              },
+            ],
+          },
+        },
+        usernames: [
+          {
+            id: "username1",
+            name: "testUsername1",
+            contourColorId: "id1",
+            nameColorId: "id1",
+          },
+        ],
+      },
+    });
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+
+    fireEvent.click(screen.getByText("Export to file"));
+
+    await waitFor(async () => {
+      expect(neutralino.filesystem.writeFile).toBeCalledTimes(1);
+    });
+  });
+
+  test("trigger file export when there is the same file existing", async () => {
+    neutralino.filesystem.readDirectory.mockReturnValueOnce(
+      new Promise((resolve) => {
+        resolve([
+          {
+            type: "DIRECTORY",
+            entry: "Test",
+          },
+          {
+            type: "FILE",
+            entry: NAME_COLORIZING_FILE_NAME,
+          },
+        ]);
+      })
+    );
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        colors: {
+          id1: {
+            name: "testNameColor",
+            color: {
+              r: 0,
+              g: 0,
+              b: 0,
+            },
+            usernames: [
+              {
+                id: "username1",
+                name: "testUsername1",
+                contourColorId: "id1",
+                nameColorId: "id1",
+              },
+            ],
+          },
+        },
+        usernames: [
+          {
+            id: "username1",
+            name: "testUsername1",
+            contourColorId: "id1",
+            nameColorId: "id1",
+          },
+        ],
+      },
+    });
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+
+    fireEvent.click(screen.getByText("Export to file"));
+
+    await waitFor(async () => {
+      expect(neutralino.filesystem.writeFile).toBeCalledTimes(1);
+    });
+  });
+
+  test("triggers notification if there is an error", async () => {
+    neutralino.filesystem.writeFile.mockReturnValueOnce(
+      new Promise((resolve, reject) => {
+        reject();
+      })
+    );
+    const spy = jest.spyOn(console, "log");
+
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        colors: {
+          id1: {
+            name: "testNameColor",
+            color: {
+              r: 0,
+              g: 0,
+              b: 0,
+            },
+            usernames: [
+              {
+                id: "username1",
+                name: "testUsername1",
+                contourColorId: "id1",
+                nameColorId: "id1",
+              },
+            ],
+          },
+        },
+        usernames: [
+          {
+            id: "username1",
+            name: "testUsername1",
+            contourColorId: "id1",
+            nameColorId: "id1",
+          },
+        ],
+      },
+    });
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+
+    fireEvent.click(screen.getByText("Export to file"));
+
+    await waitFor(async () => {
+      expect(spy).toBeCalledTimes(1);
     });
   });
 });

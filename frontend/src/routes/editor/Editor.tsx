@@ -16,9 +16,12 @@ import {
   updateColors,
 } from "store/file/slice";
 import ColorDetails from "./ColorDetails/ColorDetails";
-import { getEntries } from "utils/utils";
+import { checkIfFileExist, getEntries } from "utils/utils";
+import { CURRENT_DIR, NAME_COLORIZING_FILE_NAME } from "constants/constants";
 
 import "./style.scss";
+import { neutralino } from "neutralino/neutralino";
+import { isTestingEnv } from "utils/testing-utils";
 
 const Editor: FunctionalComponent = () => {
   const {
@@ -92,7 +95,43 @@ const Editor: FunctionalComponent = () => {
       dispatch(changeValidation(true));
       return;
     }
-  }, [validateColors, dispatch]);
+    let lines: string[] = [];
+
+    lines = colorEntries.map(([key, colorGroup]) => {
+      return `@ ${colorGroup.name} ${colorGroup.color.r} ${colorGroup.color.g} ${colorGroup.color.b}\n`;
+    });
+
+    lines.push(`\n`);
+
+    usernames.forEach((username) => {
+      lines.push(
+        `> ${username.name} ${colors[username.nameColorId].name} ${
+          colors[username.contourColorId].name
+        }\n`
+      );
+    });
+
+    checkIfFileExist(CURRENT_DIR, NAME_COLORIZING_FILE_NAME).then((value) => {
+      const name = value
+        ? `NameColorizing-${new Date().toISOString()}.txt`
+        : NAME_COLORIZING_FILE_NAME;
+
+      neutralino.filesystem
+        .writeFile(CURRENT_DIR + name, lines.join(""))
+        .then(() => {
+          notification.success({ message: "The file exported successfully" });
+        })
+        .catch(() => {
+          notification.error({
+            message: "The error occured during the file export",
+          });
+
+          if (isTestingEnv()) {
+            console.log("triggers notification if there is an error");
+          }
+        });
+    });
+  }, [colors, colorEntries, usernames, validateColors, dispatch]);
 
   return (
     <div className="editor">

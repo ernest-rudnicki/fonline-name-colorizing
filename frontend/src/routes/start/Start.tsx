@@ -17,9 +17,9 @@ import Button from "components/Button/Button";
 import { neutralino } from "neutralino/neutralino";
 import { readFileContent } from "store/file/actions";
 import { isTestingEnv } from "utils/testing-utils";
+import { updateColors } from "store/file/slice";
 
 import "./style.scss";
-import { updateColors } from "store/file/slice";
 
 const Start: FunctionalComponent = () => {
   const [isFileInCurrentDir, setIsFileInCurrentDir] = useState<boolean>(false);
