@@ -1,4 +1,5 @@
 @use "style/variables" as v;
+@use "style/mixins" as m;
 
 .editor {
 	height: 100%;
@@ -25,6 +26,12 @@
 	}
 
 	&-config {
+		@include m.full-size;
 		overflow-y: auto;
+
+		&-message {
+			@include m.full-size;
+			@include m.center;
+		}
 	}
 }

@@ -167,13 +167,17 @@ const Editor: FunctionalComponent = () => {
         </div>
       </div>
       <div className="editor-config">
-        {selectedColorKey && (
+        {selectedColorKey ? (
           <ColorDetails
             unsavedColors={unsavedColors}
             allUsernames={usernames}
             colors={colors}
             selectedColorKey={selectedColorKey}
           />
+        ) : (
+          <div className="editor-config-message">
+            <h2>Please select a color group in order to continue</h2>
+          </div>
         )}
       </div>
     </div>
