@@ -224,7 +224,7 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
           </h2>
         </div>
         <div className="color-details-content-header-color">
-          <ColoredSquare size={30} color={selectedColor.color} />
+          <ColoredSquare size={30} color={originalColor.color} />
           <span className="color-details-content-header-color-data">
             <span className="color-details-content-header-color-data-red">
               Red: {originalColor.color.r}
