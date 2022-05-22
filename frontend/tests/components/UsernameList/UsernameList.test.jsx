@@ -1,8 +1,9 @@
 import { h } from "preact";
 import { render, screen, fireEvent, waitFor } from "@testing-library/preact";
+import userEvent from "@testing-library/user-event";
+
 import UsernameList from "components/UsernameList/UsernameList";
 import { addMatchMedia } from "utils/testing-utils";
-import userEvent from "@testing-library/user-event";
 import { UsernameState } from "store/file/types";
 
 addMatchMedia();

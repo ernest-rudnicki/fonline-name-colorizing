@@ -3,6 +3,8 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/preact";
 import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
+import userEvent from "@testing-library/user-event";
+
 import Editor from "routes/Editor/Editor";
 import {
   changeSelectedColor,
@@ -13,9 +15,7 @@ import {
 } from "store/file/slice";
 import { addMatchMedia } from "utils/testing-utils";
 import { UsernameState } from "store/file/types";
-import userEvent from "@testing-library/user-event";
 import { neutralino } from "neutralino/neutralino";
-import { NAME_COLORIZING_FILE_NAME } from "constants/constants";
 
 addMatchMedia();
 jest.mock("store/file/slice");

@@ -1,6 +1,7 @@
 import { h } from "preact";
-import ColorList from "components/ColorList/ColorList";
 import { fireEvent, render, screen } from "@testing-library/preact";
+
+import ColorList from "components/ColorList/ColorList";
 
 const colors = {
   id1: {
