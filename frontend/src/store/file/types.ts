@@ -32,6 +32,9 @@ export enum UsernameState {
   NONE,
   UNSAVED,
   DELETED,
+  CHANGED_NAME_COLOR,
+  CHANGED_CONTOUR_COLOR,
+  ORIGINAL,
 }
 
 export interface Username extends BaseItem {
@@ -39,7 +42,7 @@ export interface Username extends BaseItem {
   contourColorId: string;
   nameColorId: string;
   errors?: Partial<UsernameFormItemError>;
-  state?: UsernameState;
+  state: UsernameState;
 }
 
 export interface SaveColorChangesPayload {

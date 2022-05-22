@@ -61,7 +61,7 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
       color: selectedColor.color,
       usernames: selectedColor.usernames,
     });
-  }, [selectedColorKey]);
+  }, [selectedColorKey, colors]);
 
   const onFinish = useCallback(() => {
     const unsavedColorsCopy = cloneDeep(unsavedColors);
@@ -75,37 +75,86 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
 
     unsavedColor.usernames = unsavedColor.usernames
       .map((el) => {
-        if (!el.state) {
-          return el;
-        }
-
-        if (el.state === UsernameState.UNSAVED) {
-          delete el.state;
-          usernamesCopy.push(el);
-          return el;
-        }
-
         const index = usernamesCopy.findIndex(
           (username) => el.id === username.id
         );
-        const deletedUsername = usernamesCopy[index];
-        usernamesCopy.splice(index, 1);
+        const originalUsername = usernamesCopy[index];
+        const { nameColorId, contourColorId } = originalUsername;
 
-        if (deletedUsername.nameColorId === selectedColorKey) {
-          colorsCopy[deletedUsername.contourColorId].usernames = colorsCopy[
-            deletedUsername.contourColorId
-          ].usernames.filter((username) => username.id !== deletedUsername.id);
+        switch (el.state) {
+          case UsernameState.CHANGED_NAME_COLOR:
+            el.state = UsernameState.ORIGINAL;
+            colorsCopy[nameColorId].usernames = colorsCopy[
+              nameColorId
+            ].usernames.filter(
+              (username) => username.id !== originalUsername.id
+            );
 
-          return null;
+            usernamesCopy[index].nameColorId = el.nameColorId;
+            colorsCopy[el.nameColorId].usernames.push(el);
+
+            return selectedColorKey === el.nameColorId ||
+              selectedColorKey === el.contourColorId
+              ? el
+              : null;
+          case UsernameState.CHANGED_CONTOUR_COLOR:
+            el.state = UsernameState.ORIGINAL;
+            colorsCopy[contourColorId].usernames = colorsCopy[
+              contourColorId
+            ].usernames.filter(
+              (username) => username.id !== originalUsername.id
+            );
+
+            usernamesCopy[index].contourColorId = el.contourColorId;
+            colorsCopy[el.contourColorId].usernames.push(el);
+
+            return selectedColorKey === el.nameColorId ||
+              selectedColorKey === el.contourColorId
+              ? el
+              : null;
+          case UsernameState.UNSAVED:
+            el.state = UsernameState.ORIGINAL;
+            usernamesCopy.push(el);
+
+            if (
+              el.nameColorId === el.contourColorId &&
+              el.nameColorId !== selectedColorKey
+            ) {
+              colorsCopy[el.nameColorId].usernames.push(el);
+              return el;
+            }
+
+            if (el.nameColorId !== selectedColorKey) {
+              colorsCopy[el.nameColorId].usernames.push(el);
+            }
+
+            if (el.contourColorId !== selectedColorKey) {
+              colorsCopy[el.contourColorId].usernames.push(el);
+            }
+            return el;
+          case UsernameState.DELETED:
+            usernamesCopy.splice(index, 1);
+
+            if (originalUsername.nameColorId === selectedColorKey) {
+              colorsCopy[originalUsername.contourColorId].usernames =
+                colorsCopy[originalUsername.contourColorId].usernames.filter(
+                  (username) => username.id !== originalUsername.id
+                );
+
+              return null;
+            }
+
+            if (originalUsername.contourColorId === selectedColorKey) {
+              colorsCopy[originalUsername.nameColorId].usernames = colorsCopy[
+                originalUsername.nameColorId
+              ].usernames.filter(
+                (username) => username.id !== originalUsername.id
+              );
+            }
+            return null;
+          default:
+            return el;
         }
-
-        if (deletedUsername.contourColorId === selectedColorKey) {
-          colorsCopy[deletedUsername.nameColorId].usernames = colorsCopy[
-            deletedUsername.nameColorId
-          ].usernames.filter((username) => username.id !== deletedUsername.id);
-        }
-
-        return null;
       })
       .filter((el) => el !== null) as Username[];
 

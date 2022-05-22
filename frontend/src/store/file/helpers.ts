@@ -1,4 +1,4 @@
-import { ColorGroupHashMap, Username } from "./types";
+import { ColorGroupHashMap, Username, UsernameState } from "./types";
 import { getEntries, parseIntBaseTen } from "utils/utils";
 import { v4 as uuidv4 } from "uuid";
 
@@ -12,6 +12,7 @@ export function createUsernameObject(
     name: username,
     nameColorId,
     contourColorId,
+    state: UsernameState.ORIGINAL,
   };
 }
 

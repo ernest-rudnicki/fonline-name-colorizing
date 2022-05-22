@@ -83,12 +83,22 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
     ): [Username[], number] => {
       const valuesCopy = cloneDeep(values);
       const foundIndex = valuesCopy.findIndex((el) => el.id === id);
-
       if (foundIndex === -1) {
         return [valuesCopy, -1];
       }
 
       valuesCopy[foundIndex][objectKey] = updateValue;
+
+      if (valuesCopy[foundIndex].state === UsernameState.ORIGINAL) {
+        switch (objectKey) {
+          case "nameColorId":
+            valuesCopy[foundIndex].state = UsernameState.CHANGED_NAME_COLOR;
+            break;
+          case "contourColorId":
+            valuesCopy[foundIndex].state = UsernameState.CHANGED_CONTOUR_COLOR;
+            break;
+        }
+      }
 
       return [valuesCopy, foundIndex];
     },
