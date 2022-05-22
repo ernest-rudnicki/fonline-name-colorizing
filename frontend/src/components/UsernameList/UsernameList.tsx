@@ -172,7 +172,7 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
             color={color}
             size={16}
           />
-          {username}
+          {username === "" ? "New Color" : username}
         </div>
       ) as React.ReactNode;
     },
