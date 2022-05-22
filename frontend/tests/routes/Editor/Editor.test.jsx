@@ -47,18 +47,21 @@ const usernames = [
     name: "testUsername1",
     contourColorId: "id1",
     nameColorId: "id2",
+    state: UsernameState.ORIGINAL,
   },
   {
     id: "username2",
     name: "testEnemy",
     contourColorId: "id1",
     nameColorId: "id3",
+    state: UsernameState.ORIGINAL,
   },
   {
     id: "username3",
     name: "testFriend",
     contourColorId: "id4",
     nameColorId: "id5",
+    state: UsernameState.ORIGINAL,
   },
 ];
 
@@ -478,6 +481,7 @@ describe("Editor actions", () => {
                 name: "newUsername",
                 contourColorId: "id1",
                 nameColorId: "id1",
+                state: UsernameState.ORIGINAL,
               },
             ],
           },
@@ -488,6 +492,156 @@ describe("Editor actions", () => {
             id: "newUsername",
             name: "newUsername",
             contourColorId: "id1",
+            nameColorId: "id1",
+            state: UsernameState.ORIGINAL,
+          },
+        ],
+      });
+    });
+  });
+
+  test("submit form with changed contour color", async () => {
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        colors: {
+          id1: { ...initialState.file.colors["id1"] },
+          id2: { ...initialState.file.colors["id2"] },
+        },
+        unsavedColors: {
+          id1: {
+            name: "newNameColor",
+            color: {
+              red: 255,
+              green: 255,
+              blue: 255,
+            },
+            usernames: [
+              {
+                ...usernames[0],
+                contourColorId: "id2",
+                state: UsernameState.CHANGED_CONTOUR_COLOR,
+              },
+            ],
+          },
+        },
+        usernames: [usernames[0]],
+        selectedColorKey: "id1",
+      },
+    });
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+
+    fireEvent.click(await screen.findByText("Save"));
+
+    await waitFor(async () => {
+      expect(saveColorChanges).toBeCalledTimes(1);
+      expect(saveColorChanges).toHaveBeenCalledWith({
+        unsavedColors: {},
+        colors: {
+          id1: {
+            name: "newNameColor",
+            color: {
+              red: 255,
+              green: 255,
+              blue: 255,
+            },
+            usernames: [],
+          },
+          id2: {
+            ...initialState.file.colors["id2"],
+            usernames: [
+              {
+                ...usernames[0],
+                contourColorId: "id2",
+              },
+            ],
+          },
+        },
+        usernames: [
+          {
+            ...usernames[0],
+            contourColorId: "id2",
+          },
+        ],
+      });
+    });
+  });
+
+  test("submit form with changed name color", async () => {
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        colors: {
+          id1: {
+            ...initialState.file.colors["id1"],
+            usernames: [usernames[0]],
+          },
+          id2: {
+            ...initialState.file.colors["id2"],
+          },
+        },
+        unsavedColors: {
+          id2: {
+            name: "newNameColor",
+            color: {
+              red: 255,
+              green: 255,
+              blue: 255,
+            },
+            usernames: [
+              {
+                ...usernames[0],
+                nameColorId: "id1",
+                state: UsernameState.CHANGED_NAME_COLOR,
+              },
+            ],
+          },
+        },
+        usernames: [usernames[0]],
+        selectedColorKey: "id2",
+      },
+    });
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+
+    fireEvent.click(await screen.findByText("Save"));
+
+    await waitFor(async () => {
+      expect(saveColorChanges).toBeCalledTimes(1);
+      expect(saveColorChanges).toHaveBeenCalledWith({
+        unsavedColors: {},
+        colors: {
+          id1: {
+            ...initialState.file.colors["id1"],
+            usernames: [
+              {
+                ...usernames[0],
+                nameColorId: "id1",
+              },
+            ],
+          },
+          id2: {
+            name: "newNameColor",
+            color: {
+              red: 255,
+              green: 255,
+              blue: 255,
+            },
+            usernames: [],
+          },
+        },
+        usernames: [
+          {
+            ...usernames[0],
             nameColorId: "id1",
           },
         ],

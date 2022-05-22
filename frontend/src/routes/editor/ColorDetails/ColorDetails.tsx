@@ -78,8 +78,13 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
         nameColorId
       ].usernames.filter((username) => username.id !== originalUsername.id);
 
+      colorsCopy[changedUsername.nameColorId].usernames = colorsCopy[
+        changedUsername.nameColorId
+      ].usernames.filter((username) => username.id !== changedUsername.id);
+
       usernamesCopy[originalUsernameIndex].nameColorId =
         changedUsername.nameColorId;
+
       colorsCopy[changedUsername.nameColorId].usernames.push(changedUsername);
 
       return selectedColorKey === changedUsername.nameColorId ||
@@ -105,8 +110,13 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
         contourColorId
       ].usernames.filter((username) => username.id !== originalUsername.id);
 
+      colorsCopy[changedUsername.contourColorId].usernames = colorsCopy[
+        changedUsername.contourColorId
+      ].usernames.filter((username) => username.id !== changedUsername.id);
+
       usernamesCopy[originalUsernameIndex].contourColorId =
         changedUsername.contourColorId;
+
       colorsCopy[changedUsername.contourColorId].usernames.push(
         changedUsername
       );
