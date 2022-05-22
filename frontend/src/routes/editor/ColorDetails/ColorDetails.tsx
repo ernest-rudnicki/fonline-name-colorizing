@@ -72,7 +72,6 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
     ) => {
       const originalUsername = usernamesCopy[originalUsernameIndex];
       const { nameColorId } = originalUsername;
-      changedUsername.state = UsernameState.ORIGINAL;
 
       colorsCopy[nameColorId].usernames = colorsCopy[
         nameColorId
@@ -82,10 +81,11 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
         changedUsername.nameColorId
       ].usernames.filter((username) => username.id !== changedUsername.id);
 
+      changedUsername.state = UsernameState.ORIGINAL;
+      colorsCopy[changedUsername.nameColorId].usernames.push(changedUsername);
+
       usernamesCopy[originalUsernameIndex].nameColorId =
         changedUsername.nameColorId;
-
-      colorsCopy[changedUsername.nameColorId].usernames.push(changedUsername);
 
       return selectedColorKey === changedUsername.nameColorId ||
         selectedColorKey === changedUsername.contourColorId
@@ -104,7 +104,6 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
     ) => {
       const originalUsername = usernamesCopy[originalUsernameIndex];
       const { contourColorId } = originalUsername;
-      changedUsername.state = UsernameState.ORIGINAL;
 
       colorsCopy[contourColorId].usernames = colorsCopy[
         contourColorId
@@ -114,12 +113,13 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
         changedUsername.contourColorId
       ].usernames.filter((username) => username.id !== changedUsername.id);
 
-      usernamesCopy[originalUsernameIndex].contourColorId =
-        changedUsername.contourColorId;
-
+      changedUsername.state = UsernameState.ORIGINAL;
       colorsCopy[changedUsername.contourColorId].usernames.push(
         changedUsername
       );
+
+      usernamesCopy[originalUsernameIndex].contourColorId =
+        changedUsername.contourColorId;
 
       return selectedColorKey === changedUsername.nameColorId ||
         selectedColorKey === changedUsername.contourColorId
