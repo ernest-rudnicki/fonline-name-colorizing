@@ -57,12 +57,12 @@ export function parseFileContent(content: string[]): {
       const textUsername = splittedLine[1];
       const nameColor = splittedLine[2];
       const contourColor = splittedLine[3];
-      const entries = getEntries(colors);
+      const colorEntries = getEntries(colors);
 
-      const nameColorEntry = entries.find(
+      const nameColorEntry = colorEntries.find(
         ([, value]) => value.name === nameColor
       );
-      const contourColorEntry = entries.find(
+      const contourColorEntry = colorEntries.find(
         ([, value]) => value.name === contourColor
       );
 

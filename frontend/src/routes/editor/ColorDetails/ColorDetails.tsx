@@ -63,73 +63,28 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
     });
   }, [selectedColorKey, colors]);
 
-  const updateChangedNameColor = useCallback(
+  const removeUsernameFromColors = useCallback(
     (
       changedUsername: Username,
-      originalUsernameIndex: number,
-      colorsCopy: ColorGroupHashMap,
-      usernamesCopy: Username[]
+      originalUsername: Username,
+      colorsRef: ColorGroupHashMap,
+      keyColorId: "nameColorId" | "contourColorId"
     ) => {
-      const originalUsername = usernamesCopy[originalUsernameIndex];
-      const { nameColorId } = originalUsername;
+      const originalColorId = originalUsername[keyColorId];
+      const changedColorId = changedUsername[keyColorId];
 
-      colorsCopy[nameColorId].usernames = colorsCopy[
-        nameColorId
+      colorsRef[originalColorId].usernames = colorsRef[
+        originalColorId
       ].usernames.filter((username) => username.id !== originalUsername.id);
 
-      colorsCopy[changedUsername.nameColorId].usernames = colorsCopy[
-        changedUsername.nameColorId
+      colorsRef[changedColorId].usernames = colorsRef[
+        changedColorId
       ].usernames.filter((username) => username.id !== changedUsername.id);
-
-      changedUsername.state = UsernameState.ORIGINAL;
-      colorsCopy[changedUsername.nameColorId].usernames.push(changedUsername);
-
-      usernamesCopy[originalUsernameIndex].nameColorId =
-        changedUsername.nameColorId;
-
-      return selectedColorKey === changedUsername.nameColorId ||
-        selectedColorKey === changedUsername.contourColorId
-        ? changedUsername
-        : null;
     },
-    [selectedColorKey]
+    []
   );
 
-  const updateChangedContourColor = useCallback(
-    (
-      changedUsername: Username,
-      originalUsernameIndex: number,
-      colorsCopy: ColorGroupHashMap,
-      usernamesCopy: Username[]
-    ) => {
-      const originalUsername = usernamesCopy[originalUsernameIndex];
-      const { contourColorId } = originalUsername;
-
-      colorsCopy[contourColorId].usernames = colorsCopy[
-        contourColorId
-      ].usernames.filter((username) => username.id !== originalUsername.id);
-
-      colorsCopy[changedUsername.contourColorId].usernames = colorsCopy[
-        changedUsername.contourColorId
-      ].usernames.filter((username) => username.id !== changedUsername.id);
-
-      changedUsername.state = UsernameState.ORIGINAL;
-      colorsCopy[changedUsername.contourColorId].usernames.push(
-        changedUsername
-      );
-
-      usernamesCopy[originalUsernameIndex].contourColorId =
-        changedUsername.contourColorId;
-
-      return selectedColorKey === changedUsername.nameColorId ||
-        selectedColorKey === changedUsername.contourColorId
-        ? changedUsername
-        : null;
-    },
-    [selectedColorKey]
-  );
-
-  const saveUnsavedUsername = useCallback(
+  const addUnsavedUsernameToColors = useCallback(
     (
       unsavedUsername: Username,
       colorsCopy: ColorGroupHashMap,
@@ -168,6 +123,7 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
     ) => {
       const originalUsername = usernamesCopy[originalUsernameIndex];
       const { id, nameColorId, contourColorId } = originalUsername;
+
       usernamesCopy.splice(originalUsernameIndex, 1);
 
       if (nameColorId === selectedColorKey) {
@@ -188,6 +144,16 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
     [selectedColorKey]
   );
 
+  const isInSelectedColor = useCallback(
+    (changedUsername: Username) => {
+      return (
+        selectedColorKey === changedUsername.nameColorId ||
+        selectedColorKey === changedUsername.contourColorId
+      );
+    },
+    [selectedColorKey]
+  );
+
   const onFinish = useCallback(() => {
     const unsavedColorsCopy = cloneDeep(unsavedColors);
     const unsavedColor = unsavedColorsCopy[selectedColorKey];
@@ -203,21 +169,45 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
         const index = usernamesCopy.findIndex(
           (username) => el.id === username.id
         );
+        const originalUsername = usernamesCopy[index];
 
         switch (el.state) {
           case UsernameState.CHANGED_NAME_COLOR:
-            return updateChangedNameColor(el, index, colorsCopy, usernamesCopy);
-          case UsernameState.CHANGED_CONTOUR_COLOR:
-            return updateChangedContourColor(
+            removeUsernameFromColors(
               el,
-              index,
+              originalUsername,
               colorsCopy,
-              usernamesCopy
+              "nameColorId"
             );
+
+            el.state = UsernameState.ORIGINAL;
+            colorsCopy[el.nameColorId].usernames.push(el);
+
+            usernamesCopy[index].nameColorId = el.nameColorId;
+
+            return isInSelectedColor(el) ? el : null;
+
+          case UsernameState.CHANGED_CONTOUR_COLOR:
+            removeUsernameFromColors(
+              el,
+              originalUsername,
+              colorsCopy,
+              "contourColorId"
+            );
+
+            el.state = UsernameState.ORIGINAL;
+            colorsCopy[el.contourColorId].usernames.push(el);
+
+            usernamesCopy[index].contourColorId = el.contourColorId;
+
+            return isInSelectedColor(el) ? el : null;
+
           case UsernameState.UNSAVED:
-            return saveUnsavedUsername(el, colorsCopy, usernamesCopy);
+            return addUnsavedUsernameToColors(el, colorsCopy, usernamesCopy);
+
           case UsernameState.DELETED:
             return deleteUsername(index, usernamesCopy, colorsCopy);
+
           default:
             return el;
         }
@@ -239,14 +229,14 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
       })
     );
   }, [
-    selectedColorKey,
     unsavedColors,
+    selectedColorKey,
     colors,
     allUsernames,
     dispatch,
-    updateChangedNameColor,
-    updateChangedContourColor,
-    saveUnsavedUsername,
+    removeUsernameFromColors,
+    isInSelectedColor,
+    addUnsavedUsernameToColors,
     deleteUsername,
   ]);
 
