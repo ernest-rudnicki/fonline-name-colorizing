@@ -13,9 +13,14 @@ export interface Filter {
   extensions: string[];
 }
 
-export interface ShowDialogOptions {
+export interface ShowOpenDialogOptions {
   filters: Filter[];
   multiSelections?: boolean;
+}
+
+export interface ShowSaveDialogOptions {
+  filters: Filter[];
+  forceOverwrite?: boolean;
 }
 
 export interface NeutralinoFileSystem {
@@ -27,8 +32,12 @@ export interface NeutralinoFileSystem {
 export interface NeutralinoOS {
   showOpenDialog: (
     title: string,
-    options: ShowDialogOptions
+    options: ShowOpenDialogOptions
   ) => Promise<string[]>;
+  showSaveDialog: (
+    title: string,
+    options: ShowSaveDialogOptions
+  ) => Promise<string>;
 }
 
 export interface Neutralino {

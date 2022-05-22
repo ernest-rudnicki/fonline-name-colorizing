@@ -16,8 +16,12 @@ import {
   updateColors,
 } from "store/file/slice";
 import ColorDetails from "./ColorDetails/ColorDetails";
-import { checkIfFileExist, getCurrentDate, getEntries } from "utils/utils";
-import { CURRENT_DIR, NAME_COLORIZING_FILE_NAME } from "constants/constants";
+import { checkIfFileExist, getEntries } from "utils/utils";
+import {
+  CURRENT_DIR,
+  NAME_COLORIZING_FILE_FILTERS,
+  NAME_COLORIZING_FILE_NAME,
+} from "constants/constants";
 
 import "./style.scss";
 import { neutralino } from "neutralino/neutralino";
@@ -111,26 +115,26 @@ const Editor: FunctionalComponent = () => {
       );
     });
 
-    checkIfFileExist(CURRENT_DIR, NAME_COLORIZING_FILE_NAME).then((value) => {
-      const name = value
-        ? `NameColorizing-${getCurrentDate()}.txt`
-        : NAME_COLORIZING_FILE_NAME;
+    neutralino.os
+      .showSaveDialog("Export to file", {
+        filters: NAME_COLORIZING_FILE_FILTERS,
+      })
+      .then((entry) => {
+        neutralino.filesystem
+          .writeFile(entry, lines.join(""))
+          .then(() => {
+            notification.success({ message: "The file exported successfully" });
+          })
+          .catch(() => {
+            notification.error({
+              message: "The error occured during the file export",
+            });
 
-      neutralino.filesystem
-        .writeFile(CURRENT_DIR + name, lines.join(""))
-        .then(() => {
-          notification.success({ message: "The file exported successfully" });
-        })
-        .catch((e) => {
-          notification.error({
-            message: "The error occured during the file export",
+            if (isTestingEnv()) {
+              console.log("triggers notification if there is an error");
+            }
           });
-
-          if (isTestingEnv()) {
-            console.log("triggers notification if there is an error");
-          }
-        });
-    });
+      });
   }, [colors, colorEntries, usernames, validateColors, dispatch]);
 
   return (

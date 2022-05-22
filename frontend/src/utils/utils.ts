@@ -51,13 +51,6 @@ export function debounce<Args extends any[], F extends (...args: Args) => any>(
   };
 }
 
-export function getCurrentDate(): string {
-  const d = new Date();
-  return `${d.getDate()}${
-    d.getMonth() + 1
-  }-${d.getFullYear()}${d.getHours()}${d.getMinutes()}${d.getSeconds}`;
-}
-
 export function overrideReactType(el: VNode): React.ReactNode {
   return el as React.ReactNode;
 }

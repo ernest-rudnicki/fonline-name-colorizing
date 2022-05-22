@@ -695,6 +695,10 @@ describe("Editor actions", () => {
   });
 
   test("trigger file export", async () => {
+    neutralino.os.showSaveDialog.mockReturnValueOnce(
+      new Promise((resolve) => resolve("./NameColorizing.txt"))
+    );
+
     store = mockStore({
       ...initialState,
       file: {
@@ -741,19 +745,8 @@ describe("Editor actions", () => {
   });
 
   test("trigger file export when there is the same file existing", async () => {
-    neutralino.filesystem.readDirectory.mockReturnValueOnce(
-      new Promise((resolve) => {
-        resolve([
-          {
-            type: "DIRECTORY",
-            entry: "Test",
-          },
-          {
-            type: "FILE",
-            entry: NAME_COLORIZING_FILE_NAME,
-          },
-        ]);
-      })
+    neutralino.os.showSaveDialog.mockReturnValueOnce(
+      new Promise((resolve) => resolve("./NameColorizing.txt"))
     );
     store = mockStore({
       ...initialState,
@@ -801,6 +794,10 @@ describe("Editor actions", () => {
   });
 
   test("triggers notification if there is an error", async () => {
+    neutralino.os.showSaveDialog.mockReturnValueOnce(
+      new Promise((resolve) => resolve("./NameColorizing.txt"))
+    );
+
     neutralino.filesystem.writeFile.mockReturnValueOnce(
       new Promise((resolve, reject) => {
         reject();

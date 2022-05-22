@@ -12,7 +12,8 @@
     "filesystem.readDirectory",
     "filesystem.readFile",
     "filesystem.writeFile",
-    "os.showOpenDialog"
+    "os.showOpenDialog",
+    "os.showSaveDialog"
   ],
   "modes": {
     "window": {

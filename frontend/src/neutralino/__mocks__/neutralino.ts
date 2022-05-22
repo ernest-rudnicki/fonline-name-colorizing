@@ -7,5 +7,6 @@ export const neutralino = {
   },
   os: {
     showOpenDialog: jest.fn(),
+    showSaveDialog: jest.fn(),
   },
 };
