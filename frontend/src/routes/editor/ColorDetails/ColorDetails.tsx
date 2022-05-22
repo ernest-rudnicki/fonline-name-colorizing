@@ -63,6 +63,121 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
     });
   }, [selectedColorKey, colors]);
 
+  const updateChangedNameColor = useCallback(
+    (
+      changedUsername: Username,
+      originalUsernameIndex: number,
+      colorsCopy: ColorGroupHashMap,
+      usernamesCopy: Username[]
+    ) => {
+      const originalUsername = usernamesCopy[originalUsernameIndex];
+      const { nameColorId } = originalUsername;
+      changedUsername.state = UsernameState.ORIGINAL;
+
+      colorsCopy[nameColorId].usernames = colorsCopy[
+        nameColorId
+      ].usernames.filter((username) => username.id !== originalUsername.id);
+
+      usernamesCopy[originalUsernameIndex].nameColorId =
+        changedUsername.nameColorId;
+      colorsCopy[changedUsername.nameColorId].usernames.push(changedUsername);
+
+      return selectedColorKey === changedUsername.nameColorId ||
+        selectedColorKey === changedUsername.contourColorId
+        ? changedUsername
+        : null;
+    },
+    [selectedColorKey]
+  );
+
+  const updateChangedContourColor = useCallback(
+    (
+      changedUsername: Username,
+      originalUsernameIndex: number,
+      colorsCopy: ColorGroupHashMap,
+      usernamesCopy: Username[]
+    ) => {
+      const originalUsername = usernamesCopy[originalUsernameIndex];
+      const { contourColorId } = originalUsername;
+      changedUsername.state = UsernameState.ORIGINAL;
+
+      colorsCopy[contourColorId].usernames = colorsCopy[
+        contourColorId
+      ].usernames.filter((username) => username.id !== originalUsername.id);
+
+      usernamesCopy[originalUsernameIndex].contourColorId =
+        changedUsername.contourColorId;
+      colorsCopy[changedUsername.contourColorId].usernames.push(
+        changedUsername
+      );
+
+      return selectedColorKey === changedUsername.nameColorId ||
+        selectedColorKey === changedUsername.contourColorId
+        ? changedUsername
+        : null;
+    },
+    [selectedColorKey]
+  );
+
+  const saveUnsavedUsername = useCallback(
+    (
+      unsavedUsername: Username,
+      colorsCopy: ColorGroupHashMap,
+      usernamesCopy: Username[]
+    ) => {
+      unsavedUsername.state = UsernameState.ORIGINAL;
+      usernamesCopy.push(unsavedUsername);
+
+      if (
+        unsavedUsername.nameColorId === unsavedUsername.contourColorId &&
+        unsavedUsername.nameColorId !== selectedColorKey
+      ) {
+        colorsCopy[unsavedUsername.nameColorId].usernames.push(unsavedUsername);
+        return unsavedUsername;
+      }
+
+      if (unsavedUsername.nameColorId !== selectedColorKey) {
+        colorsCopy[unsavedUsername.nameColorId].usernames.push(unsavedUsername);
+      }
+
+      if (unsavedUsername.contourColorId !== selectedColorKey) {
+        colorsCopy[unsavedUsername.contourColorId].usernames.push(
+          unsavedUsername
+        );
+      }
+      return unsavedUsername;
+    },
+    [selectedColorKey]
+  );
+
+  const deleteUsername = useCallback(
+    (
+      originalUsernameIndex: number,
+      usernamesCopy: Username[],
+      colorsCopy: ColorGroupHashMap
+    ) => {
+      const originalUsername = usernamesCopy[originalUsernameIndex];
+      const { id, nameColorId, contourColorId } = originalUsername;
+      usernamesCopy.splice(originalUsernameIndex, 1);
+
+      if (nameColorId === selectedColorKey) {
+        colorsCopy[contourColorId].usernames = colorsCopy[
+          contourColorId
+        ].usernames.filter((username) => username.id !== id);
+
+        return null;
+      }
+
+      if (contourColorId === selectedColorKey) {
+        colorsCopy[nameColorId].usernames = colorsCopy[
+          nameColorId
+        ].usernames.filter((username) => username.id !== id);
+      }
+      return null;
+    },
+    [selectedColorKey]
+  );
+
   const onFinish = useCallback(() => {
     const unsavedColorsCopy = cloneDeep(unsavedColors);
     const unsavedColor = unsavedColorsCopy[selectedColorKey];
@@ -78,80 +193,21 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
         const index = usernamesCopy.findIndex(
           (username) => el.id === username.id
         );
-        const originalUsername = usernamesCopy[index];
-        const { nameColorId, contourColorId } = originalUsername;
 
         switch (el.state) {
           case UsernameState.CHANGED_NAME_COLOR:
-            el.state = UsernameState.ORIGINAL;
-            colorsCopy[nameColorId].usernames = colorsCopy[
-              nameColorId
-            ].usernames.filter(
-              (username) => username.id !== originalUsername.id
-            );
-
-            usernamesCopy[index].nameColorId = el.nameColorId;
-            colorsCopy[el.nameColorId].usernames.push(el);
-
-            return selectedColorKey === el.nameColorId ||
-              selectedColorKey === el.contourColorId
-              ? el
-              : null;
+            return updateChangedNameColor(el, index, colorsCopy, usernamesCopy);
           case UsernameState.CHANGED_CONTOUR_COLOR:
-            el.state = UsernameState.ORIGINAL;
-            colorsCopy[contourColorId].usernames = colorsCopy[
-              contourColorId
-            ].usernames.filter(
-              (username) => username.id !== originalUsername.id
+            return updateChangedContourColor(
+              el,
+              index,
+              colorsCopy,
+              usernamesCopy
             );
-
-            usernamesCopy[index].contourColorId = el.contourColorId;
-            colorsCopy[el.contourColorId].usernames.push(el);
-
-            return selectedColorKey === el.nameColorId ||
-              selectedColorKey === el.contourColorId
-              ? el
-              : null;
           case UsernameState.UNSAVED:
-            el.state = UsernameState.ORIGINAL;
-            usernamesCopy.push(el);
-
-            if (
-              el.nameColorId === el.contourColorId &&
-              el.nameColorId !== selectedColorKey
-            ) {
-              colorsCopy[el.nameColorId].usernames.push(el);
-              return el;
-            }
-
-            if (el.nameColorId !== selectedColorKey) {
-              colorsCopy[el.nameColorId].usernames.push(el);
-            }
-
-            if (el.contourColorId !== selectedColorKey) {
-              colorsCopy[el.contourColorId].usernames.push(el);
-            }
-            return el;
+            return saveUnsavedUsername(el, colorsCopy, usernamesCopy);
           case UsernameState.DELETED:
-            usernamesCopy.splice(index, 1);
-
-            if (originalUsername.nameColorId === selectedColorKey) {
-              colorsCopy[originalUsername.contourColorId].usernames =
-                colorsCopy[originalUsername.contourColorId].usernames.filter(
-                  (username) => username.id !== originalUsername.id
-                );
-
-              return null;
-            }
-
-            if (originalUsername.contourColorId === selectedColorKey) {
-              colorsCopy[originalUsername.nameColorId].usernames = colorsCopy[
-                originalUsername.nameColorId
-              ].usernames.filter(
-                (username) => username.id !== originalUsername.id
-              );
-            }
-            return null;
+            return deleteUsername(index, usernamesCopy, colorsCopy);
           default:
             return el;
         }
@@ -172,7 +228,17 @@ const ColorDetails: FunctionalComponent<ColorDetailsProps> = (props) => {
         unsavedColors: unsavedColorsCopy,
       })
     );
-  }, [selectedColorKey, unsavedColors, colors, allUsernames, dispatch]);
+  }, [
+    selectedColorKey,
+    unsavedColors,
+    colors,
+    allUsernames,
+    dispatch,
+    updateChangedNameColor,
+    updateChangedContourColor,
+    saveUnsavedUsername,
+    deleteUsername,
+  ]);
 
   const onValuesChange = useCallback(
     (changedValues: Partial<ColorGroup>, allValues: ColorGroup) => {
