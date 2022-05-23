@@ -83,6 +83,7 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
     ): [Username[], number] => {
       const valuesCopy = cloneDeep(values);
       const foundIndex = valuesCopy.findIndex((el) => el.id === id);
+
       if (foundIndex === -1) {
         return [valuesCopy, -1];
       }
