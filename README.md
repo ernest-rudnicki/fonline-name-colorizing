@@ -36,7 +36,7 @@ npm run dev:app
 
 *   `npm run dev:app`: runs only the nautrlino.js application in development mode
 
-## Preact and Typescript
+## Preact and TypeScript
 There are a lot of issues when it comes to React types and Preact JSX. Therefore, I have created a function as a workaround that overrides the JSX type of Preact components. For simplicity the test files are written in JSX files not TSX, to avoid calling the function `overrideReactType` in every test case.
 ```
 // This throws an error, that the component is not assignable to children of Form.Item.
