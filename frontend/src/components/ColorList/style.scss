@@ -10,6 +10,7 @@
     border-right: 4px solid transparent;
     transition: background-color v.$animation-duration-base ease, border-color v.$animation-duration-base ease;
     padding: v.$padding-minimal-between 0 v.$padding-minimal-between v.$padding-tiny;
+    @include m.truncate(100%);
 
     &-error {
       color: v.$danger;
@@ -18,6 +19,7 @@
     &.selected {
       background-color: v.$selected-regular;
       border-color: v.$primary-color;
+      
       &:focus {
         background-color: v.$selected-regular;
       }

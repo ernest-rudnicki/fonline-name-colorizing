@@ -183,7 +183,9 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
             color={color}
             size={16}
           />
-          {username === "" ? "New Color" : username}
+          <span className="username-list-row-item-option-text">
+            {username === "" ? "New Color" : username}
+          </span>
         </div>
       ) as React.ReactNode;
     },
@@ -301,7 +303,7 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
                   )}
                 </Form.Item>
               </div>
-              <div className="username-list-row-item username-list-row-color">
+              <div className="username-list-row-item">
                 <Form.Item validateStatus={undefined}>
                   {overrideReactType(
                     <Select
@@ -315,7 +317,7 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
                   )}
                 </Form.Item>
               </div>
-              <div className="username-list-row-item username-list-row-contour">
+              <div className="username-list-row-item">
                 <Form.Item validateStatus={undefined}>
                   {overrideReactType(
                     <Select
