@@ -16,16 +16,12 @@ import {
   updateColors,
 } from "store/file/slice";
 import ColorDetails from "./ColorDetails/ColorDetails";
-import { checkIfFileExist, getEntries } from "utils/utils";
-import {
-  CURRENT_DIR,
-  NAME_COLORIZING_FILE_FILTERS,
-  NAME_COLORIZING_FILE_NAME,
-} from "constants/constants";
-
-import "./style.scss";
+import { getEntries } from "utils/utils";
+import { NAME_COLORIZING_FILE_FILTERS } from "constants/constants";
 import { neutralino } from "neutralino/neutralino";
 import { isTestingEnv } from "utils/testing-utils";
+
+import "./style.scss";
 
 const Editor: FunctionalComponent = () => {
   const {
