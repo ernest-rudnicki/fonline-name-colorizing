@@ -1,4 +1,4 @@
-import { ColorGroupHashMap, Username } from "./types";
+import { ColorGroupHashMap, Username, UsernameState } from "./types";
 import { getEntries, parseIntBaseTen } from "utils/utils";
 import { v4 as uuidv4 } from "uuid";
 
@@ -12,6 +12,7 @@ export function createUsernameObject(
     name: username,
     nameColorId,
     contourColorId,
+    state: UsernameState.ORIGINAL,
   };
 }
 
@@ -56,12 +57,12 @@ export function parseFileContent(content: string[]): {
       const textUsername = splittedLine[1];
       const nameColor = splittedLine[2];
       const contourColor = splittedLine[3];
-      const entries = getEntries(colors);
+      const colorEntries = getEntries(colors);
 
-      const nameColorEntry = entries.find(
+      const nameColorEntry = colorEntries.find(
         ([, value]) => value.name === nameColor
       );
-      const contourColorEntry = entries.find(
+      const contourColorEntry = colorEntries.find(
         ([, value]) => value.name === contourColor
       );
 

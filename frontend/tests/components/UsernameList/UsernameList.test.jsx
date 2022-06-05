@@ -1,8 +1,9 @@
 import { h } from "preact";
 import { render, screen, fireEvent, waitFor } from "@testing-library/preact";
+import userEvent from "@testing-library/user-event";
+
 import UsernameList from "components/UsernameList/UsernameList";
 import { addMatchMedia } from "utils/testing-utils";
-import userEvent from "@testing-library/user-event";
 import { UsernameState } from "store/file/types";
 
 addMatchMedia();
@@ -16,18 +17,21 @@ const usernames = [
     name: "testUsername1",
     contourColorId: "id1",
     nameColorId: "id2",
+    state: UsernameState.ORIGINAL,
   },
   {
     id: "username2",
     name: "testEnemy",
     contourColorId: "id1",
     nameColorId: "id3",
+    state: UsernameState.ORIGINAL,
   },
   {
     id: "username3",
     name: "testFriend",
     contourColorId: "id4",
     nameColorId: "id5",
+    state: UsernameState.ORIGINAL,
   },
 ];
 
@@ -137,6 +141,7 @@ describe("UsernameList actions", () => {
         name: "testEnemy",
         contourColorId: "id1",
         nameColorId: "id3",
+        state: UsernameState.ORIGINAL,
       },
     ]);
   });
@@ -161,12 +166,14 @@ describe("UsernameList actions", () => {
         name: "testUsername1",
         contourColorId: "id1",
         nameColorId: "id2",
+        state: UsernameState.ORIGINAL,
       },
       {
         id: "username2",
         name: "testEnemy",
         contourColorId: "id1",
         nameColorId: "id3",
+        state: UsernameState.ORIGINAL,
       },
       {
         id: "username4",
@@ -201,12 +208,14 @@ describe("UsernameList actions", () => {
         name: "testUsername1",
         contourColorId: "id1",
         nameColorId: "id2",
+        state: UsernameState.ORIGINAL,
       },
       {
         id: "username2",
         name: "testEnemy",
         contourColorId: "id1",
         nameColorId: "id3",
+        state: UsernameState.ORIGINAL,
       },
     ]);
   });
@@ -247,12 +256,14 @@ describe("UsernameList actions", () => {
           name: "testUsername1",
           contourColorId: "id1",
           nameColorId: "id2",
+          state: UsernameState.ORIGINAL,
         },
         {
           id: "username2",
           name: "testEnemy",
           contourColorId: "id1",
           nameColorId: "id3",
+          state: UsernameState.ORIGINAL,
         },
         {
           id: "username4",
@@ -310,12 +321,14 @@ describe("UsernameList actions", () => {
           name: "testUsername1",
           contourColorId: "id1",
           nameColorId: "id2",
+          state: UsernameState.ORIGINAL,
         },
         {
           id: "username2",
           name: "testEnemy",
           contourColorId: "id1",
           nameColorId: "id3",
+          state: UsernameState.ORIGINAL,
         },
         {
           id: "username4",
@@ -352,12 +365,14 @@ describe("UsernameList actions", () => {
           name: "testUsername1",
           contourColorId: "id1",
           nameColorId: "id4",
+          state: UsernameState.CHANGED_NAME_COLOR,
         },
         {
           id: "username2",
           name: "testEnemy",
           contourColorId: "id1",
           nameColorId: "id3",
+          state: UsernameState.ORIGINAL,
         },
       ]);
     });
@@ -386,12 +401,14 @@ describe("UsernameList actions", () => {
           name: "testUsername1",
           contourColorId: "id4",
           nameColorId: "id2",
+          state: UsernameState.CHANGED_CONTOUR_COLOR,
         },
         {
           id: "username2",
           name: "testEnemy",
           contourColorId: "id1",
           nameColorId: "id3",
+          state: UsernameState.ORIGINAL,
         },
       ]);
     });

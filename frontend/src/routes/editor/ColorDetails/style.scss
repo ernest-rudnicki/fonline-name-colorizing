@@ -16,6 +16,7 @@
 
         &-text {
           margin-left: v.$margin-small;
+          @include m.truncate(95%);
         }
 
       }

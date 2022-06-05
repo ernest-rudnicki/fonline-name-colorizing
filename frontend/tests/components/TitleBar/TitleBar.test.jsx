@@ -1,5 +1,6 @@
 import { h } from "preact";
 import { render, screen } from "@testing-library/preact";
+
 import TitleBar from "components/TitleBar/TitleBar";
 
 describe("TitleBar rendering", () => {

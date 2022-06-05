@@ -1,8 +1,9 @@
 import { h } from "preact";
 import { shallow } from "enzyme";
-import Button from "components/Button/Button";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { render, fireEvent, screen } from "@testing-library/preact";
+
+import Button from "components/Button/Button";
 
 describe("Button rendering", () => {
   test("Standard button renders a label", () => {

@@ -2,10 +2,11 @@ import { h } from "preact";
 import { fireEvent, render, screen, waitFor } from "@testing-library/preact";
 import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";
+import thunk from "redux-thunk";
+
 import Start from "routes/Start/Start";
 import { neutralino } from "neutralino/neutralino";
 import { NAME_COLORIZING_FILE_NAME } from "constants/constants";
-import thunk from "redux-thunk";
 import { updateColors } from "store/file/slice";
 
 jest.mock("neutralino/neutralino");

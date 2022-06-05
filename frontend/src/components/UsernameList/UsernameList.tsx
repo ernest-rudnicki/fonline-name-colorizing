@@ -90,6 +90,17 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
 
       valuesCopy[foundIndex][objectKey] = updateValue;
 
+      if (valuesCopy[foundIndex].state === UsernameState.ORIGINAL) {
+        switch (objectKey) {
+          case "nameColorId":
+            valuesCopy[foundIndex].state = UsernameState.CHANGED_NAME_COLOR;
+            break;
+          case "contourColorId":
+            valuesCopy[foundIndex].state = UsernameState.CHANGED_CONTOUR_COLOR;
+            break;
+        }
+      }
+
       return [valuesCopy, foundIndex];
     },
     []
@@ -172,7 +183,9 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
             color={color}
             size={16}
           />
-          {username}
+          <span className="username-list-row-item-option-text">
+            {username === "" ? "New Color" : username}
+          </span>
         </div>
       ) as React.ReactNode;
     },
@@ -290,7 +303,7 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
                   )}
                 </Form.Item>
               </div>
-              <div className="username-list-row-item username-list-row-color">
+              <div className="username-list-row-item">
                 <Form.Item validateStatus={undefined}>
                   {overrideReactType(
                     <Select
@@ -304,7 +317,7 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
                   )}
                 </Form.Item>
               </div>
-              <div className="username-list-row-item username-list-row-contour">
+              <div className="username-list-row-item">
                 <Form.Item validateStatus={undefined}>
                   {overrideReactType(
                     <Select

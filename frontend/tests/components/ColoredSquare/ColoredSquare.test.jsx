@@ -1,6 +1,7 @@
 import { h } from "preact";
-import ColoredSquare from "components/ColoredSquare/ColoredSquare";
 import { shallow } from "enzyme";
+
+import ColoredSquare from "components/ColoredSquare/ColoredSquare";
 
 describe("ColoredSquare rendering", () => {
   test("renders a component", () => {

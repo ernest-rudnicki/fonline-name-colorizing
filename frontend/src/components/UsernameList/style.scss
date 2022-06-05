@@ -19,18 +19,10 @@
       }
 
       &-buttons {
-        @include m.center-vertically;
-        
         &-btn {
           margin-right: v.$margin-small;
         }
       }
-    }
-
-    &-color, &-contour {
-      flex-grow: 1;
-      flex-basis: 50%;
-      width: auto !important;
     }
 
     &-item:not(:last-child) {
@@ -38,11 +30,19 @@
     }
 
     &-item {
+      flex-grow: 1;
+      flex-basis: 0;
+      min-width: 0;
+
       &-option {
         @include m.center-vertically;
 
         &-square {
           margin-right: v.$margin-small;
+        }
+
+        &-text {
+          @include m.truncate(80%);
         }
       }
     }

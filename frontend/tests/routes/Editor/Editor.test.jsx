@@ -3,6 +3,8 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/preact";
 import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
+import userEvent from "@testing-library/user-event";
+
 import Editor from "routes/Editor/Editor";
 import {
   changeSelectedColor,
@@ -13,9 +15,7 @@ import {
 } from "store/file/slice";
 import { addMatchMedia } from "utils/testing-utils";
 import { UsernameState } from "store/file/types";
-import userEvent from "@testing-library/user-event";
 import { neutralino } from "neutralino/neutralino";
-import { NAME_COLORIZING_FILE_NAME } from "constants/constants";
 
 addMatchMedia();
 jest.mock("store/file/slice");
@@ -47,18 +47,21 @@ const usernames = [
     name: "testUsername1",
     contourColorId: "id1",
     nameColorId: "id2",
+    state: UsernameState.ORIGINAL,
   },
   {
     id: "username2",
     name: "testEnemy",
     contourColorId: "id1",
     nameColorId: "id3",
+    state: UsernameState.ORIGINAL,
   },
   {
     id: "username3",
     name: "testFriend",
     contourColorId: "id4",
     nameColorId: "id5",
+    state: UsernameState.ORIGINAL,
   },
 ];
 
@@ -478,6 +481,7 @@ describe("Editor actions", () => {
                 name: "newUsername",
                 contourColorId: "id1",
                 nameColorId: "id1",
+                state: UsernameState.ORIGINAL,
               },
             ],
           },
@@ -489,6 +493,576 @@ describe("Editor actions", () => {
             name: "newUsername",
             contourColorId: "id1",
             nameColorId: "id1",
+            state: UsernameState.ORIGINAL,
+          },
+        ],
+      });
+    });
+  });
+
+  test("submit form with changed contour color", async () => {
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        colors: {
+          id1: { ...initialState.file.colors["id1"] },
+          id2: { ...initialState.file.colors["id2"] },
+        },
+        unsavedColors: {
+          id1: {
+            name: "newNameColor",
+            color: {
+              red: 255,
+              green: 255,
+              blue: 255,
+            },
+            usernames: [
+              {
+                ...usernames[0],
+                contourColorId: "id2",
+                state: UsernameState.CHANGED_CONTOUR_COLOR,
+              },
+            ],
+          },
+        },
+        usernames: [usernames[0]],
+        selectedColorKey: "id1",
+      },
+    });
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+
+    fireEvent.click(await screen.findByText("Save"));
+
+    await waitFor(async () => {
+      expect(saveColorChanges).toBeCalledTimes(1);
+      expect(saveColorChanges).toHaveBeenCalledWith({
+        unsavedColors: {},
+        colors: {
+          id1: {
+            name: "newNameColor",
+            color: {
+              red: 255,
+              green: 255,
+              blue: 255,
+            },
+            usernames: [],
+          },
+          id2: {
+            ...initialState.file.colors["id2"],
+            usernames: [
+              {
+                ...usernames[0],
+                contourColorId: "id2",
+              },
+            ],
+          },
+        },
+        usernames: [
+          {
+            ...usernames[0],
+            contourColorId: "id2",
+          },
+        ],
+      });
+    });
+  });
+
+  test("submit form with changed name color", async () => {
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        colors: {
+          id1: {
+            ...initialState.file.colors["id1"],
+            usernames: [usernames[0]],
+          },
+          id2: {
+            ...initialState.file.colors["id2"],
+          },
+        },
+        unsavedColors: {
+          id2: {
+            name: "newNameColor",
+            color: {
+              red: 255,
+              green: 255,
+              blue: 255,
+            },
+            usernames: [
+              {
+                ...usernames[0],
+                nameColorId: "id1",
+                state: UsernameState.CHANGED_NAME_COLOR,
+              },
+            ],
+          },
+        },
+        usernames: [usernames[0]],
+        selectedColorKey: "id2",
+      },
+    });
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+
+    fireEvent.click(await screen.findByText("Save"));
+
+    await waitFor(async () => {
+      expect(saveColorChanges).toBeCalledTimes(1);
+      expect(saveColorChanges).toHaveBeenCalledWith({
+        unsavedColors: {},
+        colors: {
+          id1: {
+            ...initialState.file.colors["id1"],
+            usernames: [
+              {
+                ...usernames[0],
+                nameColorId: "id1",
+              },
+            ],
+          },
+          id2: {
+            name: "newNameColor",
+            color: {
+              red: 255,
+              green: 255,
+              blue: 255,
+            },
+            usernames: [],
+          },
+        },
+        usernames: [
+          {
+            ...usernames[0],
+            nameColorId: "id1",
+          },
+        ],
+      });
+    });
+  });
+
+  test("submit form with unsaved username with changed contour color", async () => {
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        colors: {
+          id1: {
+            ...initialState.file.colors["id1"],
+            usernames: [],
+          },
+          id2: {
+            ...initialState.file.colors["id2"],
+            usernames: [],
+          },
+        },
+        unsavedColors: {
+          id1: {
+            name: "newNameColor",
+            color: {
+              red: 255,
+              green: 255,
+              blue: 255,
+            },
+            usernames: [
+              {
+                ...usernames[0],
+                nameColorId: "id1",
+                contourColorId: "id2",
+                state: UsernameState.UNSAVED,
+              },
+            ],
+          },
+        },
+        usernames: [],
+        selectedColorKey: "id1",
+      },
+    });
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+
+    fireEvent.click(await screen.findByText("Save"));
+
+    await waitFor(async () => {
+      expect(saveColorChanges).toBeCalledTimes(1);
+      expect(saveColorChanges).toHaveBeenCalledWith({
+        unsavedColors: {},
+        colors: {
+          id1: {
+            name: "newNameColor",
+            color: {
+              red: 255,
+              green: 255,
+              blue: 255,
+            },
+            usernames: [
+              {
+                ...usernames[0],
+                nameColorId: "id1",
+                contourColorId: "id2",
+              },
+            ],
+          },
+          id2: {
+            ...initialState.file.colors["id2"],
+            usernames: [
+              {
+                ...usernames[0],
+                nameColorId: "id1",
+                contourColorId: "id2",
+              },
+            ],
+          },
+        },
+        usernames: [
+          {
+            ...usernames[0],
+            nameColorId: "id1",
+            contourColorId: "id2",
+          },
+        ],
+      });
+    });
+  });
+
+  test("submit form with unsaved username with changed name color", async () => {
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        colors: {
+          id1: {
+            ...initialState.file.colors["id1"],
+            usernames: [],
+          },
+          id2: {
+            ...initialState.file.colors["id2"],
+            usernames: [],
+          },
+        },
+        unsavedColors: {
+          id1: {
+            name: "newNameColor",
+            color: {
+              red: 255,
+              green: 255,
+              blue: 255,
+            },
+            usernames: [
+              {
+                ...usernames[0],
+                nameColorId: "id2",
+                contourColorId: "id1",
+                state: UsernameState.UNSAVED,
+              },
+            ],
+          },
+        },
+        usernames: [],
+        selectedColorKey: "id1",
+      },
+    });
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+
+    fireEvent.click(await screen.findByText("Save"));
+
+    await waitFor(async () => {
+      expect(saveColorChanges).toBeCalledTimes(1);
+      expect(saveColorChanges).toHaveBeenCalledWith({
+        unsavedColors: {},
+        colors: {
+          id1: {
+            name: "newNameColor",
+            color: {
+              red: 255,
+              green: 255,
+              blue: 255,
+            },
+            usernames: [
+              {
+                ...usernames[0],
+                nameColorId: "id2",
+                contourColorId: "id1",
+              },
+            ],
+          },
+          id2: {
+            ...initialState.file.colors["id2"],
+            usernames: [
+              {
+                ...usernames[0],
+                nameColorId: "id2",
+                contourColorId: "id1",
+              },
+            ],
+          },
+        },
+        usernames: [
+          {
+            ...usernames[0],
+            nameColorId: "id2",
+            contourColorId: "id1",
+          },
+        ],
+      });
+    });
+  });
+
+  test("submit form with removed color from original name color and unsaved contour color", async () => {
+    const usernameToDelete = {
+      ...usernames[0],
+      nameColorId: "id1",
+      contourColorId: "id2",
+    };
+
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        colors: {
+          id1: {
+            ...initialState.file.colors["id1"],
+            usernames: [usernameToDelete],
+          },
+          id2: {
+            ...initialState.file.colors["id2"],
+            usernames: [usernameToDelete],
+          },
+        },
+        unsavedColors: {
+          id1: {
+            name: "newNameColor",
+            color: {
+              red: 255,
+              green: 255,
+              blue: 255,
+            },
+            usernames: [
+              {
+                ...usernameToDelete,
+                state: UsernameState.DELETED,
+              },
+            ],
+          },
+          id2: {
+            ...initialState.file.colors["id2"],
+            name: "AnotherNewName",
+          },
+        },
+        usernames: [usernameToDelete],
+        selectedColorKey: "id1",
+      },
+    });
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+
+    fireEvent.click(await screen.findByText("Save"));
+
+    await waitFor(async () => {
+      expect(saveColorChanges).toBeCalledTimes(1);
+      expect(saveColorChanges).toHaveBeenCalledWith({
+        unsavedColors: {
+          id2: {
+            ...initialState.file.colors["id2"],
+            name: "AnotherNewName",
+            usernames: [],
+          },
+        },
+        colors: {
+          id1: {
+            name: "newNameColor",
+            color: {
+              red: 255,
+              green: 255,
+              blue: 255,
+            },
+            usernames: [],
+          },
+          id2: {
+            ...initialState.file.colors["id2"],
+            usernames: [],
+          },
+        },
+        usernames: [],
+      });
+    });
+  });
+
+  test("submit form with removed color from original contour color and unsaved name color", async () => {
+    const usernameToDelete = {
+      ...usernames[0],
+      nameColorId: "id1",
+      contourColorId: "id2",
+    };
+
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        colors: {
+          id1: {
+            ...initialState.file.colors["id1"],
+            usernames: [usernameToDelete],
+          },
+          id2: {
+            ...initialState.file.colors["id2"],
+            usernames: [usernameToDelete],
+          },
+        },
+        unsavedColors: {
+          id1: {
+            ...initialState.file.colors["id1"],
+            usernames: [usernameToDelete],
+            name: "newNameColor",
+          },
+          id2: {
+            ...initialState.file.colors["id2"],
+            name: "AnotherNewName",
+            usernames: [
+              {
+                ...usernameToDelete,
+                state: UsernameState.DELETED,
+              },
+            ],
+          },
+        },
+        usernames: [usernameToDelete],
+        selectedColorKey: "id2",
+      },
+    });
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+
+    fireEvent.click(await screen.findByText("Save"));
+
+    await waitFor(async () => {
+      expect(saveColorChanges).toBeCalledTimes(1);
+      expect(saveColorChanges).toHaveBeenCalledWith({
+        unsavedColors: {
+          id1: {
+            ...initialState.file.colors["id1"],
+            name: "newNameColor",
+            usernames: [],
+          },
+        },
+        colors: {
+          id1: {
+            ...initialState.file.colors["id1"],
+            usernames: [],
+          },
+          id2: {
+            ...initialState.file.colors["id2"],
+            name: "AnotherNewName",
+            usernames: [],
+          },
+        },
+        usernames: [],
+      });
+    });
+  });
+
+  test("submit form with unsaved username with name color and contour colour having the same value", async () => {
+    store = mockStore({
+      ...initialState,
+      file: {
+        ...initialState.file,
+        colors: {
+          id1: {
+            ...initialState.file.colors["id1"],
+            usernames: [],
+          },
+          id2: {
+            ...initialState.file.colors["id2"],
+            usernames: [],
+          },
+        },
+        unsavedColors: {
+          id1: {
+            name: "newNameColor",
+            color: {
+              red: 255,
+              green: 255,
+              blue: 255,
+            },
+            usernames: [
+              {
+                ...usernames[0],
+                nameColorId: "id2",
+                contourColorId: "id2",
+                state: UsernameState.UNSAVED,
+              },
+            ],
+          },
+        },
+        usernames: [],
+        selectedColorKey: "id1",
+      },
+    });
+    render(
+      <Provider store={store}>
+        <Editor />
+      </Provider>
+    );
+
+    fireEvent.click(await screen.findByText("Save"));
+
+    await waitFor(async () => {
+      expect(saveColorChanges).toBeCalledTimes(1);
+      expect(saveColorChanges).toHaveBeenCalledWith({
+        unsavedColors: {},
+        colors: {
+          id1: {
+            name: "newNameColor",
+            color: {
+              red: 255,
+              green: 255,
+              blue: 255,
+            },
+            usernames: [
+              {
+                ...usernames[0],
+                nameColorId: "id2",
+                contourColorId: "id2",
+              },
+            ],
+          },
+          id2: {
+            ...initialState.file.colors["id2"],
+            usernames: [
+              {
+                ...usernames[0],
+                nameColorId: "id2",
+                contourColorId: "id2",
+              },
+            ],
+          },
+        },
+        usernames: [
+          {
+            ...usernames[0],
+            nameColorId: "id2",
+            contourColorId: "id2",
           },
         ],
       });
