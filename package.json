@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Utility tool for colorizing usernames in Fonline",
   "scripts": {
+    "install:front": "cd frontend && npm install",
     "setup": "cd frontend && npm install && npm run build",
     "test": "cd frontend && npm run test",
     "test:coverage": "cd frontend && npm run test:coverage",
