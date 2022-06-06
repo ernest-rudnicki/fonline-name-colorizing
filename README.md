@@ -9,7 +9,7 @@ A small and portable application written using neutralino.js framework and Preac
 ## Features
 - Create NameColorizing file or import an existing one.
 - Create color groups and specify colors using intuitive form-like editor that includes a color picker.
-- Validate whether your username is arleady added to another colour group.
+- Validate whether your username is arleady added to another color group.
 - Export color groups into NameColorizing text file.
 
 ## Running the application in a development mode
