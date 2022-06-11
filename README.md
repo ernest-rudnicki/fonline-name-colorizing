@@ -23,7 +23,7 @@ neu update
 npm run setup
 
 // run application in the development mode (after the preact project builds, you need to refresh the neutralino app)
-npm run dev:app
+npm run dev
 ```
 
 ## Useful commands
@@ -34,7 +34,7 @@ npm run dev:app
 
 *   `npm run dev:front`: runs only the Preact project in development mode
 
-*   `npm run dev:app`: runs only the nautrlino.js application in development mode
+*   `npm run dev:app`: runs only the neutralino.js application in development mode
 
 ## Preact and TypeScript
 There are a lot of issues when it comes to React types and Preact JSX. Therefore, I have created a function as a workaround that overrides the JSX type of Preact components. For simplicity the test files are written in JSX files not TSX, to avoid calling the function `overrideReactType` in every test case.
