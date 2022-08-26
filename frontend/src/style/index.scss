@@ -18,6 +18,22 @@ html, body {
 
 * {
 	box-sizing: border-box;
+	scrollbar-width: auto;
+    scrollbar-color: #b3b3b3 #ffffff;
+}
+
+*::-webkit-scrollbar {
+    width: 14px;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #b3b3b3;
+    border-radius: 10px;
+    border: 3px solid #ffffff;
 }
 
 #preact_root {
@@ -43,28 +59,4 @@ a {
 	padding: 0px !important;
 	transform: none !important;
 	border: none !important;
-}
-
-
-// SCROLLBAR
-
-/* Firefox */
-* {
-    scrollbar-width: auto;
-    scrollbar-color: #b3b3b3 #ffffff;
-}
-
-/* Chrome, Edge, and Safari */
-*::-webkit-scrollbar {
-    width: 14px;
-}
-
-*::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-*::-webkit-scrollbar-thumb {
-    background-color: #b3b3b3;
-    border-radius: 10px;
-    border: 3px solid #ffffff;
 }

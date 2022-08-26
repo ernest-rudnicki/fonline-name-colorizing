@@ -127,16 +127,12 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
   const removeItemError = useCallback(
     (item: Username, errorKey: keyof Username): Username => {
       const newItem = { ...item };
-      if (!newItem.errors) {
-        if (isTestingEnv()) {
-          console.log("triggers if route when the are no errors on the item");
-        }
-        return newItem;
-      }
 
-      delete newItem.errors[errorKey];
-      if (Object.keys(newItem.errors).length === 0) {
-        delete newItem.errors;
+      if (newItem.errors) {
+        delete newItem.errors[errorKey];
+        if (Object.keys(newItem.errors).length === 0) {
+          delete newItem.errors;
+        }
       }
 
       return newItem;
@@ -144,9 +140,9 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
     []
   );
 
-  const onInputChange = debounce((value: string, id: string) => {
+  const onInputChange = debounce((inputValue: string, id: string) => {
     const [updated, foundIndex] = updateUsername(
-      value,
+      inputValue,
       id,
       "name",
       internalValue
@@ -193,10 +189,10 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
   );
 
   const renderSelectOptions = useCallback(
-    (colorEntries: Entries<ColorGroupHashMap>) => {
-      return colorEntries.map(([colorKey, value]) => (
+    (colors: Entries<ColorGroupHashMap>) => {
+      return colors.map(([colorKey, colorValue]) => (
         <Select.Option key={colorKey} value={colorKey}>
-          {renderOptionContent(value.color, value.name)}
+          {renderOptionContent(colorValue.color, colorValue.name)}
         </Select.Option>
       )) as React.ReactNode;
     },
@@ -204,9 +200,13 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
   );
 
   const onSelectChange = useCallback(
-    (value: string, id: string, colorKey: "nameColorId" | "contourColorId") => {
+    (
+      selectValue: string,
+      id: string,
+      colorKey: "nameColorId" | "contourColorId"
+    ) => {
       const [updated, foundIndex] = updateUsername(
-        value,
+        selectValue,
         id,
         colorKey,
         internalValue
@@ -296,8 +296,8 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
                     <Input
                       aria-label="Username"
                       value={el.name}
-                      onChange={(value) =>
-                        onInputChange(value.currentTarget.value, el.id)
+                      onChange={(inputValue) =>
+                        onInputChange(inputValue.currentTarget.value, el.id)
                       }
                     />
                   )}
@@ -307,8 +307,8 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
                 <Form.Item validateStatus={undefined}>
                   {overrideReactType(
                     <Select
-                      onChange={(value) =>
-                        onSelectChange(value, el.id, "nameColorId")
+                      onChange={(selectValue) =>
+                        onSelectChange(selectValue, el.id, "nameColorId")
                       }
                       value={el.nameColorId}
                     >
@@ -321,8 +321,8 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
                 <Form.Item validateStatus={undefined}>
                   {overrideReactType(
                     <Select
-                      onChange={(value) =>
-                        onSelectChange(value, el.id, "contourColorId")
+                      onChange={(selectValue) =>
+                        onSelectChange(selectValue, el.id, "contourColorId")
                       }
                       value={el.contourColorId}
                     >

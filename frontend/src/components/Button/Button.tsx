@@ -36,6 +36,7 @@ const Button: FunctionalComponent<ButtonProps> = (props) => {
     mode = "light",
     color = "primary",
   } = props;
+  const ariaLabel = !children ? tooltipText : undefined;
 
   const _onClick = useCallback(
     (e: PreactMouseEvent) => {
@@ -52,6 +53,7 @@ const Button: FunctionalComponent<ButtonProps> = (props) => {
     <Tooltip overlay={tooltipText} placement="bottom">
       {overrideReactType(
         <button
+          aria-label={ariaLabel}
           data-testid={dataTestId}
           onClick={_onClick}
           disabled={disabled}

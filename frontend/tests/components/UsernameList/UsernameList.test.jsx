@@ -428,28 +428,4 @@ describe("UsernameList actions", () => {
     fireEvent.click(screen.getByText("Add new username"));
     expect(spy).toHaveBeenCalledTimes(1);
   });
-
-  test("triggers if route when the are no errors on the item", async () => {
-    const spy = jest.spyOn(console, "log");
-    const onChange = jest.fn();
-    render(
-      <UsernameList
-        value={colors["id1"].usernames}
-        colors={colors}
-        selectedColorKey="id1"
-        allUsernames={usernames}
-        onChange={onChange}
-      />
-    );
-    fireEvent.click(screen.getByText("Add new username"));
-    const inputs = await screen.findAllByLabelText("Username");
-    await userEvent.type(inputs[2], "testInput");
-
-    await waitFor(async () => {
-      expect(spy).toBeCalledTimes(2);
-      expect(spy).toHaveBeenCalledWith(
-        "triggers if route when the are no errors on the item"
-      );
-    });
-  });
 });

@@ -107,8 +107,6 @@ export function parseFileContent(content: string[]): {
         g: parseIntBaseTen(green),
         b: parseIntBaseTen(blue),
       };
-
-      return;
     }
   });
 

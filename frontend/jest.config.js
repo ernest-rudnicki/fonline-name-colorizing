@@ -1,10 +1,7 @@
 module.exports = async () => {
   return {
     preset: "jest-preset-preact",
-    setupFiles: [
-      "<rootDir>/tests/__mocks__/browserMocks.ts",
-      "<rootDir>/tests/__mocks__/setupTests.ts",
-    ],
+    setupFiles: ["<rootDir>/tests/__mocks__/setupTests.ts"],
     moduleNameMapper: {
       "^components/(.*)$": "<rootDir>/src/components/$1",
       "^store/(.*)$": "<rootDir>/src/store/$1",

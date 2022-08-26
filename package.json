@@ -1,6 +1,6 @@
 {
   "name": "fonline-name-colorizing",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Utility tool for colorizing usernames in Fonline",
   "scripts": {
     "install:front": "cd frontend && npm install",
