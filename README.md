@@ -1,6 +1,7 @@
 # Fonline Name Colorizing
 
 [![codecov](https://codecov.io/gh/ernest-rudnicki/fonline-name-colorizing/branch/main/graph/badge.svg?token=LQ0MM46PUI)](https://codecov.io/gh/ernest-rudnicki/fonline-name-colorizing)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ernest-rudnicki_fonline-name-colorizing&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ernest-rudnicki_fonline-name-colorizing)
 
 A small and portable application written using neutralino.js framework and Preact. Thanks to neutralino.js framework the bundle size of the application is a lot smaller than the typical Electron based application. The application lets you to maintain your NameColorizing files or create new ones for all the servers of Fonline.
 
