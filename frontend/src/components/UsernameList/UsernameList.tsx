@@ -148,10 +148,6 @@ const UsernameList: FunctionalComponent<UsernameListProps> = (props) => {
       internalValue
     );
 
-    if (foundIndex === -1) {
-      return;
-    }
-
     const { name } = updated[foundIndex];
     const duplicatedUsername = validateUsername(id, name);
 
